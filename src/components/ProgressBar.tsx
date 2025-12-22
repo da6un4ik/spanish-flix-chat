@@ -1,36 +1,22 @@
-interface ProgressBarProps {
-  learned: number;
-  total: number;
-}
-
-export const ProgressBar = ({ learned, total }: ProgressBarProps) => {
-  const percentage = total > 0 ? (learned / total) * 100 : 0;
+export const ProgressBar = ({ learned, total }: { learned: number, total: number }) => {
+  const percentage = Math.round((learned / total) * 100);
 
   return (
-    <div className="bg-card rounded-lg p-4 mb-6 animate-fade-in">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-muted-foreground">Ваш прогресс</span>
-        <span className="text-sm font-medium text-foreground">
-          {learned} / {total} идиом
-        </span>
+    <div className="mt-4">
+      <div className="flex justify-between items-end mb-2">
+        <div>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Твой прогресс</p>
+          <p className="text-2xl font-black">{percentage}%</p>
+        </div>
+        <p className="text-xs text-gray-500 font-medium">{learned} из {total} идиом</p>
       </div>
-      
-      <div className="relative h-2 bg-secondary rounded-full overflow-hidden">
-        <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-primary-glow rounded-full transition-all duration-500"
-          style={{ width: `${percentage}%` }}
+      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          className="h-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)]"
         />
       </div>
-      
-      <p className="text-xs text-muted-foreground mt-2">
-        {percentage === 0
-          ? 'Начните изучать испанские идиомы!'
-          : percentage < 50
-          ? 'Отличное начало! Продолжайте!'
-          : percentage < 100
-          ? 'Вы почти у цели!'
-          : '🎉 Поздравляем! Все идиомы изучены!'}
-      </p>
     </div>
   );
 };
