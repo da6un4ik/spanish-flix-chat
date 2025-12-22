@@ -1,3 +1,4 @@
+localStorage.clear(); // Удалит все выученные идиомы и стрик
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/Header';
