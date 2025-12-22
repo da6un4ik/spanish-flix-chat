@@ -25,7 +25,7 @@ const Index = () => {
   const [isPremium] = useState(false);
   const [refreshSeed, setRefreshSeed] = useState(0);
 
-  // --- 1. TELEGRAM SDK INIT ---
+  // --- 1. ИНИЦИАЛИЗАЦИЯ TELEGRAM ---
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg) {
@@ -36,31 +36,21 @@ const Index = () => {
     }
   }, []);
 
-  // --- 2. PROGRESS LOGIC ---
+  // --- 2. ЗАГРУЗКА И СОХРАНЕНИЕ ---
   useEffect(() => {
     const savedProgress = localStorage.getItem('spanish-flix-progress-v4');
     if (savedProgress) {
       try { setProgressMap(JSON.parse(savedProgress)); } catch (e) { console.error(e); }
     }
     const savedStreak = localStorage.getItem('spanish-flix-streak') || '0';
-    const lastDate = localStorage.getItem('spanish-flix-last-date');
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-
-    if (lastDate) {
-      const last = parseInt(lastDate);
-      const diff = (today - last) / (1000 * 60 * 60 * 24);
-      if (diff === 1) setStreak(parseInt(savedStreak));
-      else if (diff > 1) setStreak(0);
-      else setStreak(parseInt(savedStreak));
-    }
-    localStorage.setItem('spanish-flix-last-date', today.toString());
+    setStreak(parseInt(savedStreak));
   }, []);
 
   useEffect(() => {
     localStorage.setItem('spanish-flix-progress-v4', JSON.stringify(progressMap));
   }, [progressMap]);
 
+  // --- 3. ФУНКЦИИ-ПОМОЩНИКИ ---
   const calculateNextReview = (currentStep: number) => {
     const intervals = [1, 3, 7, 30, 90];
     return new Date().setDate(new Date().getDate() + (intervals[currentStep] || 120));
@@ -81,7 +71,7 @@ const Index = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // --- 3. DAILY SELECTION (10 IDIOMS) ---
+  // --- 4. УМНАЯ ВЫБОРКА (ВСЕГДА 10 ШТУК) ---
   const sections = useMemo(() => {
     if (searchQuery) {
       const filtered = idioms.filter(i => 
@@ -90,20 +80,23 @@ const Index = () => {
       );
       return { daily: filtered, isSearch: true };
     }
+
+    // Приоритеты: Повторение -> Новые -> Остальные
     const toReview = idioms.filter(i => getIdiomStatus(i.id) === 'needs_review');
     const neverLearned = idioms.filter(i => getIdiomStatus(i.id) === 'new');
-    const learnedWaiting = idioms
-      .filter(i => getIdiomStatus(i.id) === 'waiting')
-      .sort((a, b) => (progressMap[a.id]?.nextReviewDate || 0) - (progressMap[b.id]?.nextReviewDate || 0));
+    const learnedWaiting = idioms.filter(i => getIdiomStatus(i.id) === 'waiting');
 
-    let pool = [...toReview, ...neverLearned];
-    if (pool.length < 10) pool = [...pool, ...learnedWaiting];
+    // Собираем всё в один список
+    const fullPool = [...toReview, ...neverLearned, ...learnedWaiting];
+
+    // Перемешиваем на основе сида
+    const shuffled = [...fullPool].sort(() => 0.5 - Math.random());
     
-    const shuffled = [...pool].sort(() => 0.5 - Math.random());
+    // Возвращаем первые 10
     return { daily: shuffled.slice(0, 10), isSearch: false };
   }, [searchQuery, progressMap, refreshSeed]);
 
-  // --- 4. FLOW LOGIC: NEXT IDIOM CARD ---
+  // --- 5. ЛОГИКА АВТО-ПЕРЕХОДА (ПОТОК) ---
   const handleNextIdiom = () => {
     if (!practiceIdiom) return;
     const currentIndex = sections.daily.findIndex(i => i.id === practiceIdiom.id);
@@ -111,20 +104,20 @@ const Index = () => {
     if (currentIndex !== -1 && currentIndex < sections.daily.length - 1) {
       const next = sections.daily[currentIndex + 1];
       
-      // Сначала закрываем экран упражнений
+      // Сначала закрываем режим ТЕСТА
       setIsPracticing(false);
       
-      // Даем небольшую паузу для плавности анимации, затем меняем контент карточки
+      // Переключаем контент КАРТОЧКИ (Detail View остается открытым)
       setTimeout(() => {
         setPracticeIdiom(next);
         (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
       }, 100);
     } else {
-      // Конец пачки
+      // Подборка закончилась
       setIsPracticing(false);
       setIsDetailView(false);
       setPracticeIdiom(null);
-      (window as any).Telegram?.WebApp?.showAlert("¡Excelente! Ты просмотрела всю подборку. 🎉");
+      (window as any).Telegram?.WebApp?.showAlert("¡Felicidades! Ты прошла всю подборку на сегодня! 🎉");
     }
   };
 
@@ -141,7 +134,7 @@ const Index = () => {
             <input 
               type="text" placeholder="Найти идиому..." value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white outline-none"
+              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none"
             />
           </div>
         </div>
@@ -149,19 +142,25 @@ const Index = () => {
         <ProgressBar learned={learnedTotal} total={idioms.length} />
 
         <div className="mt-12">
-          <div className="flex items-center justify-between mb-8 text-[11px] font-black uppercase tracking-[0.3em]">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-white font-black uppercase tracking-[0.3em] text-[11px] flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-red-600 fill-current" />
-              <span>{sections.isSearch ? 'Результаты' : 'Твоя подборка'}</span>
-            </div>
+              {sections.isSearch ? 'Результаты' : 'Подборка на сегодня'}
+            </h3>
             {!sections.isSearch && (
-              <button onClick={() => setRefreshSeed(s => s + 1)} className="p-2 bg-white/5 rounded-full">
+              <button 
+                onClick={() => {
+                  setRefreshSeed(s => s + 1);
+                  (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+                }}
+                className="p-3 bg-white/5 rounded-full"
+              >
                 <RefreshCw className="w-4 h-4 text-gray-400" />
               </button>
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {sections.daily.map(idiom => (
               <IdiomCard 
                 key={idiom.id} 
@@ -188,7 +187,7 @@ const Index = () => {
       <AnimatePresence mode="wait">
         {isDetailView && practiceIdiom && (
           <motion.div 
-            key={practiceIdiom.id} // Позволяет анимировать смену идиом внутри
+            key={practiceIdiom.id} // Ключ для анимации смены идиом
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             className="fixed inset-0 z-50 bg-[#141414] overflow-y-auto"
           >
@@ -206,7 +205,7 @@ const Index = () => {
                <p className="text-green-500 font-bold text-xl mb-8 italic">{practiceIdiom.meaning}</p>
                
                <div className="flex justify-center gap-4 mb-10">
-                 <button onClick={() => speak(practiceIdiom.expression)} className="p-4 bg-white/5 rounded-2xl">
+                 <button onClick={() => speak(practiceIdiom.expression)} className="p-4 bg-white/5 rounded-2xl hover:bg-white/10">
                    <Volume2 className="w-6 h-6 text-red-500" />
                  </button>
                </div>
@@ -235,7 +234,7 @@ const Index = () => {
                         }
                       }));
                       
-                      // После упражнения - идем к следующей КАРТОЧКЕ
+                      // После успешного теста — идем к следующей КАРТОЧКЕ
                       handleNextIdiom();
                      }}
                      completedExercises={new Set()} onExerciseComplete={() => {}} 
@@ -251,7 +250,14 @@ const Index = () => {
 };
 
 const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, onClick: () => void }) => (
-  <motion.div whileTap={{ scale: 0.96 }} onClick={onClick} className="aspect-[16/10] rounded-xl overflow-hidden relative bg-[#222] border border-white/5 shadow-lg group">
+  <motion.div 
+    whileTap={{ scale: 0.96 }} 
+    onClick={() => {
+      onClick();
+      (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+    }}
+    className="aspect-[16/10] rounded-xl overflow-hidden relative bg-[#222] border border-white/5 shadow-lg group"
+  >
     <img src={idiom.imageUrl} loading="lazy" className={`w-full h-full object-cover transition-transform group-hover:scale-110 ${status === 'waiting' ? 'opacity-20 grayscale' : 'opacity-70'}`} />
     <div className="absolute inset-0 bg-gradient-to-t from-black flex items-end p-4">
       <p className="font-bold text-sm leading-tight">{idiom.expression}</p>
