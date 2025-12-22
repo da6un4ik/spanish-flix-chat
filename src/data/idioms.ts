@@ -27,8 +27,15 @@ export const idioms: Idiom[] = [
         id: 'ex1-1',
         type: 'choice',
         question: 'Что означает фраза "Tomar el pelo"?',
-        options: ['Сделать стрижку', 'Разыгрывать', 'Помогать'],
+        options: ['Сделать стрижку', 'Разыгрывать', 'Помогать другу'],
         correctAnswer: 'Разыгрывать'
+      },
+      {
+        id: 'ex1-2',
+        type: 'choice',
+        question: 'За что "тянут" в этой идиоме?',
+        options: ['За руку', 'За волосы', 'За нос'],
+        correctAnswer: 'За волосы'
       }
     ]
   },
@@ -42,9 +49,9 @@ export const idioms: Idiom[] = [
       {
         id: 'ex2-1',
         type: 'choice',
-        question: 'Какое животное упоминается в идиоме о сумасшествии?',
-        options: ['Собака', 'Корова', 'Коза'],
-        correctAnswer: 'Коза'
+        question: 'О ком говорят, когда кто-то ведет себя безумно?',
+        options: ['О собаке', 'О козе', 'О быке'],
+        correctAnswer: 'О козе'
       }
     ]
   },
@@ -58,9 +65,9 @@ export const idioms: Idiom[] = [
       {
         id: 'ex3-1',
         type: 'choice',
-        question: 'Когда говорят "Ponerse las pilas"?',
-        options: ['Когда хотят спать', 'Нужно начать работать', 'Когда садятся батарейки'],
-        correctAnswer: 'Нужно начать работать'
+        question: 'Что нужно "вставить", чтобы начать усердно работать?',
+        options: ['Батарейки', 'Ключи', 'Слова'],
+        correctAnswer: 'Батарейки'
       }
     ]
   },
@@ -74,8 +81,8 @@ export const idioms: Idiom[] = [
       {
         id: 'ex4-1',
         type: 'choice',
-        question: 'Какой продукт в идиоме означает легкость задачи?',
-        options: ['Хлеб', 'Паэлья', 'Сыр'],
+        question: 'Какой продукт символизирует очень легкую задачу?',
+        options: ['Сыр', 'Вино', 'Хлеб'],
         correctAnswer: 'Хлеб'
       }
     ]
@@ -84,63 +91,31 @@ export const idioms: Idiom[] = [
     id: '5',
     expression: 'No tener pelos en la lengua',
     meaning: 'Говорить прямо, что думаешь (букв. "не иметь волос на языке")',
-    example: 'Ella no tiene pelos en la lengua, te dirá la verdad aunque duela.',
+    example: 'Ella не tiene pelos en la lengua, всегда говорит правду.',
     imageUrl: 'https://images.unsplash.com/photo-1541534401786-2077a4a88e5b?auto=format&fit=crop&w=800&q=80',
     exercises: [
       {
         id: 'ex5-1',
         type: 'choice',
-        question: 'О чем эта идиома?',
-        options: ['О болезни', 'О честности и прямоте', 'О плохой дикции'],
-        correctAnswer: 'О честности и прямоте'
+        question: 'Что отсутствует на языке у очень прямолинейного человека?',
+        options: ['Слова', 'Волосы', 'Вкус'],
+        correctAnswer: 'Волосы'
       }
     ]
   },
   {
     id: '6',
-    expression: 'Estar en las nubes',
-    meaning: 'Витать в облаках / быть рассеянным',
-    example: '¡Oye! Pon atención, pareces estar en las nubes hoy.',
-    imageUrl: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=800&q=80',
+    expression: 'Tirar la casa por la ventana',
+    meaning: 'Не жалеть денег / кутить (букв. "выбросить дом в окно")',
+    example: 'Para su boda, decidieron tirar la casa por la ventana.',
+    imageUrl: 'https://images.unsplash.com/photo-1513519247352-4d3660365ee1?auto=format&fit=crop&w=800&q=80',
     exercises: [
       {
         id: 'ex6-1',
         type: 'choice',
-        question: 'Что значит "Estar en las nubes"?',
-        options: ['Лететь в самолете', 'Быть очень внимательным', 'Быть рассеянным'],
-        correctAnswer: 'Быть рассеянным'
-      }
-    ]
-  },
-  {
-    id: '7',
-    expression: 'Dar en el clavo',
-    meaning: 'Попасть в точку (букв. "ударить по гвоздю")',
-    example: 'Tu respuesta dio en el clavo, eso es exactamente lo que pasaba.',
-    imageUrl: 'https://images.unsplash.com/photo-1586864387789-628af9feed71?auto=format&fit=crop&w=800&q=80',
-    exercises: [
-      {
-        id: 'ex7-1',
-        type: 'choice',
-        question: 'Во что нужно попасть согласно этой идиоме?',
-        options: ['В стену', 'В гвоздь', 'В цель'],
-        correctAnswer: 'В гвоздь'
-      }
-    ]
-  },
-  {
-    id: '8',
-    expression: 'Meter la pata',
-    meaning: 'Сплоховать / совершить оплошность (букв. "вставить лапу")',
-    example: 'Metí la pata al decirle a Juan sobre su fiesta sorpresa.',
-    imageUrl: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80',
-    exercises: [
-      {
-        id: 'ex8-1',
-        type: 'choice',
-        question: 'Что означает "Meter la pata"?',
-        options: ['Танцевать', 'Ошибиться / сказать лишнее', 'Быстро бежать'],
-        correctAnswer: 'Ошибиться / сказать лишнее'
+        question: 'Куда "выбрасывают дом", когда тратят много денег?',
+        options: ['В окно', 'В дверь', 'В корзину'],
+        correctAnswer: 'В окно'
       }
     ]
   }
