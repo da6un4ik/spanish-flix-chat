@@ -4,7 +4,7 @@ import { Header } from '@/components/Header';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
 import { idioms, Idiom } from '@/data/idioms';
-import { Search, X, Volume2, Calendar, Clock } from 'lucide-react';
+import { Search, X, Volume2, Calendar, Clock, ArrowLeft } from 'lucide-react';
 
 interface IdiomProgressState {
   completedExercises: string[];
@@ -21,7 +21,7 @@ const Index = () => {
   const [isPracticing, setIsPracticing] = useState(false);
   const [streak, setStreak] = useState(0);
 
-  // 1. Озвучка
+  // 1. Озвучка текста (испанский акцент)
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -30,15 +30,13 @@ const Index = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // 2. Загрузка данных и расчет Стрика
+  // 2. Загрузка прогресса и логика Стрика при запуске
   useEffect(() => {
-    // Загрузка прогресса идиом
-    const savedProgress = localStorage.getItem('spanish-flix-progress-v3');
+    const savedProgress = localStorage.getItem('spanish-flix-progress-v4');
     if (savedProgress) {
       try { setProgressMap(JSON.parse(savedProgress)); } catch (e) { console.error(e); }
     }
 
-    // Логика Стрика
     const savedStreak = localStorage.getItem('spanish-flix-streak') || '0';
     const lastDate = localStorage.getItem('spanish-flix-last-date');
     const now = new Date();
@@ -60,14 +58,14 @@ const Index = () => {
     localStorage.setItem('spanish-flix-last-date', today.toString());
   }, []);
 
-  // 3. Сохранение прогресса
+  // 3. Сохранение прогресса в LocalStorage
   useEffect(() => {
-    localStorage.setItem('spanish-flix-progress-v3', JSON.stringify(progressMap));
+    localStorage.setItem('spanish-flix-progress-v4', JSON.stringify(progressMap));
   }, [progressMap]);
 
-  // 4. Интервальные повторения (1, 3, 7, 30 дней)
+  // 4. Алгоритм интервальных повторений
   const calculateNextReview = (currentStep: number) => {
-    const intervals = [1, 3, 7, 30, 90];
+    const intervals = [1, 3, 7, 30, 90]; // Дни
     const daysToAdd = intervals[currentStep] || 120;
     const date = new Date();
     date.setDate(date.getDate() + daysToAdd);
@@ -78,7 +76,6 @@ const Index = () => {
     const current = progressMap[id] || { completedExercises: [], isLearned: false, reviewStep: 0 };
     const nextStep = current.reviewStep + 1;
     
-    // Обновляем карту прогресса
     setProgressMap(prev => ({
       ...prev,
       [id]: {
@@ -89,7 +86,7 @@ const Index = () => {
       }
     }));
 
-    // Обновляем стрик
+    // Обновление стрика (один раз в день)
     const lastUpdate = localStorage.getItem('spanish-flix-streak-updated');
     const todayStr = new Date().toDateString();
     
@@ -109,7 +106,7 @@ const Index = () => {
     return 'new';
   };
 
-  // 5. Поиск и фильтрация
+  // 5. Фильтрация контента (Поиск + Секции)
   const sections = useMemo(() => {
     const filtered = idioms.filter(i => 
       i.expression.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -125,7 +122,7 @@ const Index = () => {
   const onDragEnd = (event: any, info: any) => {
     if (info.offset.x > 80) {
       if (isPracticing) setIsPracticing(false);
-      else if (isDetailView) setIsDetailView(false);
+      else if (isDetailView) { setIsDetailView(false); setPracticeIdiom(null); }
     }
   };
 
@@ -133,30 +130,29 @@ const Index = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-[#141414] text-white select-none"
+      className="min-h-screen bg-[#141414] text-white select-none overflow-x-hidden"
       drag="x" dragConstraints={{ left: 0, right: 0 }} onDragEnd={onDragEnd}
     >
       <Header streak={streak} />
 
       <main className="px-6 pb-32">
-        {/* ПОИСК */}
         <div className="pt-6 mb-8 sticky top-[72px] z-30 bg-[#141414]/95 backdrop-blur-sm pb-2">
           <div className="relative max-w-xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
             <input 
               type="text" placeholder="Найти идиому..." value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all shadow-2xl"
+              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all"
             />
           </div>
         </div>
 
         <ProgressBar learned={learnedTotal} total={idioms.length} />
 
-        {/* СЕКЦИЯ: НУЖНО ПОВТОРИТЬ */}
+        {/* ПОВТОРЕНИЕ */}
         {sections.toReview.length > 0 && (
           <div className="mt-12">
-            <h3 className="flex items-center gap-2 text-red-500 font-bold mb-6 uppercase tracking-[0.2em] text-xs">
+            <h3 className="flex items-center gap-2 text-red-500 font-bold mb-6 uppercase tracking-[0.2em] text-[10px]">
               <Clock className="w-4 h-4" /> Пора повторить
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -167,9 +163,9 @@ const Index = () => {
           </div>
         )}
 
-        {/* СЕКЦИЯ: ВСЕ ОСТАЛЬНЫЕ */}
+        {/* БИБЛИОТЕКА */}
         <div className="mt-12">
-          <h3 className="text-gray-500 font-bold mb-6 uppercase tracking-[0.2em] text-xs">
+          <h3 className="text-gray-500 font-bold mb-6 uppercase tracking-[0.2em] text-[10px]">
             {searchQuery ? 'Результаты поиска' : 'Твоя библиотека'}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -185,7 +181,7 @@ const Index = () => {
         </div>
       </main>
 
-      {/* ДЕТАЛЬНЫЙ ПРОСМОТР */}
+      {/* ЭКРАН ДЕТАЛЕЙ */}
       <AnimatePresence>
         {isDetailView && practiceIdiom && (
           <motion.div 
@@ -195,9 +191,14 @@ const Index = () => {
           >
              <div className="relative h-[45vh]">
                <img src={practiceIdiom.imageUrl} className="w-full h-full object-cover" />
-               <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/20 to-transparent" />
-               <button onClick={() => setIsDetailView(false)} className="absolute top-6 left-6 bg-black/40 p-2 rounded-full backdrop-blur-md">
-                 <X className="w-6 h-6" />
+               <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
+               
+               <button 
+                onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} 
+                className="absolute top-6 left-6 bg-black/60 px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 border border-white/10 hover:bg-white/20 transition-all active:scale-95 group"
+               >
+                 <ArrowLeft className="w-5 h-5 text-white group-hover:-translate-x-1 transition-transform" />
+                 <span className="text-sm font-bold uppercase tracking-wider text-white">Назад</span>
                </button>
              </div>
 
@@ -222,7 +223,7 @@ const Index = () => {
                {getIdiomStatus(practiceIdiom.id) === 'waiting' && (
                  <div className="mb-8 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 flex items-center gap-3 text-sm">
                    <Calendar className="w-4 h-4" />
-                   <span>Вы уже учили это. Повторение скоро появится.</span>
+                   <span>Выучено. Повторение станет доступно позже.</span>
                  </div>
                )}
 
@@ -232,10 +233,9 @@ const Index = () => {
                >
                  {getIdiomStatus(practiceIdiom.id) === 'needs_review' ? 'ПОВТОРИТЬ' : 'УЧИТЬ'}
                </button>
-               <p className="text-center text-gray-600 text-[10px] mt-6 uppercase tracking-[0.3em]">свайпните вправо для возврата</p>
              </div>
 
-             {/* ПРАКТИКА */}
+             {/* МОДАЛКА ПРАКТИКИ */}
              {isPracticing && (
                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-[#141414]">
                  <IdiomPractice
@@ -258,18 +258,16 @@ const Index = () => {
   );
 };
 
-// Компонент карточки для сетки
 const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, onClick: () => void }) => (
   <motion.div 
-    whileTap={{ scale: 0.96 }} 
-    onClick={onClick} 
+    whileTap={{ scale: 0.96 }} onClick={onClick} 
     className="aspect-[16/10] rounded-xl overflow-hidden relative cursor-pointer bg-[#222] border border-white/5 shadow-lg group"
   >
     <img 
       src={idiom.imageUrl} 
       className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${status === 'waiting' ? 'opacity-20 grayscale' : 'opacity-70'}`} 
     />
-    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex items-end p-4">
+    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent flex items-end p-4">
       <p className="font-bold text-sm sm:text-base leading-tight tracking-tight">{idiom.expression}</p>
     </div>
     
