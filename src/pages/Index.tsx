@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomCard } from '@/components/IdiomCard';
@@ -21,6 +21,46 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [currentMode, setCurrentMode] = useState<AppMode>('browse');
   const [practiceIdiom, setPracticeIdiom] = useState<Idiom | null>(null);
+
+  // --- ЛОГИКА СОХРАНЕНИЯ ПРОГРЕССА ---
+  
+  // Загрузка данных из LocalStorage при запуске приложения
+  useEffect(() => {
+    const savedProgress = localStorage.getItem('spanish-flix-progress');
+    if (savedProgress) {
+      try {
+        const parsed = JSON.parse(savedProgress);
+        const restored: Record<string, IdiomProgressState> = {};
+        
+        // Восстанавливаем Set из массива (JSON не поддерживает Set напрямую)
+        Object.keys(parsed).forEach((id) => {
+          restored[id] = {
+            isLearned: parsed[id].isLearned,
+            completedExercises: new Set(parsed[id].completedExercises),
+          };
+        });
+        setProgressMap(restored);
+      } catch (e) {
+        console.error("Ошибка при загрузке прогресса:", e);
+      }
+    }
+  }, []);
+
+  // Сохранение данных в LocalStorage при каждом изменении progressMap
+  useEffect(() => {
+    if (Object.keys(progressMap).length === 0) return;
+
+    const dataToSave: Record<string, any> = {};
+    Object.keys(progressMap).forEach((id) => {
+      dataToSave[id] = {
+        isLearned: progressMap[id].isLearned,
+        completedExercises: Array.from(progressMap[id].completedExercises),
+      };
+    });
+    localStorage.setItem('spanish-flix-progress', JSON.stringify(dataToSave));
+  }, [progressMap]);
+
+  // --- КОНЕЦ ЛОГИКИ СОХРАНЕНИЯ ---
 
   const getProgress = (idiomId: string): IdiomProgressState => {
     return progressMap[idiomId] || { completedExercises: new Set(), isLearned: false };
@@ -122,7 +162,7 @@ const Index = () => {
               onPractice={() => setPracticeIdiom(featuredIdiom)}
             />
 
-            {/* Progress */}
+            {/* Progress Bar */}
             <div className="mt-6">
               <ProgressBar learned={learnedCount} total={idioms.length} />
             </div>
@@ -130,7 +170,7 @@ const Index = () => {
             {/* Category Filter */}
             <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
 
-            {/* Content based on filter */}
+            {/* Content rows */}
             {selectedCategory === 'Все' ? (
               <>
                 {categories.slice(1).map((category) => (
@@ -170,10 +210,7 @@ const Index = () => {
       <Header streak={learnedCount} />
 
       <main className="px-4 py-6 pb-24 max-w-4xl mx-auto">
-        {/* Mode Selector */}
         <ModeSelector currentMode={currentMode} onModeChange={setCurrentMode} />
-
-        {/* Render based on mode */}
         {renderContent()}
       </main>
 
