@@ -1,15 +1,24 @@
 import { useState } from 'react';
 import { Idiom } from '@/data/idioms';
-import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Play } from 'lucide-react';
 
 interface IdiomCardProps {
   idiom: Idiom;
   onLearn?: (id: string) => void;
   isLearned?: boolean;
   featured?: boolean;
+  exerciseProgress?: number;
+  onPractice?: () => void;
 }
 
-export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: IdiomCardProps) => {
+export const IdiomCard = ({
+  idiom,
+  onLearn,
+  isLearned,
+  featured = false,
+  exerciseProgress = 0,
+  onPractice,
+}: IdiomCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const difficultyColors = {
@@ -24,6 +33,9 @@ export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: Idiom
     advanced: 'Продвинутый',
   };
 
+  const totalExercises = idiom.exercises.length;
+  const progressPercent = (exerciseProgress / totalExercises) * 100;
+
   if (featured) {
     return (
       <div className="relative rounded-xl overflow-hidden hero-gradient p-6 md:p-8 animate-fade-in">
@@ -37,22 +49,36 @@ export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: Idiom
               {difficultyLabels[idiom.difficulty]}
             </span>
           </div>
-          
+
           <h2 className="font-display text-3xl md:text-5xl text-foreground mb-3">
             {idiom.spanish}
           </h2>
-          
+
           <p className="text-muted-foreground text-sm mb-4">
             Буквально: "{idiom.literal}"
           </p>
-          
+
           <div className="bg-card/50 backdrop-blur rounded-lg p-4 mb-4">
             <p className="text-foreground font-medium mb-2">{idiom.meaning}</p>
             <p className="text-sm text-muted-foreground italic">"{idiom.example}"</p>
           </div>
-          
+
+          {/* Progress bar */}
+          <div className="mb-4">
+            <div className="flex justify-between text-xs text-muted-foreground mb-1">
+              <span>Упражнения</span>
+              <span>{exerciseProgress} / {totalExercises}</span>
+            </div>
+            <div className="h-2 bg-secondary rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-primary to-emerald-500 transition-all duration-500"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          </div>
+
           <button
-            onClick={() => onLearn?.(idiom.id)}
+            onClick={onPractice}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               isLearned
                 ? 'bg-emerald-500/20 text-emerald-400'
@@ -65,7 +91,10 @@ export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: Idiom
                 Изучено
               </>
             ) : (
-              'Отметить как изученное'
+              <>
+                <Play className="w-4 h-4" />
+                Практиковать
+              </>
             )}
           </button>
         </div>
@@ -74,7 +103,7 @@ export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: Idiom
   }
 
   return (
-    <div 
+    <div
       className="idiom-card card-shine min-w-[200px] w-[200px] md:min-w-[240px] md:w-[240px] flex-shrink-0"
       onClick={() => setIsExpanded(!isExpanded)}
     >
@@ -85,43 +114,49 @@ export const IdiomCard = ({ idiom, onLearn, isLearned, featured = false }: Idiom
           </span>
           {isLearned && <Check className="w-4 h-4 text-emerald-400" />}
         </div>
-        
+
         <h3 className="font-display text-lg md:text-xl text-foreground leading-tight mb-1">
           {idiom.spanish}
         </h3>
-        
-        <p className="text-xs text-muted-foreground mb-2">
-          {idiom.category}
+
+        <p className="text-xs text-muted-foreground mb-2">{idiom.category}</p>
+
+        {/* Mini progress */}
+        <div className="h-1 bg-secondary rounded-full overflow-hidden mb-2">
+          <div
+            className="h-full bg-primary transition-all duration-300"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        <p className="text-[10px] text-muted-foreground">
+          {exerciseProgress}/{totalExercises} упражнений
         </p>
-        
-        <div 
+
+        <div
           className={`overflow-hidden transition-all duration-300 ${
-            isExpanded ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+            isExpanded ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="pt-2 border-t border-border">
+          <div className="pt-3 border-t border-border mt-2">
             <p className="text-xs text-muted-foreground mb-1">
               Буквально: {idiom.literal}
             </p>
             <p className="text-sm text-foreground mb-2">{idiom.meaning}</p>
             <p className="text-xs text-muted-foreground italic">"{idiom.example}"</p>
-            
+
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onLearn?.(idiom.id);
+                onPractice?.();
               }}
-              className={`mt-3 w-full flex items-center justify-center gap-1 px-3 py-1.5 rounded text-xs font-medium transition-all ${
-                isLearned
-                  ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground'
-              }`}
+              className="mt-3 w-full flex items-center justify-center gap-1 px-3 py-2 rounded-lg text-xs font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              {isLearned ? 'Изучено ✓' : 'Изучить'}
+              <Play className="w-3 h-3" />
+              Практиковать
             </button>
           </div>
         </div>
-        
+
         <div className="flex justify-center mt-2">
           {isExpanded ? (
             <ChevronUp className="w-4 h-4 text-muted-foreground" />

@@ -7,25 +7,73 @@ import { CategoryFilter } from '@/components/CategoryFilter';
 import { ModeSelector, AppMode } from '@/components/ModeSelector';
 import { FlashCard } from '@/components/FlashCard';
 import { QuizMode } from '@/components/QuizMode';
-import { idioms, categories } from '@/data/idioms';
-import { Home, CheckCircle, Settings } from 'lucide-react';
+import { IdiomPractice } from '@/components/IdiomPractice';
+import { idioms, categories, Idiom } from '@/data/idioms';
+import { Home, Layers, Settings } from 'lucide-react';
+
+interface IdiomProgressState {
+  completedExercises: Set<string>;
+  isLearned: boolean;
+}
 
 const Index = () => {
-  const [learnedIds, setLearnedIds] = useState<Set<string>>(new Set());
+  const [progressMap, setProgressMap] = useState<Record<string, IdiomProgressState>>({});
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [currentMode, setCurrentMode] = useState<AppMode>('browse');
+  const [practiceIdiom, setPracticeIdiom] = useState<Idiom | null>(null);
 
-  const handleLearn = (id: string) => {
-    setLearnedIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
+  const getProgress = (idiomId: string): IdiomProgressState => {
+    return progressMap[idiomId] || { completedExercises: new Set(), isLearned: false };
+  };
+
+  const handleExerciseComplete = (idiomId: string, exerciseId: string) => {
+    setProgressMap((prev) => {
+      const current = prev[idiomId] || { completedExercises: new Set(), isLearned: false };
+      const newCompleted = new Set(current.completedExercises);
+      newCompleted.add(exerciseId);
+
+      const idiom = idioms.find((i) => i.id === idiomId);
+      const isFullyLearned = idiom ? newCompleted.size === idiom.exercises.length : false;
+
+      return {
+        ...prev,
+        [idiomId]: {
+          completedExercises: newCompleted,
+          isLearned: isFullyLearned,
+        },
+      };
     });
   };
+
+  const handleFullyLearned = (idiomId: string) => {
+    setProgressMap((prev) => ({
+      ...prev,
+      [idiomId]: {
+        ...prev[idiomId],
+        isLearned: true,
+      },
+    }));
+  };
+
+  const handleLegacyLearn = (id: string) => {
+    setProgressMap((prev) => {
+      const current = prev[id] || { completedExercises: new Set(), isLearned: false };
+      return {
+        ...prev,
+        [id]: {
+          ...current,
+          isLearned: !current.isLearned,
+        },
+      };
+    });
+  };
+
+  const learnedCount = Object.values(progressMap).filter((p) => p.isLearned).length;
+  const learnedIds = new Set(
+    Object.entries(progressMap)
+      .filter(([_, p]) => p.isLearned)
+      .map(([id]) => id)
+  );
 
   const featuredIdiom = idioms[0];
 
@@ -49,7 +97,7 @@ const Index = () => {
           <FlashCard
             idioms={filteredIdioms}
             learnedIds={learnedIds}
-            onLearn={handleLearn}
+            onLearn={handleLegacyLearn}
           />
         );
 
@@ -57,7 +105,7 @@ const Index = () => {
         return (
           <QuizMode
             idioms={filteredIdioms.slice(0, 5)}
-            onLearn={handleLearn}
+            onLearn={handleLegacyLearn}
           />
         );
 
@@ -69,20 +117,18 @@ const Index = () => {
             <IdiomCard
               idiom={featuredIdiom}
               featured
-              isLearned={learnedIds.has(featuredIdiom.id)}
-              onLearn={handleLearn}
+              isLearned={getProgress(featuredIdiom.id).isLearned}
+              exerciseProgress={getProgress(featuredIdiom.id).completedExercises.size}
+              onPractice={() => setPracticeIdiom(featuredIdiom)}
             />
 
             {/* Progress */}
             <div className="mt-6">
-              <ProgressBar learned={learnedIds.size} total={idioms.length} />
+              <ProgressBar learned={learnedCount} total={idioms.length} />
             </div>
 
             {/* Category Filter */}
-            <CategoryFilter
-              selected={selectedCategory}
-              onSelect={setSelectedCategory}
-            />
+            <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
 
             {/* Content based on filter */}
             {selectedCategory === 'Все' ? (
@@ -93,7 +139,9 @@ const Index = () => {
                     title={category}
                     idioms={idiomsByCategory[category]}
                     learnedIds={learnedIds}
-                    onLearn={handleLearn}
+                    onLearn={handleLegacyLearn}
+                    progressMap={progressMap}
+                    onPractice={(idiom) => setPracticeIdiom(idiom)}
                   />
                 ))}
               </>
@@ -104,8 +152,9 @@ const Index = () => {
                     <IdiomCard
                       key={idiom.id}
                       idiom={idiom}
-                      isLearned={learnedIds.has(idiom.id)}
-                      onLearn={handleLearn}
+                      isLearned={getProgress(idiom.id).isLearned}
+                      exerciseProgress={getProgress(idiom.id).completedExercises.size}
+                      onPractice={() => setPracticeIdiom(idiom)}
                     />
                   ))}
                 </div>
@@ -118,7 +167,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header streak={learnedIds.size} />
+      <Header streak={learnedCount} />
 
       <main className="px-4 py-6 pb-24 max-w-4xl mx-auto">
         {/* Mode Selector */}
@@ -127,6 +176,19 @@ const Index = () => {
         {/* Render based on mode */}
         {renderContent()}
       </main>
+
+      {/* Practice Modal */}
+      {practiceIdiom && (
+        <IdiomPractice
+          idiom={practiceIdiom}
+          completedExercises={getProgress(practiceIdiom.id).completedExercises}
+          onExerciseComplete={(exerciseId) =>
+            handleExerciseComplete(practiceIdiom.id, exerciseId)
+          }
+          onClose={() => setPracticeIdiom(null)}
+          onFullyLearned={() => handleFullyLearned(practiceIdiom.id)}
+        />
+      )}
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur border-t border-border">
@@ -146,7 +208,7 @@ const Index = () => {
               currentMode === 'flashcards' ? 'text-primary' : 'text-muted-foreground hover:text-primary'
             }`}
           >
-            <CheckCircle className="w-6 h-6" />
+            <Layers className="w-6 h-6" />
             <span className="text-[10px] font-medium">Карточки</span>
           </button>
           <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors">

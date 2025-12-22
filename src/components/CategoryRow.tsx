@@ -2,15 +2,33 @@ import { Idiom } from '@/data/idioms';
 import { IdiomCard } from './IdiomCard';
 import { ChevronRight } from 'lucide-react';
 
+interface IdiomProgressState {
+  completedExercises: Set<string>;
+  isLearned: boolean;
+}
+
 interface CategoryRowProps {
   title: string;
   idioms: Idiom[];
   learnedIds: Set<string>;
   onLearn: (id: string) => void;
+  progressMap?: Record<string, IdiomProgressState>;
+  onPractice?: (idiom: Idiom) => void;
 }
 
-export const CategoryRow = ({ title, idioms, learnedIds, onLearn }: CategoryRowProps) => {
+export const CategoryRow = ({
+  title,
+  idioms,
+  learnedIds,
+  onLearn,
+  progressMap = {},
+  onPractice,
+}: CategoryRowProps) => {
   if (idioms.length === 0) return null;
+
+  const getProgress = (idiomId: string) => {
+    return progressMap[idiomId] || { completedExercises: new Set(), isLearned: false };
+  };
 
   return (
     <div className="mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -20,14 +38,16 @@ export const CategoryRow = ({ title, idioms, learnedIds, onLearn }: CategoryRowP
           Все <ChevronRight className="w-4 h-4" />
         </button>
       </div>
-      
+
       <div className="category-row -mx-4 px-4">
         {idioms.map((idiom) => (
           <IdiomCard
             key={idiom.id}
             idiom={idiom}
-            isLearned={learnedIds.has(idiom.id)}
+            isLearned={getProgress(idiom.id).isLearned}
+            exerciseProgress={getProgress(idiom.id).completedExercises.size}
             onLearn={onLearn}
+            onPractice={() => onPractice?.(idiom)}
           />
         ))}
       </div>
