@@ -1,12 +1,11 @@
 export interface Idiom {
   id: string;
-  spanish: string;
-  literal: string;
+  expression: string;
   meaning: string;
   example: string;
   category: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  exercises: Exercise[];
+  imageUrl?: string; // Добавляем это поле (необязательное)
+  exercises: any[];
 }
 
 export interface Exercise {
