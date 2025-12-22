@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { X, Trophy, Star, Crown, Download, FileText, Calendar, Flame, ChevronRight } from 'lucide-react';
+import { X, Trophy, Star, Crown, Flame, ChevronRight, Settings, ExternalLink } from 'lucide-react';
 
 interface ProfileProps {
   isOpen: boolean;
@@ -13,11 +13,15 @@ interface ProfileProps {
 }
 
 export const Profile = ({ isOpen, onClose, stats, isPremium }: ProfileProps) => {
-  // Логика уровней
-  const level = stats.learnedCount < 5 ? 'Новичок' : stats.learnedCount < 15 ? 'Афисионадо' : 'Мастер идиом';
-  
-  // Имитация данных календаря (28 дней)
-  const activity = Array.from({ length: 28 }, (_, i) => Math.random() > 0.6);
+  // --- TELEGRAM DATA ---
+  const tg = (window as any).Telegram?.WebApp;
+  const user = tg?.initDataUnsafe?.user;
+
+  // Если данных нет (например, открыли в браузере), используем заглушки
+  const firstName = user?.first_name || 'Amigo';
+  const lastName = user?.last_name || '';
+  const username = user?.username ? `@${user.username}` : 'Ученик';
+  const photoUrl = user?.photo_url;
 
   if (!isOpen) return null;
 
@@ -29,119 +33,118 @@ export const Profile = ({ isOpen, onClose, stats, isPremium }: ProfileProps) => 
       transition={{ type: 'spring', damping: 25, stiffness: 200 }}
       className="fixed inset-0 z-[100] bg-[#141414] overflow-y-auto pb-12"
     >
-      {/* Header */}
+      {/* HEADER */}
       <div className="p-6 flex items-center justify-between sticky top-0 bg-[#141414]/90 backdrop-blur-md z-10">
         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition">
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6 text-white" />
         </button>
-        <h2 className="text-sm font-black uppercase tracking-[0.3em]">Мой Профиль</h2>
+        <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-400">Профиль ученика</h2>
         <div className="w-10" />
       </div>
 
       <div className="max-w-xl mx-auto px-6">
-        {/* User Card */}
+        {/* USER INFO SECTION */}
         <div className="flex flex-col items-center mt-6 mb-10">
-          <div className="relative group cursor-pointer">
-            <div className="w-24 h-24 rounded-lg bg-red-600 flex items-center justify-center text-4xl font-black shadow-2xl transition-transform group-hover:scale-105">
-              U
+          <div className="relative">
+            <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center text-5xl font-black shadow-2xl overflow-hidden border-4 border-white/5">
+              {photoUrl ? (
+                <img src={photoUrl} alt={firstName} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-white drop-shadow-md">{firstName[0]}</span>
+              )}
             </div>
             {isPremium && (
-              <div className="absolute -top-3 -right-3 bg-yellow-500 p-1.5 rounded-full shadow-lg ring-4 ring-[#141414]">
-                <Crown className="w-4 h-4 text-black" />
+              <div className="absolute -top-3 -right-3 bg-yellow-500 p-2 rounded-xl shadow-lg ring-4 ring-[#141414]">
+                <Crown className="w-5 h-5 text-black" />
               </div>
             )}
           </div>
-          <div className="text-center mt-5">
-            <h3 className="text-2xl font-black tracking-tight flex items-center justify-center gap-2">
-              User_2025
-              {isPremium && <span className="text-[10px] bg-yellow-500 text-black px-2 py-0.5 rounded-sm font-black">PRO</span>}
+
+          <div className="text-center mt-6">
+            <h3 className="text-3xl font-black tracking-tight text-white">
+              {firstName} {lastName}
             </h3>
-            <p className="text-red-600 font-bold text-xs uppercase tracking-widest mt-1">{level}</p>
+            <p className="text-red-500 font-bold text-xs uppercase tracking-[0.2em] mt-2 flex items-center justify-center gap-2">
+              <Trophy className="w-3 h-3" />
+              {stats.learnedCount < 5 ? 'Новичок' : 'Мастер идиом'} • {username}
+            </p>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-8">
-          <div className="bg-[#1f1f1f] p-5 rounded-2xl border border-white/5">
-            <div className="flex items-center gap-2 text-gray-500 mb-2">
-              <Star className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-wider">Идиом</span>
+        {/* QUICK STATS */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="bg-[#1f1f1f] p-6 rounded-2xl border border-white/5 flex flex-col items-center text-center">
+            <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center mb-3">
+              <Star className="w-5 h-5 text-blue-500 fill-current" />
             </div>
-            <p className="text-3xl font-black">{stats.learnedCount}<span className="text-gray-600 text-lg">/{stats.totalCount}</span></p>
+            <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Выучено</p>
+            <p className="text-2xl font-black">{stats.learnedCount}<span className="text-gray-600 text-sm ml-1 font-bold">/{stats.totalCount}</span></p>
           </div>
-          <div className="bg-[#1f1f1f] p-5 rounded-2xl border border-white/5">
-            <div className="flex items-center gap-2 text-orange-500 mb-2">
-              <Flame className="w-4 h-4 fill-current" />
-              <span className="text-[10px] font-black uppercase tracking-wider">Стрик</span>
+          
+          <div className="bg-[#1f1f1f] p-6 rounded-2xl border border-white/5 flex flex-col items-center text-center">
+            <div className="w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center mb-3">
+              <Flame className="w-5 h-5 text-orange-500 fill-current" />
             </div>
-            <p className="text-3xl font-black">{stats.streak}<span className="text-gray-600 text-lg text-sm ml-1 font-bold">дн.</span></p>
+            <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">Ударный темп</p>
+            <p className="text-2xl font-black">{stats.streak}<span className="text-gray-600 text-sm ml-1 font-bold">дн.</span></p>
           </div>
         </div>
 
-        {/* Activity Map */}
-        <div className="bg-[#1f1f1f] p-5 rounded-2xl border border-white/5 mb-8">
-          <h4 className="text-[10px] text-gray-500 uppercase font-black mb-4 tracking-widest flex items-center gap-2">
-            <Calendar className="w-3 h-3" /> Активность за месяц
-          </h4>
-          <div className="grid grid-cols-7 gap-2">
-            {activity.map((active, i) => (
-              <div 
-                key={i} 
-                className={`aspect-square rounded-[2px] ${active ? 'bg-red-600' : 'bg-white/5'}`} 
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Achievements */}
-        <div className="mb-10">
-          <h4 className="text-[10px] text-gray-500 uppercase font-black mb-5 tracking-widest">Достижения</h4>
-          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-            {[
-              { id: 1, label: 'Новичок', icon: <Trophy />, active: stats.learnedCount >= 1 },
-              { id: 2, label: '7 Дней', icon: <Flame />, active: stats.streak >= 7 },
-              { id: 3, label: 'Мастер', icon: <Star />, active: stats.learnedCount >= 10 },
-            ].map(badge => (
-              <div key={badge.id} className={`flex-shrink-0 flex flex-col items-center gap-3 ${badge.active ? 'opacity-100' : 'opacity-20'}`}>
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center border-2 ${badge.active ? 'border-yellow-500 bg-yellow-500/10 text-yellow-500' : 'border-white/10 text-white'}`}>
-                  {badge.icon}
+        {/* PREMIUM CARD (TELEGRAM STARS READY) */}
+        {!isPremium && (
+          <div className="bg-gradient-to-br from-[#EAB308] to-[#92400E] p-1 rounded-3xl mb-8 shadow-xl shadow-yellow-900/20">
+            <div className="bg-[#141414] rounded-[22px] p-6 relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="bg-yellow-500 p-1 rounded-md">
+                    <Crown className="w-4 h-4 text-black" />
+                  </div>
+                  <span className="text-yellow-500 font-black text-xs uppercase tracking-widest">Premium Доступ</span>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-tighter">{badge.label}</span>
+                <h4 className="text-white font-black text-xl mb-2">Разблокируй всё!</h4>
+                <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+                  Получи доступ к 500+ идиомам, PDF-гайдам и обучению без рекламы за Telegram Stars.
+                </p>
+                <button 
+                  onClick={() => {
+                    // Здесь будет логика оплаты Stars
+                    (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+                    alert('Скоро: Оплата через Telegram Stars ⭐️');
+                  }}
+                  className="w-full bg-yellow-500 text-black font-black py-4 rounded-xl text-sm tracking-[0.1em] hover:bg-yellow-400 transition-all active:scale-95"
+                >
+                  УЛУЧШИТЬ АККАУНТ
+                </button>
               </div>
-            ))}
+              <Crown className="absolute -right-6 -bottom-6 w-32 h-32 text-yellow-500/5 rotate-12" />
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Premium Offer */}
-        <div className="bg-gradient-to-br from-yellow-600 to-yellow-700 p-6 rounded-3xl mb-8 relative overflow-hidden group">
-          <Crown className="absolute -right-4 -bottom-4 w-32 h-32 text-black/10 rotate-12 transition-transform group-hover:scale-110" />
-          <h4 className="text-black font-black text-xl mb-1 flex items-center gap-2">
-            Spanish Flix Premium
-          </h4>
-          <p className="text-black/70 text-sm mb-5 font-medium leading-tight">
-            Офлайн-режим, экспорт в PDF и <br/>умная статистика забывания.
-          </p>
-          <button className="w-full bg-black text-white font-black py-4 rounded-xl text-sm tracking-widest hover:bg-black/80 transition shadow-xl">
-            {isPremium ? 'ПОДПИСКА АКТИВНА' : 'ПОЛУЧИТЬ ДОСТУП'}
-          </button>
+        {/* MENU OPTIONS */}
+        <div className="space-y-2 mb-10">
+          {[
+            { icon: Settings, label: 'Настройки приложения', sub: 'Тема, уведомления' },
+            { icon: ExternalLink, label: 'Наш Telegram канал', sub: 'Новые идиомы каждый день' },
+          ].map((item, i) => (
+            <button key={i} className="w-full flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-colors group">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-[#222] rounded-xl group-hover:bg-red-600/20 transition-colors">
+                  <item.icon className="w-5 h-5 text-gray-400 group-hover:text-red-500" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-bold text-white">{item.label}</p>
+                  <p className="text-[10px] text-gray-500 font-medium">{item.sub}</p>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-gray-700" />
+            </button>
+          ))}
         </div>
-
-        {/* Tools Section */}
-        <div className="space-y-2">
-           <p className="text-[10px] text-gray-500 uppercase font-black mb-3 ml-1 tracking-widest">Инструменты</p>
-           {[
-             { icon: <Download />, label: 'Скачать базу (Offline)', premium: true },
-             { icon: <FileText />, label: 'Экспорт в PDF карточки', premium: true }
-           ].map((item, i) => (
-             <button key={i} className={`w-full flex items-center justify-between p-5 rounded-2xl bg-[#1f1f1f] border border-white/5 transition active:scale-[0.98] ${!isPremium && 'opacity-50'}`}>
-               <div className="flex items-center gap-4">
-                 <span className="text-gray-400">{item.icon}</span>
-                 <span className="text-sm font-bold">{item.label}</span>
-               </div>
-               {!isPremium ? <Crown className="w-4 h-4 text-yellow-500" /> : <ChevronRight className="w-4 h-4 text-gray-600" />}
-             </button>
-           ))}
-        </div>
+        
+        <p className="text-center text-[10px] text-gray-700 font-bold uppercase tracking-[0.4em]">
+          Spanish Flix v1.0.4
+        </p>
       </div>
     </motion.div>
   );
