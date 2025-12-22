@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2, ArrowRight } from 'lucide-react';
-import { Idiom, Exercise } from '@/data/idioms';
+import { CheckCircle2, ArrowLeft } from 'lucide-react'; // Убрали X, добавили ArrowLeft
+import { Idiom } from '@/data/idioms';
 
 interface IdiomPracticeProps {
   idiom: Idiom;
@@ -13,8 +13,6 @@ interface IdiomPracticeProps {
 
 export const IdiomPractice = ({ 
   idiom, 
-  completedExercises, 
-  onExerciseComplete, 
   onClose, 
   onFullyLearned 
 }: IdiomPracticeProps) => {
@@ -25,14 +23,13 @@ export const IdiomPractice = ({
   const exercise = idiom.exercises[currentStep];
 
   const handleAnswer = (option: string) => {
-    if (isCorrect !== null) return; // Запрет повторного клика
+    if (isCorrect !== null) return;
     
     setSelectedOption(option);
     const correct = option === exercise.correctAnswer;
     setIsCorrect(correct);
 
     if (correct) {
-      onExerciseComplete(exercise.id);
       setTimeout(() => {
         if (currentStep < idiom.exercises.length - 1) {
           setCurrentStep(prev => prev + 1);
@@ -41,9 +38,8 @@ export const IdiomPractice = ({
         } else {
           onFullyLearned();
         }
-      }, 1500);
+      }, 1200);
     } else {
-      // Если ошибка, даем шанс нажать снова через секунду
       setTimeout(() => {
         setSelectedOption(null);
         setIsCorrect(null);
@@ -53,19 +49,29 @@ export const IdiomPractice = ({
 
   return (
     <div className="flex flex-col h-full bg-[#141414] text-white p-6 pt-12">
-      {/* Шапка тренировки */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex gap-1 flex-1 px-4">
+      {/* ШАПКА ТРЕНИРОВКИ С КНОПКОЙ НАЗАД */}
+      <div className="flex items-center mb-10">
+        <button 
+          onClick={onClose} 
+          className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          <span className="text-xs font-black uppercase tracking-widest">Назад</span>
+        </button>
+
+        <div className="flex gap-1.5 flex-1 px-8">
           {idiom.exercises.map((_, idx) => (
             <div 
               key={idx} 
-              className={`h-1.5 flex-1 rounded-full transition-colors ${
-                idx <= currentStep ? 'bg-red-600' : 'bg-white/10'
+              className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                idx <= currentStep ? 'bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.5)]' : 'bg-white/10'
               }`} 
             />
           ))}
         </div>
-        <button onClick={onClose} className="ml-4 p-2 text-gray-500"><X /></button>
+        
+        {/* Пустой блок справа для центровки прогресс-бара */}
+        <div className="w-16" />
       </div>
 
       <AnimatePresence mode="wait">
@@ -76,25 +82,25 @@ export const IdiomPractice = ({
           exit={{ opacity: 0, x: -20 }}
           className="flex-1 flex flex-col justify-center max-w-xl mx-auto w-full"
         >
-          <p className="text-gray-400 uppercase tracking-widest text-xs font-black mb-4">Упражнение {currentStep + 1}</p>
-          <h2 className="text-3xl font-bold mb-10 leading-tight">{exercise.question}</h2>
+          <p className="text-red-600 uppercase tracking-[0.3em] text-[10px] font-black mb-4">Упражнение {currentStep + 1}</p>
+          <h2 className="text-3xl font-bold mb-12 leading-tight tracking-tight">{exercise.question}</h2>
 
           <div className="space-y-4">
             {exercise.options?.map((option) => (
               <button
                 key={option}
                 onClick={() => handleAnswer(option)}
-                className={`w-full p-6 rounded-2xl text-left text-xl font-medium border-2 transition-all ${
+                className={`w-full p-6 rounded-2xl text-left text-lg font-bold border-2 transition-all active:scale-[0.98] ${
                   selectedOption === option
                     ? isCorrect 
                       ? 'border-green-500 bg-green-500/10 text-green-400' 
                       : 'border-red-600 bg-red-600/10 text-red-500'
-                    : 'border-white/10 bg-white/5 hover:bg-white/10'
+                    : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   {option}
-                  {selectedOption === option && isCorrect && <CheckCircle2 className="text-green-500" />}
+                  {selectedOption === option && isCorrect && <CheckCircle2 className="text-green-500 w-6 h-6" />}
                 </div>
               </button>
             ))}
@@ -102,8 +108,8 @@ export const IdiomPractice = ({
         </motion.div>
       </AnimatePresence>
 
-      <div className="text-center pb-10 text-gray-600 text-xs uppercase tracking-[0.2em]">
-        Выбери правильный вариант
+      <div className="text-center pb-8 text-gray-700 text-[10px] uppercase font-black tracking-[0.4em]">
+        Spanish Flix Academy
       </div>
     </div>
   );
