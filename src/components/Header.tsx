@@ -1,5 +1,5 @@
+import { motion } from 'framer-motion'; // Добавь это!
 import { Flame } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export const Header = ({ streak }: { streak: number }) => {
   return (
