@@ -21,7 +21,7 @@ export const idioms: Idiom[] = [
     expression: 'Tomar el pelo',
     meaning: 'Разыгрывать кого-то (букв. "тянуть за волосы")',
     example: '¿De verdad ganaste la lotería o me estás tomando el pelo?',
-    imageUrl: 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/idioms/pelo.jpg',
     exercises: [
       {
         id: 'ex1-1',
@@ -44,7 +44,7 @@ export const idioms: Idiom[] = [
     expression: 'Estar como una cabra',
     meaning: 'Быть сумасшедшим / вести себя странно',
     example: 'Ese hombre está como una cabra, corre por la calle gritando en pijama.',
-    imageUrl: 'https://images.unsplash.com/photo-1524024973431-2ad916746881?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/idioms/cabra.jpg',
     exercises: [
       {
         id: 'ex2-1',
@@ -60,7 +60,7 @@ export const idioms: Idiom[] = [
     expression: 'Ponerse las pilas',
     meaning: 'Взяться за дело / подтянуться (букв. "вставить батарейки")',
     example: 'Si quieres aprobar el examen de español, tienes que ponerte las pilas.',
-    imageUrl: 'https://images.unsplash.com/photo-1590001158193-79040c4172ad?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/idioms/pilas.jpg',
     exercises: [
       {
         id: 'ex3-1',
@@ -76,7 +76,7 @@ export const idioms: Idiom[] = [
     expression: 'Ser pan comido',
     meaning: 'Проще простого (букв. "быть съеденным хлебом")',
     example: 'El examen de hoy fue pan comido, terminé en 10 minutos.',
-    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/idioms/pan.jpg',
     exercises: [
       {
         id: 'ex4-1',
@@ -92,7 +92,7 @@ export const idioms: Idiom[] = [
     expression: 'No tener pelos en la lengua',
     meaning: 'Говорить прямо, что думаешь (букв. "не иметь волос на языке")',
     example: 'Ella не tiene pelos en la lengua, всегда говорит правду.',
-    imageUrl: 'https://images.unsplash.com/photo-1541534401786-2077a4a88e5b?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/idioms/pelos.jpg',
     exercises: [
       {
         id: 'ex5-1',
@@ -108,7 +108,7 @@ export const idioms: Idiom[] = [
     expression: 'Tirar la casa por la ventana',
     meaning: 'Не жалеть денег / кутить (букв. "выбросить дом в окно")',
     example: 'Para su boda, decidieron tirar la casa por la ventana.',
-    imageUrl: 'https://images.unsplash.com/photo-1513519247352-4d3660365ee1?auto=format&fit=crop&w=800&q=80',
+    imageUrl:'/idioms/ventana.jpg',
     exercises: [
       {
         id: 'ex6-1',
