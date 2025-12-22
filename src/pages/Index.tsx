@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/Header';
@@ -23,109 +22,95 @@ const Index = () => {
   const [isPracticing, setIsPracticing] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [isPremium] = useState(false);
   const [refreshSeed, setRefreshSeed] = useState(0);
+  
+  // ФИКСИРОВАННЫЙ СПИСОК ДЛЯ ТЕКУЩЕЙ СЕССИИ
+  const [activeSessionList, setActiveSessionList] = useState<Idiom[]>([]);
 
-  // --- 1. ИНИЦИАЛИЗАЦИЯ TELEGRAM ---
+  // 1. Инициализация Telegram
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg) {
       tg.ready();
       tg.expand();
       tg.setHeaderColor('#141414');
-      tg.setBackgroundColor('#141414');
     }
   }, []);
 
-  // --- 2. ЗАГРУЗКА И СОХРАНЕНИЕ ---
+  // 2. Загрузка прогресса
   useEffect(() => {
-    const savedProgress = localStorage.getItem('spanish-flix-progress-v4');
-    if (savedProgress) {
-      try { setProgressMap(JSON.parse(savedProgress)); } catch (e) { console.error(e); }
+    const saved = localStorage.getItem('spanish-flix-progress-v4');
+    if (saved) {
+      try { setProgressMap(JSON.parse(saved)); } catch (e) { console.error(e); }
     }
-    const savedStreak = localStorage.getItem('spanish-flix-streak') || '0';
-    setStreak(parseInt(savedStreak));
   }, []);
 
+  // Сохранение прогресса при каждом изменении
   useEffect(() => {
     localStorage.setItem('spanish-flix-progress-v4', JSON.stringify(progressMap));
   }, [progressMap]);
 
-  // --- 3. ФУНКЦИИ-ПОМОЩНИКИ ---
-  const calculateNextReview = (currentStep: number) => {
-    const intervals = [1, 3, 7, 30, 90];
-    return new Date().setDate(new Date().getDate() + (intervals[currentStep] || 120));
-  };
+  // 3. Логика формирования подборки (10 штук)
+  const dailySelection = useMemo(() => {
+    const toReview = idioms.filter(i => {
+      const p = progressMap[i.id];
+      return p?.nextReviewDate && p.nextReviewDate <= Date.now();
+    });
+    const neverLearned = idioms.filter(i => !progressMap[i.id]);
+    const learned = idioms.filter(i => progressMap[i.id] && !toReview.find(r => r.id === i.id));
 
-  const getIdiomStatus = (id: string) => {
-    const p = progressMap[id];
-    if (!p) return 'new';
-    if (p.nextReviewDate && p.nextReviewDate > Date.now()) return 'waiting';
-    return p.nextReviewDate && p.nextReviewDate <= Date.now() ? 'needs_review' : 'new';
+    // Смешиваем всё, но новые и повторение — в начало
+    const pool = [...toReview, ...neverLearned, ...learned];
+    // Перемешиваем по сиду
+    const shuffled = [...pool].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 10);
+  }, [refreshSeed, progressMap]); // Добавили progressMap в зависимости
+
+  // Фиксируем список, когда пользователь заходит в первый раз или обновляет
+  useEffect(() => {
+    if (dailySelection.length > 0) {
+      setActiveSessionList(dailySelection);
+    }
+  }, [dailySelection]);
+
+  // 4. ГЛАВНАЯ ФУНКЦИЯ ПЕРЕХОДА
+  const handleNextIdiom = () => {
+    if (!practiceIdiom) return;
+
+    // Ищем индекс строго в зафиксированном списке сессии
+    const currentIndex = activeSessionList.findIndex(i => i.id === practiceIdiom.id);
+    
+    if (currentIndex !== -1 && currentIndex < activeSessionList.length - 1) {
+      const next = activeSessionList[currentIndex + 1];
+      
+      // Сначала закрываем экран упражнений (уходим в DetailView следующей идиомы)
+      setIsPracticing(false);
+      
+      // Небольшая задержка, чтобы UI успел переключиться
+      setTimeout(() => {
+        setPracticeIdiom(next);
+        (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('medium');
+      }, 100);
+    } else {
+      // Конец списка
+      setIsPracticing(false);
+      setIsDetailView(false);
+      setPracticeIdiom(null);
+      (window as any).Telegram?.WebApp?.showAlert("Поздравляем! Сессия из 10 идиом завершена! 🎉");
+    }
   };
 
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-ES';
-    utterance.rate = 0.9;
     window.speechSynthesis.speak(utterance);
-  };
-
-  // --- 4. УМНАЯ ВЫБОРКА (ВСЕГДА 10 ШТУК) ---
-  const sections = useMemo(() => {
-    if (searchQuery) {
-      const filtered = idioms.filter(i => 
-        i.expression.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        i.meaning.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      return { daily: filtered, isSearch: true };
-    }
-
-    // Приоритеты: Повторение -> Новые -> Остальные
-    const toReview = idioms.filter(i => getIdiomStatus(i.id) === 'needs_review');
-    const neverLearned = idioms.filter(i => getIdiomStatus(i.id) === 'new');
-    const learnedWaiting = idioms.filter(i => getIdiomStatus(i.id) === 'waiting');
-
-    // Собираем всё в один список
-    const fullPool = [...toReview, ...neverLearned, ...learnedWaiting];
-
-    // Перемешиваем на основе сида
-    const shuffled = [...fullPool].sort(() => 0.5 - Math.random());
-    
-    // Возвращаем первые 10
-    return { daily: shuffled.slice(0, 10), isSearch: false };
-  }, [searchQuery, progressMap, refreshSeed]);
-
-  // --- 5. ЛОГИКА АВТО-ПЕРЕХОДА (ПОТОК) ---
-  const handleNextIdiom = () => {
-    if (!practiceIdiom) return;
-    const currentIndex = sections.daily.findIndex(i => i.id === practiceIdiom.id);
-    
-    if (currentIndex !== -1 && currentIndex < sections.daily.length - 1) {
-      const next = sections.daily[currentIndex + 1];
-      
-      // Сначала закрываем режим ТЕСТА
-      setIsPracticing(false);
-      
-      // Переключаем контент КАРТОЧКИ (Detail View остается открытым)
-      setTimeout(() => {
-        setPracticeIdiom(next);
-        (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-      }, 100);
-    } else {
-      // Подборка закончилась
-      setIsPracticing(false);
-      setIsDetailView(false);
-      setPracticeIdiom(null);
-      (window as any).Telegram?.WebApp?.showAlert("¡Felicidades! Ты прошла всю подборку на сегодня! 🎉");
-    }
   };
 
   const learnedTotal = Object.values(progressMap).filter(p => p.isLearned).length;
 
   return (
-    <motion.div className="min-h-screen bg-[#141414] text-white select-none overflow-x-hidden font-sans">
+    <motion.div className="min-h-screen bg-[#141414] text-white select-none font-sans">
       <Header streak={streak} onProfileClick={() => setIsProfileOpen(true)} />
 
       <main className="px-6 pb-32">
@@ -133,9 +118,9 @@ const Index = () => {
           <div className="relative max-w-xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
             <input 
-              type="text" placeholder="Найти идиому..." value={searchQuery}
+              type="text" placeholder="Поиск фразы..." value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none"
+              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white outline-none focus:ring-2 focus:ring-red-600"
             />
           </div>
         </div>
@@ -144,78 +129,78 @@ const Index = () => {
 
         <div className="mt-12">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-white font-black uppercase tracking-[0.3em] text-[11px] flex items-center gap-2">
+            <h3 className="text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-red-600 fill-current" />
-              {sections.isSearch ? 'Результаты' : 'Подборка на сегодня'}
+              Ваша пачка на сегодня
             </h3>
-            {!sections.isSearch && (
-              <button 
-                onClick={() => {
-                  setRefreshSeed(s => s + 1);
-                  (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-                }}
-                className="p-3 bg-white/5 rounded-full"
-              >
-                <RefreshCw className="w-4 h-4 text-gray-400" />
-              </button>
-            )}
+            <button onClick={() => setRefreshSeed(s => s + 1)} className="p-2 bg-white/5 rounded-full">
+              <RefreshCw className="w-4 h-4 text-gray-400" />
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {sections.daily.map(idiom => (
-              <IdiomCard 
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {activeSessionList.map(idiom => (
+              <div 
                 key={idiom.id} 
-                idiom={idiom} 
-                status={getIdiomStatus(idiom.id)} 
-                onClick={() => { setPracticeIdiom(idiom); setIsDetailView(true); }} 
-              />
+                onClick={() => { setPracticeIdiom(idiom); setIsDetailView(true); }}
+                className="aspect-[16/10] rounded-xl overflow-hidden relative bg-[#222] border border-white/5 cursor-pointer active:scale-95 transition-transform"
+              >
+                <img src={idiom.imageUrl} className="w-full h-full object-cover opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black flex items-end p-3">
+                  <p className="font-bold text-xs">{idiom.expression}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </main>
 
+      {/* Экран Профиля */}
       <AnimatePresence>
         {isProfileOpen && (
           <Profile 
             isOpen={isProfileOpen} 
             onClose={() => setIsProfileOpen(false)} 
-            isPremium={isPremium}
+            isPremium={false}
             stats={{ learnedCount: learnedTotal, totalCount: idioms.length, streak: streak }}
           />
         )}
       </AnimatePresence>
 
+      {/* ЭКРАН ДЕТАЛЕЙ (DETAIL VIEW) */}
       <AnimatePresence mode="wait">
         {isDetailView && practiceIdiom && (
           <motion.div 
-            key={practiceIdiom.id} // Ключ для анимации смены идиом
+            key={practiceIdiom.id}
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-50 bg-[#141414] overflow-y-auto"
           >
-             <div className="relative h-[45vh]">
+             <div className="relative h-[40vh]">
                <img src={practiceIdiom.imageUrl} className="w-full h-full object-cover" />
                <div className="absolute inset-0 bg-gradient-to-t from-[#141414]" />
-               <button onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} className="absolute top-6 left-6 bg-black/60 px-4 py-2 rounded-full border border-white/10 text-white flex items-center gap-2">
-                 <ArrowLeft className="w-5 h-5" />
-                 <span className="text-xs font-bold uppercase tracking-widest">Назад</span>
+               <button onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} className="absolute top-6 left-6 bg-black/50 p-3 rounded-full text-white backdrop-blur-md">
+                 <ArrowLeft className="w-6 h-6" />
                </button>
              </div>
 
-             <div className="max-w-2xl mx-auto px-6 pb-20 -mt-16 relative z-10 text-center">
-               <h2 className="text-4xl font-black mb-2 tracking-tighter">{practiceIdiom.expression}</h2>
+             <div className="max-w-xl mx-auto px-6 pb-20 -mt-12 relative z-10 text-center">
+               <h2 className="text-4xl font-black mb-2">{practiceIdiom.expression}</h2>
                <p className="text-green-500 font-bold text-xl mb-8 italic">{practiceIdiom.meaning}</p>
                
-               <div className="flex justify-center gap-4 mb-10">
-                 <button onClick={() => speak(practiceIdiom.expression)} className="p-4 bg-white/5 rounded-2xl hover:bg-white/10">
-                   <Volume2 className="w-6 h-6 text-red-500" />
-                 </button>
-               </div>
+               <button onClick={() => speak(practiceIdiom.expression)} className="mb-10 p-4 bg-white/5 rounded-2xl mx-auto block">
+                 <Volume2 className="w-6 h-6 text-red-500" />
+               </button>
 
-               <button className="w-full bg-red-600 py-5 rounded-2xl font-black text-xl shadow-xl active:scale-95 transition-transform" onClick={() => setIsPracticing(true)}>
-                 {getIdiomStatus(practiceIdiom.id) === 'needs_review' ? 'ПОВТОРИТЬ' : 'УЧИТЬ'}
+               <button 
+                className="w-full bg-red-600 py-5 rounded-2xl font-black text-xl shadow-lg active:scale-95 transition-all" 
+                onClick={() => setIsPracticing(true)}
+               >
+                 УЧИТЬ ЭТУ ФРАЗУ
                </button>
              </div>
 
+             {/* ЭКРАН УПРАЖНЕНИЙ (PRACTICE) */}
              <AnimatePresence>
                {isPracticing && (
                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-[#141414]">
@@ -223,19 +208,18 @@ const Index = () => {
                      idiom={practiceIdiom}
                      onClose={() => setIsPracticing(false)}
                      onFullyLearned={() => { 
-                      const current = progressMap[practiceIdiom.id] || { completedExercises: [], isLearned: false, reviewStep: 0 };
-                      (window as any).Telegram?.WebApp?.HapticFeedback?.notificationOccurred('success');
-                      
+                      // 1. Сохраняем прогресс
                       setProgressMap(prev => ({
                         ...prev,
                         [practiceIdiom.id]: {
-                          completedExercises: [], isLearned: true,
-                          reviewStep: current.reviewStep + 1,
-                          nextReviewDate: calculateNextReview(current.reviewStep)
+                          completedExercises: [], 
+                          isLearned: true,
+                          reviewStep: (prev[practiceIdiom.id]?.reviewStep || 0) + 1,
+                          nextReviewDate: Date.now() + 86400000 // +1 день
                         }
                       }));
                       
-                      // После успешного теста — идем к следующей КАРТОЧКЕ
+                      // 2. Переходим к следующей идиоме в списке
                       handleNextIdiom();
                      }}
                      completedExercises={new Set()} onExerciseComplete={() => {}} 
@@ -249,27 +233,5 @@ const Index = () => {
     </motion.div>
   );
 };
-
-const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, onClick: () => void }) => (
-  <motion.div 
-    whileTap={{ scale: 0.96 }} 
-    onClick={() => {
-      onClick();
-      (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
-    }}
-    className="aspect-[16/10] rounded-xl overflow-hidden relative bg-[#222] border border-white/5 shadow-lg group"
-  >
-    <img src={idiom.imageUrl} loading="lazy" className={`w-full h-full object-cover transition-transform group-hover:scale-110 ${status === 'waiting' ? 'opacity-20 grayscale' : 'opacity-70'}`} />
-    <div className="absolute inset-0 bg-gradient-to-t from-black flex items-end p-4">
-      <p className="font-bold text-sm leading-tight">{idiom.expression}</p>
-    </div>
-    {status === 'needs_review' && (
-      <div className="absolute top-3 right-3 flex h-3 w-3">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
-      </div>
-    )}
-  </motion.div>
-);
 
 export default Index;
