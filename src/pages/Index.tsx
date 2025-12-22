@@ -23,9 +23,18 @@ const Index = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [streak, setStreak] = useState(0);
   const [isPremium] = useState(false);
-  
-  // Состояние для "перемешивания" (чтобы можно было обновить 10 идиом вручную)
   const [refreshSeed, setRefreshSeed] = useState(0);
+
+  // --- ИНИЦИАЛИЗАЦИЯ TELEGRAM SDK ---
+  useEffect(() => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand(); // Разворачиваем на весь экран
+      tg.setHeaderColor('#141414'); // Цвет статус-бара в стиле Netflix
+      tg.setBackgroundColor('#141414');
+    }
+  }, []);
 
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
@@ -77,7 +86,6 @@ const Index = () => {
     return 'new';
   };
 
-  // --- УМНАЯ ЛОГИКА ВЫБОРА 10 ИДИОМ ---
   const sections = useMemo(() => {
     if (searchQuery) {
       const filtered = idioms.filter(i => 
@@ -87,28 +95,17 @@ const Index = () => {
       return { daily: filtered, isSearch: true };
     }
 
-    // 1. Идиомы для повторения (needs_review)
     const toReview = idioms.filter(i => getIdiomStatus(i.id) === 'needs_review');
-    
-    // 2. Новые идиомы (new)
     const neverLearned = idioms.filter(i => getIdiomStatus(i.id) === 'new');
-    
-    // 3. Выученные, которые просто ждут (waiting) - берем самые старые
     const learnedWaiting = idioms
       .filter(i => getIdiomStatus(i.id) === 'waiting')
       .sort((a, b) => (progressMap[a.id]?.nextReviewDate || 0) - (progressMap[b.id]?.nextReviewDate || 0));
 
-    // Смешиваем: сначала те что ПОРА повторить, потом НОВЫЕ.
-    // Если всё выучено, берем те, что давно не видели.
     let pool = [...toReview, ...neverLearned];
-    
-    // Если пул пустой или маленький, добавляем из режима ожидания
-    if (pool.length < 10) {
-      pool = [...pool, ...learnedWaiting];
-    }
+    if (pool.length < 10) pool = [...pool, ...learnedWaiting];
 
-    // Перемешиваем пул на основе refreshSeed, чтобы пользователь мог нажать "Обновить"
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    // Используем seed для воспроизводимого рандома при обновлении
+    const shuffled = [...pool].sort(() => 0.5 - Math.random());
     
     return {
       daily: shuffled.slice(0, 10),
@@ -123,7 +120,6 @@ const Index = () => {
       <Header streak={streak} onProfileClick={() => setIsProfileOpen(true)} />
 
       <main className="px-6 pb-32">
-        {/* ПОИСК */}
         <div className="pt-6 mb-8 sticky top-[72px] z-30 bg-[#141414]/95 backdrop-blur-sm pb-2">
           <div className="relative max-w-xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -137,7 +133,6 @@ const Index = () => {
 
         <ProgressBar learned={learnedTotal} total={idioms.length} />
 
-        {/* СЕКЦИЯ ДНЯ */}
         <div className="mt-12">
           <div className="flex items-center justify-between mb-8">
             <div className="flex flex-col gap-1">
@@ -154,9 +149,12 @@ const Index = () => {
 
             {!sections.isSearch && (
               <button 
-                onClick={() => setRefreshSeed(s => s + 1)}
+                onClick={() => {
+                   setRefreshSeed(s => s + 1);
+                   // Вибрация при обновлении списка
+                   (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+                }}
                 className="p-3 bg-white/5 hover:bg-white/10 rounded-full transition active:rotate-180 duration-500"
-                title="Обновить список"
               >
                 <RefreshCw className="w-4 h-4 text-gray-400" />
               </button>
@@ -176,7 +174,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* МОДАЛКИ (Profile, Detail, Practice) - оставляем как в предыдущем коде */}
       <AnimatePresence>
         {isProfileOpen && (
           <Profile 
@@ -227,6 +224,10 @@ const Index = () => {
                    onClose={() => setIsPracticing(false)}
                    onFullyLearned={() => { 
                     const current = progressMap[practiceIdiom.id] || { completedExercises: [], isLearned: false, reviewStep: 0 };
+                    
+                    // Вибрация "Успех" через Telegram SDK
+                    (window as any).Telegram?.WebApp?.HapticFeedback?.notificationOccurred('success');
+                    
                     setProgressMap(prev => ({
                       ...prev,
                       [practiceIdiom.id]: {
@@ -250,10 +251,14 @@ const Index = () => {
   );
 };
 
-// Компонент карточки (IdiomCard)
 const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, onClick: () => void }) => (
   <motion.div 
-    whileTap={{ scale: 0.96 }} onClick={onClick} 
+    whileTap={{ scale: 0.96 }} 
+    onClick={() => {
+      onClick();
+      // Легкая вибрация при клике на карточку
+      (window as any).Telegram?.WebApp?.HapticFeedback?.impactOccurred('light');
+    }} 
     className="aspect-[16/10] rounded-xl overflow-hidden relative cursor-pointer bg-[#222] border border-white/5 shadow-lg group"
   >
     <img 
