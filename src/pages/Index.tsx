@@ -4,7 +4,7 @@ import { Header } from '@/components/Header';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
 import { idioms, Idiom } from '@/data/idioms';
-import { Search, X, Play } from 'lucide-react';
+import { Search, X, Volume2 } from 'lucide-react';
 
 interface IdiomProgressState {
   completedExercises: Set<string>;
@@ -18,7 +18,15 @@ const Index = () => {
   const [isDetailView, setIsDetailView] = useState(false);
   const [isPracticing, setIsPracticing] = useState(false);
 
-  // Загрузка прогресса из памяти
+  // Функция озвучки
+  const speak = (text: string) => {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  };
+
   useEffect(() => {
     const saved = localStorage.getItem('spanish-flix-progress');
     if (saved) {
@@ -36,7 +44,6 @@ const Index = () => {
     }
   }, []);
 
-  // Сохранение прогресса
   useEffect(() => {
     const dataToSave: Record<string, any> = {};
     Object.keys(progressMap).forEach(id => {
@@ -58,12 +65,10 @@ const Index = () => {
     );
   }, [searchQuery]);
 
-  // Глобальная логика возврата (свайп вправо)
   const onDragEnd = (event: any, info: any) => {
-    if (info.offset.x > 80) { // Чувствительность свайпа
-      if (isPracticing) {
-        setIsPracticing(false);
-      } else if (isDetailView) {
+    if (info.offset.x > 80) {
+      if (isPracticing) setIsPracticing(false);
+      else if (isDetailView) {
         setIsDetailView(false);
         setPracticeIdiom(null);
       }
@@ -74,15 +79,12 @@ const Index = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-[#141414] text-white selection:bg-red-600"
-      drag="x" 
-      dragConstraints={{ left: 0, right: 0 }} 
-      onDragEnd={onDragEnd}
+      className="min-h-screen bg-[#141414] text-white"
+      drag="x" dragConstraints={{ left: 0, right: 0 }} onDragEnd={onDragEnd}
     >
       <Header streak={learnedCount} />
 
       <main className="px-6 pb-20">
-        {/* ПОИСК */}
         <div className="pt-6 mb-8">
           <div className="relative max-w-xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -91,14 +93,13 @@ const Index = () => {
               placeholder="Найти идиому..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all"
+              className="w-full bg-[#222] border-none rounded-xl py-4 pl-12 pr-4 text-white focus:ring-2 focus:ring-red-600 outline-none"
             />
           </div>
         </div>
 
         <ProgressBar learned={learnedCount} total={idioms.length} />
 
-        {/* СЕТКА */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
           {filteredIdioms.map(idiom => (
             <motion.div 
@@ -121,34 +122,43 @@ const Index = () => {
         </div>
       </main>
 
-      {/* МОДАЛЬНОЕ ОКНО ДЕТАЛЕЙ */}
       <AnimatePresence>
         {isDetailView && practiceIdiom && (
           <motion.div 
-            initial={{ x: "100%" }} 
-            animate={{ x: 0 }} 
-            exit={{ x: "100%" }}
+            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-50 bg-[#141414] overflow-y-auto"
           >
              <div className="relative h-[45vh]">
                <img src={practiceIdiom.imageUrl} className="w-full h-full object-cover" />
                <div className="absolute inset-0 bg-gradient-to-t from-[#141414] to-transparent" />
-               <button 
-                onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} 
-                className="absolute top-6 left-6 bg-black/40 p-2 rounded-full backdrop-blur-md"
-               >
+               <button onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} className="absolute top-6 left-6 bg-black/40 p-2 rounded-full backdrop-blur-md">
                  <X className="w-6 h-6" />
                </button>
              </div>
 
              <div className="max-w-2xl mx-auto px-6 pb-20 -mt-12 relative z-10">
-               <h2 className="text-4xl font-black mb-2 tracking-tight">{practiceIdiom.expression}</h2>
+               <div className="flex items-center gap-4 mb-2">
+                 <h2 className="text-4xl font-black tracking-tight">{practiceIdiom.expression}</h2>
+                 <button 
+                   onClick={() => speak(practiceIdiom.expression)}
+                   className="p-2 bg-red-600/20 rounded-full hover:bg-red-600/40 transition active:scale-90"
+                 >
+                   <Volume2 className="w-6 h-6 text-red-500" />
+                 </button>
+               </div>
+               
                <p className="text-green-500 font-bold mb-6 italic text-lg">{practiceIdiom.meaning}</p>
                
-               <div className="bg-white/5 p-6 rounded-2xl border border-white/10 mb-8 shadow-inner">
+               <div className="bg-white/5 p-6 rounded-2xl border border-white/10 mb-8 relative group">
                  <p className="text-[10px] text-gray-500 uppercase font-black mb-2 tracking-widest">Пример использования</p>
                  <p className="text-xl font-serif italic text-gray-100 leading-snug">"{practiceIdiom.example}"</p>
+                 <button 
+                   onClick={() => speak(practiceIdiom.example)}
+                   className="absolute right-4 bottom-4 p-2 text-gray-500 hover:text-white transition"
+                 >
+                   <Volume2 className="w-4 h-4" />
+                 </button>
                </div>
 
                <button 
@@ -157,15 +167,10 @@ const Index = () => {
                >
                  УЧИТЬ
                </button>
-               <p className="text-center text-gray-600 text-xs mt-6 uppercase tracking-widest">свайпните вправо, чтобы вернуться</p>
              </div>
 
-             {/* ЭКРАН ПРАКТИКИ */}
              {isPracticing && (
-               <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-[#141414]"
-               >
+               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-[#141414]">
                  <IdiomPractice
                    idiom={practiceIdiom}
                    completedExercises={getProgress(practiceIdiom.id).completedExercises}
