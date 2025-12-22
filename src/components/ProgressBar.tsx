@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'; // И сюда!
 export const ProgressBar = ({ learned, total }: { learned: number, total: number }) => {
   const percentage = Math.round((learned / total) * 100);
 
