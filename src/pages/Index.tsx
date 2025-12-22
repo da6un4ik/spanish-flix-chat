@@ -5,7 +5,7 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
 import { Profile } from '@/components/Profile';
 import { idioms, Idiom } from '@/data/idioms';
-import { Search, Volume2, Calendar, Clock, ArrowLeft } from 'lucide-react';
+import { Search, Volume2, Calendar, Clock, ArrowLeft, RefreshCw, Sparkles } from 'lucide-react';
 
 interface IdiomProgressState {
   completedExercises: string[];
@@ -15,7 +15,6 @@ interface IdiomProgressState {
 }
 
 const Index = () => {
-  // --- СОСТОЯНИЯ ---
   const [progressMap, setProgressMap] = useState<Record<string, IdiomProgressState>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [practiceIdiom, setPracticeIdiom] = useState<Idiom | null>(null);
@@ -23,9 +22,11 @@ const Index = () => {
   const [isPracticing, setIsPracticing] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [isPremium] = useState(false); // Флаг для будущей подписки
+  const [isPremium] = useState(false);
+  
+  // Состояние для "перемешивания" (чтобы можно было обновить 10 идиом вручную)
+  const [refreshSeed, setRefreshSeed] = useState(0);
 
-  // --- ЛОГИКА ОЗВУЧКИ ---
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -34,13 +35,11 @@ const Index = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // --- ЗАГРУЗКА ДАННЫХ И СТРИКА ---
   useEffect(() => {
     const savedProgress = localStorage.getItem('spanish-flix-progress-v4');
     if (savedProgress) {
       try { setProgressMap(JSON.parse(savedProgress)); } catch (e) { console.error(e); }
     }
-
     const savedStreak = localStorage.getItem('spanish-flix-streak') || '0';
     const lastDate = localStorage.getItem('spanish-flix-last-date');
     const now = new Date();
@@ -49,56 +48,25 @@ const Index = () => {
     if (lastDate) {
       const last = parseInt(lastDate);
       const diff = (today - last) / (1000 * 60 * 60 * 24);
-
-      if (diff === 1) {
-        setStreak(parseInt(savedStreak));
-      } else if (diff > 1) {
-        setStreak(0); // Сброс стрика при пропуске
+      if (diff === 1) setStreak(parseInt(savedStreak));
+      else if (diff > 1) {
+        setStreak(0);
         localStorage.setItem('spanish-flix-streak', '0');
-      } else {
-        setStreak(parseInt(savedStreak));
-      }
+      } else setStreak(parseInt(savedStreak));
     }
     localStorage.setItem('spanish-flix-last-date', today.toString());
   }, []);
 
-  // --- СОХРАНЕНИЕ ПРОГРЕССА ---
   useEffect(() => {
     localStorage.setItem('spanish-flix-progress-v4', JSON.stringify(progressMap));
   }, [progressMap]);
 
-  // --- ИНТЕРВАЛЬНЫЕ ПОВТОРЕНИЯ ---
   const calculateNextReview = (currentStep: number) => {
     const intervals = [1, 3, 7, 30, 90];
     const daysToAdd = intervals[currentStep] || 120;
     const date = new Date();
     date.setDate(date.getDate() + daysToAdd);
     return date.getTime();
-  };
-
-  const handleCompleteIdiom = (id: string) => {
-    const current = progressMap[id] || { completedExercises: [], isLearned: false, reviewStep: 0 };
-    const nextStep = current.reviewStep + 1;
-    
-    setProgressMap(prev => ({
-      ...prev,
-      [id]: {
-        completedExercises: [], 
-        isLearned: true,
-        reviewStep: nextStep,
-        nextReviewDate: calculateNextReview(current.reviewStep)
-      }
-    }));
-
-    const lastUpdate = localStorage.getItem('spanish-flix-streak-updated');
-    const todayStr = new Date().toDateString();
-    
-    if (lastUpdate !== todayStr) {
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      localStorage.setItem('spanish-flix-streak', newStreak.toString());
-      localStorage.setItem('spanish-flix-streak-updated', todayStr);
-    }
   };
 
   const getIdiomStatus = (id: string) => {
@@ -109,34 +77,49 @@ const Index = () => {
     return 'new';
   };
 
-  // --- ФИЛЬТРАЦИЯ ---
+  // --- УМНАЯ ЛОГИКА ВЫБОРА 10 ИДИОМ ---
   const sections = useMemo(() => {
-    const filtered = idioms.filter(i => 
-      i.expression.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      i.meaning.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    return {
-      toReview: filtered.filter(i => getIdiomStatus(i.id) === 'needs_review'),
-      others: filtered.filter(i => getIdiomStatus(i.id) !== 'needs_review')
-    };
-  }, [searchQuery, progressMap]);
-
-  const onDragEnd = (event: any, info: any) => {
-    if (info.offset.x > 80) {
-      if (isPracticing) setIsPracticing(false);
-      else if (isDetailView) { setIsDetailView(false); setPracticeIdiom(null); }
-      else if (isProfileOpen) setIsProfileOpen(false);
+    if (searchQuery) {
+      const filtered = idioms.filter(i => 
+        i.expression.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        i.meaning.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      return { daily: filtered, isSearch: true };
     }
-  };
+
+    // 1. Идиомы для повторения (needs_review)
+    const toReview = idioms.filter(i => getIdiomStatus(i.id) === 'needs_review');
+    
+    // 2. Новые идиомы (new)
+    const neverLearned = idioms.filter(i => getIdiomStatus(i.id) === 'new');
+    
+    // 3. Выученные, которые просто ждут (waiting) - берем самые старые
+    const learnedWaiting = idioms
+      .filter(i => getIdiomStatus(i.id) === 'waiting')
+      .sort((a, b) => (progressMap[a.id]?.nextReviewDate || 0) - (progressMap[b.id]?.nextReviewDate || 0));
+
+    // Смешиваем: сначала те что ПОРА повторить, потом НОВЫЕ.
+    // Если всё выучено, берем те, что давно не видели.
+    let pool = [...toReview, ...neverLearned];
+    
+    // Если пул пустой или маленький, добавляем из режима ожидания
+    if (pool.length < 10) {
+      pool = [...pool, ...learnedWaiting];
+    }
+
+    // Перемешиваем пул на основе refreshSeed, чтобы пользователь мог нажать "Обновить"
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    
+    return {
+      daily: shuffled.slice(0, 10),
+      isSearch: false
+    };
+  }, [searchQuery, progressMap, refreshSeed]);
 
   const learnedTotal = Object.values(progressMap).filter(p => p.isLearned).length;
 
   return (
-    <motion.div 
-      className="min-h-screen bg-[#141414] text-white select-none overflow-x-hidden"
-      drag="x" dragConstraints={{ left: 0, right: 0 }} onDragEnd={onDragEnd}
-    >
+    <motion.div className="min-h-screen bg-[#141414] text-white select-none overflow-x-hidden">
       <Header streak={streak} onProfileClick={() => setIsProfileOpen(true)} />
 
       <main className="px-6 pb-32">
@@ -154,27 +137,34 @@ const Index = () => {
 
         <ProgressBar learned={learnedTotal} total={idioms.length} />
 
-        {/* СЕКЦИЯ ПОВТОРЕНИЯ */}
-        {sections.toReview.length > 0 && (
-          <div className="mt-12">
-            <h3 className="flex items-center gap-2 text-red-500 font-bold mb-6 uppercase tracking-[0.2em] text-[10px]">
-              <Clock className="w-4 h-4" /> Пора повторить
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {sections.toReview.map(idiom => (
-                <IdiomCard key={idiom.id} idiom={idiom} status="needs_review" onClick={() => { setPracticeIdiom(idiom); setIsDetailView(true); }} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* БИБЛИОТЕКА */}
+        {/* СЕКЦИЯ ДНЯ */}
         <div className="mt-12">
-          <h3 className="text-gray-500 font-bold mb-6 uppercase tracking-[0.2em] text-[10px]">
-            {searchQuery ? 'Результаты поиска' : 'Твоя библиотека'}
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {sections.others.map(idiom => (
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-white font-black uppercase tracking-[0.3em] text-[11px] flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-red-600 fill-current" />
+                {sections.isSearch ? 'Результаты поиска' : 'Твоя подборка на сегодня'}
+              </h3>
+              {!sections.isSearch && (
+                <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">
+                  10 случайных фраз для практики
+                </p>
+              )}
+            </div>
+
+            {!sections.isSearch && (
+              <button 
+                onClick={() => setRefreshSeed(s => s + 1)}
+                className="p-3 bg-white/5 hover:bg-white/10 rounded-full transition active:rotate-180 duration-500"
+                title="Обновить список"
+              >
+                <RefreshCw className="w-4 h-4 text-gray-400" />
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {sections.daily.map(idiom => (
               <IdiomCard 
                 key={idiom.id} 
                 idiom={idiom} 
@@ -186,22 +176,25 @@ const Index = () => {
         </div>
       </main>
 
-      {/* ЭКРАН ДЕТАЛЕЙ */}
+      {/* МОДАЛКИ (Profile, Detail, Practice) - оставляем как в предыдущем коде */}
+      <AnimatePresence>
+        {isProfileOpen && (
+          <Profile 
+            isOpen={isProfileOpen} 
+            onClose={() => setIsProfileOpen(false)} 
+            isPremium={isPremium}
+            stats={{ learnedCount: learnedTotal, totalCount: idioms.length, streak: streak }}
+          />
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {isDetailView && practiceIdiom && (
-          <motion.div 
-            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-50 bg-[#141414] overflow-y-auto"
-          >
+          <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} className="fixed inset-0 z-50 bg-[#141414] overflow-y-auto">
              <div className="relative h-[45vh]">
                <img src={practiceIdiom.imageUrl} className="w-full h-full object-cover" />
                <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
-               
-               <button 
-                onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} 
-                className="absolute top-6 left-6 bg-black/60 px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 border border-white/10 hover:bg-white/20 transition-all active:scale-95 group"
-               >
+               <button onClick={() => { setIsDetailView(false); setPracticeIdiom(null); }} className="absolute top-6 left-6 bg-black/60 px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2 border border-white/10 hover:bg-white/20 transition-all group">
                  <ArrowLeft className="w-5 h-5 text-white group-hover:-translate-x-1 transition-transform" />
                  <span className="text-sm font-bold uppercase tracking-wider text-white">Назад</span>
                </button>
@@ -210,68 +203,54 @@ const Index = () => {
              <div className="max-w-2xl mx-auto px-6 pb-20 -mt-16 relative z-10">
                <div className="flex items-center gap-4 mb-4">
                  <h2 className="text-4xl font-black tracking-tighter">{practiceIdiom.expression}</h2>
-                 <button onClick={() => speak(practiceIdiom.expression)} className="p-3 bg-red-600/20 rounded-full hover:bg-red-600/30 transition active:scale-90">
+                 <button onClick={() => speak(practiceIdiom.expression)} className="p-3 bg-red-600/20 rounded-full hover:bg-red-600/30 transition">
                    <Volume2 className="w-6 h-6 text-red-500" />
                  </button>
                </div>
-               
                <p className="text-green-500 font-bold text-xl mb-8 italic">{practiceIdiom.meaning}</p>
-               
                <div className="bg-white/5 p-6 rounded-2xl border border-white/10 mb-10 relative">
-                 <p className="text-[10px] text-gray-500 uppercase font-black mb-3 tracking-widest">Пример использования</p>
+                 <p className="text-[10px] text-gray-500 uppercase font-black mb-3 tracking-widest">Контекст</p>
                  <p className="text-xl font-serif italic text-gray-100 leading-relaxed pr-8">"{practiceIdiom.example}"</p>
                  <button onClick={() => speak(practiceIdiom.example)} className="absolute right-6 bottom-6 text-gray-500 hover:text-white transition">
                    <Volume2 className="w-4 h-4" />
                  </button>
                </div>
-
-               <button 
-                  className="w-full bg-red-600 py-5 rounded-2xl font-black text-xl hover:bg-red-700 transition shadow-xl shadow-red-600/30 active:scale-[0.98]"
-                  onClick={() => setIsPracticing(true)}
-               >
+               <button className="w-full bg-red-600 py-5 rounded-2xl font-black text-xl hover:bg-red-700 transition shadow-xl active:scale-[0.98]" onClick={() => setIsPracticing(true)}>
                  {getIdiomStatus(practiceIdiom.id) === 'needs_review' ? 'ПОВТОРИТЬ' : 'УЧИТЬ'}
                </button>
              </div>
 
-             {/* ПРАКТИКА */}
              {isPracticing && (
                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-[#141414]">
                  <IdiomPractice
                    idiom={practiceIdiom}
                    onClose={() => setIsPracticing(false)}
                    onFullyLearned={() => { 
-                     handleCompleteIdiom(practiceIdiom.id);
-                     setIsPracticing(false); 
-                     setIsDetailView(false); 
+                    const current = progressMap[practiceIdiom.id] || { completedExercises: [], isLearned: false, reviewStep: 0 };
+                    setProgressMap(prev => ({
+                      ...prev,
+                      [practiceIdiom.id]: {
+                        completedExercises: [], 
+                        isLearned: true,
+                        reviewStep: current.reviewStep + 1,
+                        nextReviewDate: calculateNextReview(current.reviewStep)
+                      }
+                    }));
+                    setIsPracticing(false); 
+                    setIsDetailView(false); 
                    }}
-                   completedExercises={new Set()} 
-                   onExerciseComplete={() => {}} 
+                   completedExercises={new Set()} onExerciseComplete={() => {}} 
                  />
                </motion.div>
              )}
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* ЭКРАН ПРОФИЛЯ */}
-      <AnimatePresence>
-        {isProfileOpen && (
-          <Profile 
-            isOpen={isProfileOpen} 
-            onClose={() => setIsProfileOpen(false)} 
-            isPremium={isPremium}
-            stats={{
-              learnedCount: learnedTotal,
-              totalCount: idioms.length,
-              streak: streak
-            }}
-          />
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 };
 
+// Компонент карточки (IdiomCard)
 const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, onClick: () => void }) => (
   <motion.div 
     whileTap={{ scale: 0.96 }} onClick={onClick} 
@@ -279,18 +258,12 @@ const IdiomCard = ({ idiom, status, onClick }: { idiom: Idiom, status: string, o
   >
     <img 
       src={idiom.imageUrl} 
+      loading="lazy"
       className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${status === 'waiting' ? 'opacity-20 grayscale' : 'opacity-70'}`} 
     />
     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent flex items-end p-4">
       <p className="font-bold text-sm sm:text-base leading-tight tracking-tight">{idiom.expression}</p>
     </div>
-    
-    {status === 'waiting' && (
-      <div className="absolute top-3 right-3 bg-white/10 px-2 py-1 rounded-md text-[9px] font-black uppercase backdrop-blur-md border border-white/10 text-gray-400">
-        Выучено
-      </div>
-    )}
-    
     {status === 'needs_review' && (
       <div className="absolute top-3 right-3 flex h-3 w-3">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
