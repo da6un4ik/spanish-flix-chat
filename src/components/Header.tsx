@@ -1,33 +1,27 @@
-import { Flame, Search } from 'lucide-react';
+import { Flame } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-interface HeaderProps {
-  streak?: number;
-}
-
-export const Header = ({ streak = 0 }: HeaderProps) => {
+export const Header = ({ streak }: { streak: number }) => {
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-display text-lg">ES</span>
-          </div>
-          <div>
-            <h1 className="font-display text-lg leading-none">IDIOMAS</h1>
-            <p className="text-[10px] text-muted-foreground">Испанские идиомы</p>
-          </div>
-        </div>
+    <header className="flex items-center justify-between px-6 py-4 bg-gradient-to-b from-black/80 to-transparent sticky top-0 z-40 backdrop-blur-sm">
+      <div className="flex items-center gap-2">
+        <span className="text-red-600 text-2xl font-black tracking-tighter italic">SPANISH FLIX</span>
+      </div>
+      
+      <div className="flex items-center gap-4">
+        <motion.div 
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-full border ${
+            streak > 0 ? 'border-orange-500/50 bg-orange-500/10 text-orange-500' : 'border-white/10 text-gray-500'
+          }`}
+        >
+          <Flame className={`w-5 h-5 ${streak > 0 ? 'fill-current animate-pulse' : ''}`} />
+          <span className="font-bold">{streak}</span>
+        </motion.div>
         
-        <div className="flex items-center gap-3">
-          {streak > 0 && (
-            <div className="flex items-center gap-1 bg-amber-500/20 px-2 py-1 rounded-full">
-              <Flame className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-medium text-amber-400">{streak}</span>
-            </div>
-          )}
-          <button className="p-2 hover:bg-secondary rounded-full transition-colors">
-            <Search className="w-5 h-5 text-muted-foreground" />
-          </button>
+        <div className="w-8 h-8 rounded-md bg-blue-600 flex items-center justify-center text-[10px] font-bold">
+          USER
         </div>
       </div>
     </header>
