@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Idiom } from '@/data/idioms';
 import { RotateCcw, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 interface FlashCardProps {
   idioms: Idiom[];
@@ -11,6 +12,7 @@ interface FlashCardProps {
 export const FlashCard = ({ idioms, learnedIds, onLearn }: FlashCardProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const { playCorrectSound, playWrongSound } = useSoundEffects();
 
   const currentIdiom = idioms[currentIndex];
 
@@ -29,6 +31,7 @@ export const FlashCard = ({ idioms, learnedIds, onLearn }: FlashCardProps) => {
   };
 
   const handleKnow = () => {
+    playCorrectSound();
     if (!learnedIds.has(currentIdiom.id)) {
       onLearn(currentIdiom.id);
     }
@@ -36,6 +39,7 @@ export const FlashCard = ({ idioms, learnedIds, onLearn }: FlashCardProps) => {
   };
 
   const handleDontKnow = () => {
+    playWrongSound();
     handleNext();
   };
 

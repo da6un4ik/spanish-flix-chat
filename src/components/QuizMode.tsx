@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Idiom } from '@/data/idioms';
 import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from 'lucide-react';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 interface QuizModeProps {
   idioms: Idiom[];
@@ -19,6 +20,7 @@ export const QuizMode = ({ idioms, onLearn }: QuizModeProps) => {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const { playCorrectSound, playWrongSound, playSuccessSound } = useSoundEffects();
 
   const questions: Question[] = useMemo(() => {
     return idioms.map((idiom) => {
@@ -48,8 +50,11 @@ export const QuizMode = ({ idioms, onLearn }: QuizModeProps) => {
     setIsCorrect(correct);
 
     if (correct) {
+      playCorrectSound();
       setScore((prev) => prev + 1);
       onLearn(currentQuestion.idiom.id);
+    } else {
+      playWrongSound();
     }
   };
 
@@ -59,6 +64,7 @@ export const QuizMode = ({ idioms, onLearn }: QuizModeProps) => {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
+      playSuccessSound();
       setShowResults(true);
     }
   };
