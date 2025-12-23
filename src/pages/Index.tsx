@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
@@ -15,20 +15,19 @@ const Index = () => {
   const [refreshSeed, setRefreshSeed] = useState(0);
   const [activeSessionList, setActiveSessionList] = useState<Idiom[]>([]);
 
-  // 1. Безопасная инициализация Telegram для v6.0
+  // 1. Инициализация Telegram и "прогрев" голосов
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg) { 
       tg.ready(); 
       tg.expand();
-
-      // ПРОВЕРКА ВЕРСИИ: Если версия ниже 6.1, используем только системные ключи
+      
       const version = parseFloat(tg.version || "6.0");
       try {
+        // Фикс ошибки v6.0: Header color только через константы
         if (version >= 6.1) {
           tg.setHeaderColor('#0A0A0A');
         } else {
-          // Для версии 6.0 и ниже используем только это:
           tg.setHeaderColor('bg_color');
         }
       } catch (e) {
@@ -36,33 +35,45 @@ const Index = () => {
       }
     }
 
-    // Загрузка прогресса [cite: 2025-12-22]
+    // Прогрев синтеза речи
+    window.speechSynthesis.getVoices();
+
     const saved = localStorage.getItem('modismo-progress-v4');
     if (saved) {
       try { setProgressMap(JSON.parse(saved)); } catch (e) { console.error(e); }
     }
   }, []);
 
-  // 2. Список на сегодня
+  // 2. Список на сегодня (10 случайных)
   useEffect(() => {
     const shuffled = [...idioms].sort(() => 0.5 - Math.random());
     setActiveSessionList(shuffled.slice(0, 10));
   }, [refreshSeed]);
 
-  // 3. Сохранение прогресса
+  // 3. Автосохранение прогресса [cite: 2025-12-22]
   useEffect(() => {
     if (Object.keys(progressMap).length > 0) {
       localStorage.setItem('modismo-progress-v4', JSON.stringify(progressMap));
     }
   }, [progressMap]);
 
-  const speak = (text: string, isExample = false) => {
+  // 4. Улучшенная функция озвучки
+  const speak = useCallback((text: string, isExample = false) => {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'es-ES';
-    if (isExample) u.rate = 0.85;
+
+    const voices = window.speechSynthesis.getVoices();
+    // Ищем качественный испанский голос
+    const spanishVoice = voices.find(v => v.lang === 'es-ES' && v.name.includes('Google')) 
+                      || voices.find(v => v.lang.includes('es-'));
+    
+    if (spanishVoice) u.voice = spanishVoice;
+    
+    u.rate = isExample ? 0.8 : 0.9;
+    u.pitch = 1.0;
     window.speechSynthesis.speak(u);
-  };
+  }, []);
 
   const handleNextIdiom = () => {
     if (!practiceIdiom) return;
@@ -78,7 +89,7 @@ const Index = () => {
       setIsPracticing(false);
       setIsDetailView(false);
       setPracticeIdiom(null);
-      (window as any).Telegram?.WebApp?.showAlert("¡Increíble! Сессия завершена. 🎉");
+      (window as any).Telegram?.WebApp?.showAlert("¡Felicidades! Все идиомы на сегодня пройдены. 🎉");
     }
   };
 
@@ -112,7 +123,7 @@ const Index = () => {
 
         <div className="mt-12">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2 text-left">
+            <h3 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
               <Sparkles className="w-3 h-3 text-red-600" /> Подборка дня
             </h3>
             <button onClick={() => setRefreshSeed(s => s + 1)} className="text-gray-600 active:rotate-180 transition-all duration-500">
@@ -126,21 +137,18 @@ const Index = () => {
                 key={`${idiom.id}-${index}`} 
                 whileTap={{ scale: 0.96 }}
                 onClick={() => { setPracticeIdiom(idiom); setIsDetailView(true); }}
-                className="relative aspect-[10/13] rounded-2xl overflow-hidden bg-[#161616] border border-white/5 shadow-2xl group"
+                className="relative aspect-[10/13] rounded-2xl overflow-hidden bg-[#161616] border border-white/5 shadow-2xl"
               >
-                {/* КАРТИНКА ИЗ ПАПКИ PUBLIC */}
                 <img 
                   src={idiom.imageUrl} 
                   className="absolute inset-0 w-full h-full object-cover opacity-80" 
                   alt=""
-                  loading="lazy"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
                 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-                
-                {/* ТЕКСТ (Снова поверх с усиленным градиентом) */}
+                {/* Текст: Белый с тенью на темном градиенте */}
                 <div className="absolute inset-x-0 bottom-0 p-4 z-20">
-                  <p className="font-bold text-[13px] leading-tight text-white uppercase text-left tracking-tight drop-shadow-2xl">
+                  <p className="font-bold text-[13px] leading-tight text-white uppercase text-left tracking-tight drop-shadow-md">
                     {idiom.expression}
                   </p>
                 </div>
@@ -154,7 +162,7 @@ const Index = () => {
         </div>
       </main>
 
-      {/* DETAIL VIEW */}
+      {/* ЭКРАН ДЕТАЛЕЙ */}
       <AnimatePresence mode="wait">
         {isDetailView && practiceIdiom && (
           <motion.div 
@@ -172,27 +180,28 @@ const Index = () => {
 
              <div className="max-w-xl mx-auto px-8 pb-20 -mt-16 relative z-10">
                <h2 className="text-4xl font-black mb-2 tracking-tighter text-white uppercase text-left">{practiceIdiom.expression}</h2>
-               <p className="text-red-600 font-black text-xl mb-8 text-left leading-tight italic">{practiceIdiom.meaning}</p>
+               <p className="text-red-600 font-black text-xl mb-2 text-left leading-tight italic">{practiceIdiom.meaning}</p>
+               <p className="text-gray-500 text-sm mb-8 text-left uppercase tracking-widest font-bold">({practiceIdiom.literal})</p>
                
                <div className="bg-white/5 border-l-4 border-red-600 p-5 mb-10 rounded-r-2xl flex justify-between items-start gap-4">
                   <div className="flex-1 text-left">
-                    <p className="text-[10px] text-gray-500 uppercase font-black mb-2 tracking-widest">Пример:</p>
+                    <p className="text-[10px] text-gray-400 uppercase font-black mb-2 tracking-widest">Пример:</p>
                     <p className="text-gray-200 italic font-medium leading-relaxed">"{practiceIdiom.example}"</p>
                   </div>
-                  <button onClick={() => speak(practiceIdiom.example, true)} className="p-2 bg-white/5 rounded-full">
+                  <button onClick={() => speak(practiceIdiom.example, true)} className="p-3 bg-white/5 rounded-full active:scale-90 transition-transform">
                     <Volume2 className="w-5 h-5 text-red-600" />
                   </button>
                </div>
 
                <div className="flex items-center gap-4">
-                  <button onClick={() => speak(practiceIdiom.expression)} className="p-5 bg-white/5 rounded-2xl border border-white/10 active:bg-white/20">
+                  <button onClick={() => speak(practiceIdiom.expression)} className="p-5 bg-white/5 rounded-2xl border border-white/10 active:bg-white/20 transition-colors">
                     <Volume2 className="w-6 h-6 text-white" />
                   </button>
                   <button 
                     className="flex-1 bg-red-600 text-white py-5 rounded-2xl font-black text-xl active:scale-95 transition-all shadow-lg shadow-red-900/40" 
                     onClick={() => setIsPracticing(true)}
                   >
-                    УЧИТЬ ФРАЗУ
+                    ПРАКТИКА
                   </button>
                </div>
              </div>
