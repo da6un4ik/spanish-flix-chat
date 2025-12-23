@@ -15,26 +15,35 @@ const Index = () => {
   const [refreshSeed, setRefreshSeed] = useState(0);
   const [activeSessionList, setActiveSessionList] = useState<Idiom[]>([]);
 
-  // 1. Инициализация и загрузка прогресса [cite: 2025-12-22]
+  // 1. Безопасная инициализация Telegram для v6.0
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg) { 
       tg.ready(); 
       tg.expand();
-      // Фикс для версии 6.0: используем системный ключ вместо HEX
+
+      // ПРОВЕРКА ВЕРСИИ: Если версия ниже 6.1, используем только системные ключи
+      const version = parseFloat(tg.version || "6.0");
       try {
-        tg.setHeaderColor('bg_color'); 
+        if (version >= 6.1) {
+          tg.setHeaderColor('#0A0A0A');
+        } else {
+          // Для версии 6.0 и ниже используем только это:
+          tg.setHeaderColor('bg_color');
+        }
       } catch (e) {
-        console.warn("Header color set to default");
+        console.warn("Telegram Header Color not supported");
       }
     }
+
+    // Загрузка прогресса [cite: 2025-12-22]
     const saved = localStorage.getItem('modismo-progress-v4');
     if (saved) {
       try { setProgressMap(JSON.parse(saved)); } catch (e) { console.error(e); }
     }
   }, []);
 
-  // 2. Генерация списка на сессию
+  // 2. Список на сегодня
   useEffect(() => {
     const shuffled = [...idioms].sort(() => 0.5 - Math.random());
     setActiveSessionList(shuffled.slice(0, 10));
@@ -79,7 +88,7 @@ const Index = () => {
     <motion.div className="min-h-screen bg-[#0A0A0A] text-white select-none font-sans overflow-x-hidden">
       
       {/* HEADER */}
-      <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-[#0A0A0A] sticky top-0 z-40">
+      <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-[#0A0A0A] sticky top-0 z-40 border-b border-white/5">
         <div className="flex flex-col text-left">
           <h1 className="text-4xl font-black italic tracking-tighter leading-none uppercase">
             Modismo<span className="text-red-600 not-italic">.</span>
@@ -89,7 +98,7 @@ const Index = () => {
         
         <button 
           onClick={() => setIsProfileOpen(true)}
-          className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 active:scale-90 transition-transform relative"
+          className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5 relative active:scale-90"
         >
            <User className="w-5 h-5 text-gray-400" />
            {learnedTotal > 0 && (
@@ -103,37 +112,35 @@ const Index = () => {
 
         <div className="mt-12">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
+            <h3 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2 text-left">
               <Sparkles className="w-3 h-3 text-red-600" /> Подборка дня
             </h3>
-            <button onClick={() => setRefreshSeed(s => s + 1)} className="text-gray-600 active:rotate-180 transition-transform duration-500">
+            <button onClick={() => setRefreshSeed(s => s + 1)} className="text-gray-600 active:rotate-180 transition-all duration-500">
               <RefreshCw className="w-4 h-4" />
             </button>
           </div>
 
-          {/* СЕТКА КАРТОЧЕК */}
           <div className="grid grid-cols-2 gap-4">
             {activeSessionList.map((idiom, index) => (
               <motion.div 
                 key={`${idiom.id}-${index}`} 
                 whileTap={{ scale: 0.96 }}
                 onClick={() => { setPracticeIdiom(idiom); setIsDetailView(true); }}
-                className="relative aspect-[10/12] rounded-2xl overflow-hidden bg-[#161616] border border-white/5 shadow-2xl"
+                className="relative aspect-[10/13] rounded-2xl overflow-hidden bg-[#161616] border border-white/5 shadow-2xl group"
               >
-                {/* КАРТИНКА: Важно проверить пути в idioms.ts */}
+                {/* КАРТИНКА ИЗ ПАПКИ PUBLIC */}
                 <img 
                   src={idiom.imageUrl} 
-                  className="absolute inset-0 w-full h-full object-cover opacity-70 transition-opacity" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-80" 
                   alt=""
-                  onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?w=500'; }}
+                  loading="lazy"
                 />
                 
-                {/* ГРАДИЕНТ ДЛЯ ЧИТАЕМОСТИ ТЕКСТА */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
                 
-                {/* ТЕКСТ ПОВЕРХ КАРТИНКИ (ВЕРНУЛ) */}
+                {/* ТЕКСТ (Снова поверх с усиленным градиентом) */}
                 <div className="absolute inset-x-0 bottom-0 p-4 z-20">
-                  <p className="font-bold text-[13px] leading-tight text-white uppercase text-left tracking-tight drop-shadow-lg">
+                  <p className="font-bold text-[13px] leading-tight text-white uppercase text-left tracking-tight drop-shadow-2xl">
                     {idiom.expression}
                   </p>
                 </div>
@@ -147,7 +154,7 @@ const Index = () => {
         </div>
       </main>
 
-      {/* ЭКРАН ДЕТАЛЕЙ */}
+      {/* DETAIL VIEW */}
       <AnimatePresence mode="wait">
         {isDetailView && practiceIdiom && (
           <motion.div 
@@ -165,9 +172,9 @@ const Index = () => {
 
              <div className="max-w-xl mx-auto px-8 pb-20 -mt-16 relative z-10">
                <h2 className="text-4xl font-black mb-2 tracking-tighter text-white uppercase text-left">{practiceIdiom.expression}</h2>
-               <p className="text-red-600 font-black text-xl mb-8 text-left leading-tight">{practiceIdiom.meaning}</p>
+               <p className="text-red-600 font-black text-xl mb-8 text-left leading-tight italic">{practiceIdiom.meaning}</p>
                
-               <div className="bg-white/5 border-l-4 border-red-600 p-5 mb-10 rounded-r-2xl flex justify-between items-start gap-4 shadow-xl">
+               <div className="bg-white/5 border-l-4 border-red-600 p-5 mb-10 rounded-r-2xl flex justify-between items-start gap-4">
                   <div className="flex-1 text-left">
                     <p className="text-[10px] text-gray-500 uppercase font-black mb-2 tracking-widest">Пример:</p>
                     <p className="text-gray-200 italic font-medium leading-relaxed">"{practiceIdiom.example}"</p>
@@ -209,7 +216,6 @@ const Index = () => {
         )}
       </AnimatePresence>
 
-      {/* ПРОФИЛЬ */}
       <AnimatePresence>
         {isProfileOpen && (
           <Profile 
