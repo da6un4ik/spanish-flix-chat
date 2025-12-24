@@ -51,7 +51,7 @@ export const IdiomCard = ({
           </div>
 
           <h2 className="font-display text-3xl md:text-5xl text-foreground mb-3">
-            {idiom.spanish}
+            {idiom.expression}
           </h2>
 
           <p className="text-muted-foreground text-sm mb-4">
@@ -116,7 +116,7 @@ export const IdiomCard = ({
         </div>
 
         <h3 className="font-display text-lg md:text-xl text-foreground leading-tight mb-1">
-          {idiom.spanish}
+          {idiom.expression}
         </h3>
 
         <p className="text-xs text-muted-foreground mb-2">{idiom.category}</p>

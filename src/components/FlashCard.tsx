@@ -89,7 +89,7 @@ export const FlashCard = ({ idioms, learnedIds, onLearn }: FlashCardProps) => {
           >
             <span className="text-xs text-primary font-medium mb-4">ИСПАНСКАЯ ИДИОМА</span>
             <h2 className="font-display text-3xl text-center text-foreground mb-4">
-              {currentIdiom.spanish}
+              {currentIdiom.expression}
             </h2>
             <p className="text-sm text-muted-foreground text-center">
               Буквально: "{currentIdiom.literal}"

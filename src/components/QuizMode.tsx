@@ -134,7 +134,7 @@ export const QuizMode = ({ idioms, onLearn }: QuizModeProps) => {
       <div className="bg-card rounded-2xl p-6 w-full max-w-sm border border-border mb-6">
         <span className="text-xs text-primary font-medium">ЧТО ОЗНАЧАЕТ?</span>
         <h2 className="font-display text-2xl text-foreground mt-2">
-          {currentQuestion.idiom.spanish}
+          {currentQuestion.idiom.expression}
         </h2>
         <p className="text-sm text-muted-foreground mt-2">
           Буквально: "{currentQuestion.idiom.literal}"
