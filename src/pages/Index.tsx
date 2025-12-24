@@ -4,6 +4,7 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
 import { Profile } from '@/components/Profile';
 import { SearchBar } from '@/components/SearchBar';
+import { VideoSection } from '@/components/VideoSection';
 import { idioms, Idiom } from '@/data/idioms';
 import { Volume2, ArrowLeft, RefreshCw, Sparkles, User } from 'lucide-react';
 
@@ -195,6 +196,9 @@ const Index = () => {
             </div>
           )}
         </div>
+
+        {/* Секция видео */}
+        <VideoSection />
       </main>
 
       {/* ЭКРАН ДЕТАЛЕЙ */}
