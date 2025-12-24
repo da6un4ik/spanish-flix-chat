@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
 import { Profile } from '@/components/Profile';
+import { SearchBar } from '@/components/SearchBar';
 import { idioms, Idiom } from '@/data/idioms';
 import { Volume2, ArrowLeft, RefreshCw, Sparkles, User } from 'lucide-react';
 
@@ -14,6 +15,21 @@ const Index = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [refreshSeed, setRefreshSeed] = useState(0);
   const [activeSessionList, setActiveSessionList] = useState<Idiom[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Фильтрация по поисковому запросу
+  const filteredIdioms = useMemo(() => {
+    if (!searchQuery.trim()) return activeSessionList;
+    
+    const query = searchQuery.toLowerCase().trim();
+    return activeSessionList.filter(idiom => 
+      idiom.expression.toLowerCase().includes(query) ||
+      idiom.meaning.toLowerCase().includes(query) ||
+      idiom.literal.toLowerCase().includes(query) ||
+      idiom.example.toLowerCase().includes(query) ||
+      idiom.category.toLowerCase().includes(query)
+    );
+  }, [activeSessionList, searchQuery]);
 
   // 1. Инициализация Telegram и "прогрев" голосов
   useEffect(() => {
@@ -121,18 +137,36 @@ const Index = () => {
       <main className="px-6 pb-32">
         <ProgressBar learned={learnedTotal} total={idioms.length} />
 
-        <div className="mt-12">
-          <div className="flex items-center justify-between mb-8">
+        {/* Поиск */}
+        <div className="mt-6">
+          <SearchBar 
+            value={searchQuery} 
+            onChange={setSearchQuery} 
+            placeholder="Поиск по идиомам, значениям, категориям..." 
+          />
+        </div>
+
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
-              <Sparkles className="w-3 h-3 text-red-600" /> Подборка дня
+              <Sparkles className="w-3 h-3 text-red-600" /> 
+              {searchQuery ? `Найдено: ${filteredIdioms.length}` : 'Подборка дня'}
             </h3>
-            <button onClick={() => setRefreshSeed(s => s + 1)} className="text-gray-600 active:rotate-180 transition-all duration-500">
-              <RefreshCw className="w-4 h-4" />
-            </button>
+            {!searchQuery && (
+              <button onClick={() => setRefreshSeed(s => s + 1)} className="text-gray-600 active:rotate-180 transition-all duration-500">
+                <RefreshCw className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {activeSessionList.map((idiom, index) => (
+          {filteredIdioms.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-sm">Ничего не найдено</p>
+              <p className="text-gray-600 text-xs mt-1">Попробуйте другой запрос</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              {filteredIdioms.map((idiom, index) => (
               <motion.div 
                 key={`${idiom.id}-${index}`} 
                 whileTap={{ scale: 0.96 }}
@@ -158,7 +192,8 @@ const Index = () => {
                 )}
               </motion.div>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </main>
 
