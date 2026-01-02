@@ -1,110 +1,55 @@
 import { motion } from 'framer-motion';
-import { X, Award, Calendar, BookOpen, Star, Crown } from 'lucide-react';
+import { X, Award, Calendar, BookOpen, Star, Crown, Share2, Heart, ChevronRight } from 'lucide-react';
+import { idioms } from '@/data/idioms';
 
 interface ProfileProps {
-  isOpen: boolean;
-  onClose: () => void;
-  stats: {
-    learnedCount: number;
-    totalCount: number;
-    streak: number;
-  };
-  isPremium?: boolean;
+  isOpen: boolean; onClose: () => void;
+  stats: { learnedCount: number; totalCount: number; streak: number; };
+  favorites: string[]; onSelectIdiom: (id: string) => void;
 }
 
-export const Profile = ({ isOpen, onClose, stats, isPremium = false }: ProfileProps) => {
+export const Profile = ({ isOpen, onClose, stats, favorites, onSelectIdiom }: ProfileProps) => {
+  const favoriteItems = idioms.filter(i => favorites.includes(i.id));
+
   return (
-    <motion.div
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-      className="fixed inset-0 z-[70] bg-[#0A0A0A] text-white flex flex-col"
-    >
-      {/* Header */}
+    <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-0 z-[100] bg-[#0A0A0A] text-white flex flex-col">
       <div className="px-6 pt-12 pb-6 flex justify-between items-center border-b border-white/5 bg-[#0A0A0A]">
-        <h2 className="text-2xl font-black uppercase tracking-tighter">Mi Perfil</h2>
-        <button onClick={onClose} className="p-2 bg-white/5 rounded-full border border-white/10 active:scale-90">
-          <X className="w-6 h-6 text-gray-400" />
-        </button>
+        <h2 className="text-2xl font-black uppercase tracking-tighter italic">Mi Perfil</h2>
+        <button onClick={onClose} className="p-2 bg-white/5 rounded-full border border-white/10"><X /></button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-8">
-        {/* Аватар и статус подписки */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="relative mb-4">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-red-600 to-red-400 p-1">
-              <div className="w-full h-full rounded-full bg-[#161616] flex items-center justify-center border-4 border-[#0A0A0A]">
-                <Award className="w-10 h-10 text-red-600" />
-              </div>
-            </div>
-            {isPremium && (
-              <div className="absolute -bottom-1 -right-1 bg-yellow-500 p-1.5 rounded-full border-2 border-[#0A0A0A]">
-                <Crown className="w-4 h-4 text-black" />
-              </div>
-            )}
-          </div>
-          <h3 className="text-xl font-bold mb-1">Estudiante de Español</h3>
-          <p className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">
-            {isPremium ? 'Plan Premium' : 'Plan Gratuito'}
-          </p>
-        </div>
-
-        {/* Сетка статистики */}
-        <div className="grid grid-cols-2 gap-4 mb-10">
-          <div className="bg-white/5 p-5 rounded-2xl border border-white/10 flex flex-col items-center text-center">
+      <div className="flex-1 overflow-y-auto px-6 py-8 text-left">
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col items-center">
             <BookOpen className="w-6 h-6 text-red-600 mb-2" />
-            <span className="text-2xl font-black">{stats.learnedCount}</span>
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Aprendido</span>
+            <span className="text-3xl font-black italic">{stats.learnedCount}</span>
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Aprendido</span>
           </div>
-          <div className="bg-white/5 p-5 rounded-2xl border border-white/10 flex flex-col items-center text-center">
+          <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col items-center">
             <Calendar className="w-6 h-6 text-red-600 mb-2" />
-            <span className="text-2xl font-black">{stats.streak}</span>
-            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Días Seguidos</span>
+            <span className="text-3xl font-black italic">{stats.streak}</span>
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Días Seguidos</span>
           </div>
         </div>
 
-        {/* Текущий план */}
-        <div className="bg-gradient-to-br from-red-600/20 to-transparent p-6 rounded-2xl border border-red-600/30 mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <Star className="w-5 h-5 text-red-600 fill-red-600" />
-            <h4 className="font-black uppercase tracking-widest text-xs">Tu suscripción actual</h4>
-          </div>
-          <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-            {isPremium 
-              ? '¡Tienes acceso ilimitado a todos los modismos y clips de películas!' 
-              : 'Suscríbete para desbloquear videos exclusivos y más ejercicios interactivos.'}
-          </p>
-          {!isPremium && (
-            <button className="w-full bg-white text-black py-4 rounded-xl font-black text-sm uppercase active:scale-95 transition-transform">
-              Mejorar a Premium
+        <h4 className="flex items-center gap-2 font-black uppercase text-xs italic mb-4 text-red-600"><Heart size={14} fill="currentColor"/> Mis Favoritos</h4>
+        <div className="space-y-3 mb-10">
+          {favoriteItems.length > 0 ? favoriteItems.map(i => (
+            <button key={i.id} onClick={() => onSelectIdiom(i.id)} className="w-full bg-white/5 p-4 rounded-2xl flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src={i.imageUrl} className="w-10 h-10 rounded-lg object-cover" />
+                <span className="font-bold text-sm uppercase italic">{i.expression}</span>
+              </div>
+              <ChevronRight size={18} className="text-gray-600" />
             </button>
-          )}
+          )) : <p className="text-gray-600 text-xs uppercase font-bold text-center py-6">No hay favoritos</p>}
         </div>
 
-        {/* Прогресс-бар */}
-        <div className="mb-10 text-left">
-          <div className="flex justify-between items-end mb-2">
-            <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Progreso Total</span>
-            <span className="text-xs font-bold text-red-600">
-              {Math.round((stats.learnedCount / stats.totalCount) * 100)}%
-            </span>
-          </div>
-          <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${(stats.learnedCount / stats.totalCount) * 100}%` }}
-              className="h-full bg-red-600"
-            />
-          </div>
+        <div className="bg-gradient-to-br from-red-600/20 to-transparent p-6 rounded-3xl border border-red-600/30">
+          <h4 className="font-black uppercase text-xs mb-2 flex items-center gap-2"><Crown size={14}/> Premium Stars</h4>
+          <p className="text-gray-400 text-xs leading-relaxed mb-4">Desbloquea videos exclusivos de series y películas con Premium.</p>
+          <button className="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase">Mejorar Ahora</button>
         </div>
-      </div>
-
-      {/* Footer в стиле Netflix */}
-      <div className="p-8 text-center border-t border-white/5">
-        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">
-          Idiomas App © 2026
-        </p>
       </div>
     </motion.div>
   );
