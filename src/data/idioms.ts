@@ -1153,5 +1153,320 @@ export const idioms: Idiom[] = [
       a: "Has perdido el hilo y no recuerdas qué ibas a decir"
     }
   ]
-},
+},{
+  id: '42',
+  expression: 'Hacer la vista gorda',
+  meaning: 'Fingir que no se ha visto algo (un error o falta) para evitar problemas o favorecer a alguien.',
+  example: 'El profesor vio que el alumno usaba el móvil, pero hizo la vista gorda porque era el último día.',
+  imageUrl: 'https://images.unsplash.com/photo-1590595906931-81f04f0ccebb', // Imagen de alguien tapándose un ojo o mirando a otro lado
+  category: 'Social/Ética',
+  exercises: [
+    {
+      q: "¿Qué hace una persona que 'hace la vista gorda'?",
+      options: [
+        "Va al oculista",
+        "Decide ignorar una mala acción a propósito",
+        "Limpia sus gafas"
+      ],
+      a: "Decide ignorar una mala acción a propósito"
+    },
+    {
+      q: "A veces los padres hacen la ________ gorda cuando sus hijos se acuestan tarde.",
+      options: [
+        "cara",
+        "mano",
+        "vista"
+      ],
+      a: "vista"
+    },
+    {
+      q: "¿En qué situación es más común usar esta frase?",
+      options: [
+        "Un árbitro muy estricto",
+        "Un guardia que deja pasar a un amigo sin entrada",
+        "Alguien mirándose al espejo"
+      ],
+      a: "Un guardia que deja pasar a un amigo sin entrada"
+    },
+    {
+      q: "Si el jefe 'hace la vista gorda' con los retrasos de Juan, ¿qué significa?",
+      options: [
+        "El jefe lo sabe pero decide no castigarlo",
+        "El jefe no se ha enterado",
+        "El jefe ha despedido a Juan"
+      ],
+      a: "El jefe lo sabe pero decide no castigarlo"
+    }
+  ]
+},{
+  id: '43',
+  expression: 'Pasar de algo / de alguien',
+  meaning: 'No tener interés en una cosa o ignorar a una persona a propósito.',
+  example: 'Mis amigos quieren ir a la discoteca, pero yo paso de salir hoy; prefiero quedarme en casa.',
+  imageUrl: 'https://images.unsplash.com/photo-1516534775068-ba3e7458af70', // Imagen de alguien con auriculares ignorando el entorno
+  category: 'Social/Interés',
+  exercises: [
+    {
+      q: "Si alguien dice 'paso de este tema', ¿qué quiere decir?",
+      options: [
+        "Le parece fascinante",
+        "No le interesa y no quiere hablar de ello",
+        "Ha estudiado mucho el tema"
+      ],
+      a: "No le interesa y no quiere hablar de ello"
+    },
+    {
+      q: "No le hagas caso a lo que dicen, tú ________ de sus comentarios.",
+      options: [
+        "por",
+        "a",
+        "pasa"
+      ],
+      a: "pasa"
+    },
+    {
+      q: "¿En qué situación es más común usar esta frase?",
+      options: [
+        "En una carta formal al banco",
+        "Cuando un amigo te invita a algo aburrido",
+        "Pidiendo comida en un restaurante elegante"
+      ],
+      a: "Cuando un amigo te invita a algo aburrido"
+    },
+    {
+      q: "Si una persona dice 'Juan pasa de mí', ¿cómo se siente?",
+      options: [
+        "Se siente ignorada por Juan",
+        "Cree que Juan está enamorado",
+        "Piensa que Juan es muy puntual"
+      ],
+      a: "Se siente ignorada por Juan"
+    }
+  ]
+},{
+  id: '44',
+  expression: 'Estar de mala leche',
+  meaning: 'Estar de muy mal humor, irritable o tener malas intenciones.',
+  example: 'No le preguntes nada ahora a tu hermano, que está de mala leche porque ha perdido su equipo.',
+  imageUrl: 'https://images.unsplash.com/photo-1594499468121-f45e83e30df4', // Imagen de alguien con gesto muy enfadado o un rayo
+  category: 'Emociones',
+  exercises: [
+    {
+      q: "¿Cómo se siente alguien que 'está de mala leche'?",
+      options: [
+        "Feliz y con ganas de bromear",
+        "Irritable, enfadado o molesto",
+        "Con mucha hambre"
+      ],
+      a: "Irritable, enfadado o molesto"
+    },
+    {
+      q: "Hoy mi jefe está de mala ________, mejor hablamos con él mañana.",
+      options: [
+        "uva",
+        "leche",
+        "fruta"
+      ],
+      a: "leche"
+    },
+    {
+      q: "¿En qué situación es más probable usar esta frase?",
+      options: [
+        "Al recibir una noticia excelente",
+        "Cuando alguien te contesta de forma borde por un mal día",
+        "Relajado en la playa"
+      ],
+      a: "Cuando alguien te contesta de forma borde por un mal día"
+    },
+    {
+      q: "Si una broma 'está hecha con mala leche', ¿qué significa?",
+      options: [
+        "Tiene la intención de herir o molestar",
+        "Es muy graciosa",
+        "Trata sobre productos lácteos"
+      ],
+      a: "Tiene la intención de herir o molestar"
+    }
+  ]
+},{
+  id: '45',
+  expression: 'A quien madruga, Dios le ayuda',
+  meaning: 'Las personas que se esfuerzan y empiezan sus tareas pronto tienen más probabilidades de éxito.',
+  example: 'Mañana me levantaré a las seis para estudiar antes del examen; ya sabes que a quien madruga, Dios le ayuda.',
+  imageUrl: 'https://images.unsplash.com/photo-1470252649358-96962407e946', // Imagen de un amanecer o alguien despertando con energía
+  category: 'Sabiduría Popular',
+  exercises: [
+    {
+      q: "¿Cuál es el mensaje principal de este refrán?",
+      options: [
+        "Es necesario ir a la iglesia muy temprano",
+        "Ser trabajador y empezar pronto trae beneficios",
+        "Dormir mucho es bueno para la salud"
+      ],
+      a: "Ser trabajador y empezar pronto trae beneficios"
+    },
+    {
+      q: "No dejes el trabajo para la tarde. Recuerda que a quien ________, Dios le ayuda.",
+      options: [
+        "corre",
+        "duerme",
+        "madruga"
+      ],
+      a: "madruga"
+    },
+    {
+      q: "¿En qué situación sería más adecuado usar este refrán?",
+      options: [
+        "Cuando alguien llega tarde a una cita",
+        "Cuando un emprendedor abre su negocio muy temprano",
+        "Cuando decides cancelar planes por sueño"
+      ],
+      a: "Cuando un emprendedor abre su negocio muy temprano"
+    },
+    {
+      q: "En este refrán, el verbo 'madrugar' también implica...",
+      options: [
+        "Actuar con rapidez y anticipación ante un deber",
+        "Despertarse cansado tras una fiesta",
+        "Soñar con cosas positivas"
+      ],
+      a: "Actuar con rapidez y anticipación ante un deber"
+    }
+  ]
+},{
+  id: '46',
+  expression: 'Ser un cero a la izquierda',
+  meaning: 'Sentirse o ser alguien que no tiene ninguna influencia o cuya opinión no es valorada.',
+  example: 'En las reuniones de vecinos siento que soy un cero a la izquierda, nadie escucha mis propuestas.',
+  imageUrl: 'https://images.unsplash.com/photo-1590595601323-999330999017', // Imagen minimalista con un cero o alguien apartado
+  category: 'Social/Sentimientos',
+  exercises: [
+    {
+      q: "Si alguien dice que es 'un cero a la izquierda', ¿cómo se siente?",
+      options: [
+        "La persona más importante del grupo",
+        "Que su presencia u opinión no tienen valor",
+        "Que es muy bueno en matemáticas"
+      ],
+      a: "Que su presencia u opinión no tienen valor"
+    },
+    {
+      q: "Desde que llegó el nuevo jefe, me ignoran; parece que soy un ________ a la izquierda.",
+      options: [
+        "cero",
+        "uno",
+        "diez"
+      ],
+      a: "cero"
+    },
+    {
+      q: "¿En qué situación es más común usar esta frase?",
+      options: [
+        "Cuando ganas un premio",
+        "Cuando tus amigos organizan un viaje y no te preguntan",
+        "Cuando eres el director de una empresa"
+      ],
+      a: "Cuando tus amigos organizan un viaje y no te preguntan"
+    },
+    {
+      q: "¿Por qué se dice 'a la izquierda'?",
+      options: [
+        "Porque el lado izquierdo es siempre negativo",
+        "Porque un cero a la izquierda no cambia el valor de un número entero",
+        "Porque la mayoría de las personas son diestras"
+      ],
+      a: "Porque un cero a la izquierda no cambia el valor de un número entero"
+    }
+  ]
+},{
+  id: '47',
+  expression: 'Irse de copas',
+  meaning: 'Salir por la noche con amigos para tomar bebidas y socializar en bares o pubs.',
+  example: 'Hoy es viernes y por fin he terminado el proyecto; ¿nos vamos de copas para celebrar?',
+  imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b', // Imagen de cócteles o ambiente de pub nocturno
+  category: 'Social/Ocio',
+  exercises: [
+    {
+      q: "¿Qué significa que un grupo de amigos se va 'de copas'?",
+      options: [
+        "Van a comprar vajilla nueva",
+        "Salen a divertirse y tomar algo en bares",
+        "Participan en un torneo deportivo"
+      ],
+      a: "Salen a divertirse y tomar algo en bares"
+    },
+    {
+      q: "Después de la cena, nos fuimos de ________ por el centro de la ciudad.",
+      options: [
+        "vasos",
+        "copas",
+        "platos"
+      ],
+      a: "copas"
+    },
+    {
+      q: "¿En qué contexto es más probable escuchar esta expresión?",
+      options: [
+        "En una reunión formal a las 8 AM",
+        "Hablando con compañeros al final de la semana",
+        "En una biblioteca pública"
+      ],
+      a: "Hablando con compañeros al final de la semana"
+    },
+    {
+      q: "A diferencia de 'ir de cañas', 'irse de copas' suele implicar:",
+      options: [
+        "Horario más nocturno y ambiente de fiesta",
+        "Que solo se beben zumos",
+        "Ropa obligatoria de deporte"
+      ],
+      a: "Horario más nocturno y ambiente de fiesta"
+    }
+  ]
+},{
+  id: '48',
+  expression: 'Dormir a pierna suelta',
+  meaning: 'Dormir muy profundamente, con total tranquilidad y sin interrupciones.',
+  example: 'Como ayer terminé todos mis exámenes, anoche pude dormir a pierna suelta por fin.',
+  imageUrl: 'https://images.unsplash.com/photo-1541480601022-2308c0f02487', // Imagen de alguien durmiendo plácidamente
+  category: 'Salud/Bienestar',
+  exercises: [
+    {
+      q: "¿Cómo duerme una persona que lo hace 'a pierna suelta'?",
+      options: [
+        "Con mucha ropa y calor",
+        "Profundamente y de forma muy relajada",
+        "Solo un par de horas y se despierta cansado"
+      ],
+      a: "Profundamente y de forma muy relajada"
+    },
+    {
+      q: "Después de caminar 20 kilómetros por el monte, llegué a casa y dormí a ________ suelta.",
+      options: [
+        "mano",
+        "pierna",
+        "cabeza"
+      ],
+      a: "pierna"
+    },
+    {
+      q: "¿En qué situación es más lógico usar esta frase?",
+      options: [
+        "Cuando tienes mucha cafeína y no puedes cerrar los ojos",
+        "Cuando estás de vacaciones en un sitio silencioso y descansas maravillosamente",
+        "Cuando estás preocupado y das vueltas en la cama"
+      ],
+      a: "Cuando estás de vacaciones en un sitio silencioso y descansas maravillosamente"
+    },
+    {
+      q: "Si alguien te dice 'anoche dormí a pierna suelta', te transmite que:",
+      options: [
+        "Su calidad de sueño fue excelente y se siente renovado",
+        "Tuvo pesadillas durante toda la noche",
+        "Se cayó de la cama mientras dormía"
+      ],
+      a: "Su calidad de sueño fue excelente y se siente renovado"
+    }
+  ]
+}
 ];
