@@ -83,9 +83,19 @@ export const idioms: Idiom[] = [
         a: "Que el precio es muy elevado"
       },
       {
+        q: "Completa: «El viaje a Japón fue increíble, pero los billetes me ________ un ojo de la cara».",
+        options: ["valieron", "costaron", "gastaron"],
+        a: "costaron"
+      },
+      {
         q: "¿Qué frase es lo OPUESTO a 'Costar un ojo de la cara'?",
         options: ["Ser muy difícil", "Ser muy barato", "Ser pan comido"],
         a: "Ser muy barato"
+      },
+      {
+        q: "¿En qué escenario usarías esta expresión?",
+        options: ["Comprar una manzana", "Ver el precio de una mansión", "Recibir un descuento"],
+        a: "Ver el precio de una mansión"
       }
     ]
   },
@@ -100,13 +110,23 @@ export const idioms: Idiom[] = [
     exercises: [
       {
         q: "¿Qué significa realmente la expresión 'Meter la pata'?",
-        options: ["Poner el pie en peligro", "Cometer un error", "Comprar algo caro"],
+        options: ["Poner el pie en un lugar peligroso", "Comprar algo caro", "Cometer un error"],
         a: "Cometer un error"
+      },
+      {
+        q: "Completa con la forma correcta: «¡Qué vergüenza! Yo siempre ________ la pata con mi jefe».",
+        options: ["metes", "metemos", "meto"],
+        a: "meto"
       },
       {
         q: "¿En qué situación es más probable que alguien 'metiera la pata'?",
         options: ["Al sacar un 10", "Al revelar un secreto por accidente", "Al cocinar bien"],
         a: "Al revelar un secreto por accidente"
+      },
+      {
+        q: "¿Cuál de estas expresiones es similar a 'Meter la pata'?",
+        options: ["Hacerlo muy bien", "Cometer una equivocación", "Estar en las nubes"],
+        a: "Cometer una equivocación"
       }
     ]
   },
@@ -120,15 +140,20 @@ export const idioms: Idiom[] = [
     category: 'Social',
     exercises: [
       {
-        q: "¿Qué significa realmente 'Tomar el pelo' a alguien?",
-        options: ["Lavarle el cabello", "Hacerle una broma o engañarle", "Cortarle el pelo"],
-        a: "Hacerle una broma o engañarle"
-      },
-      {
-        q: "Si un amigo te dice algo increíble y no le crees, ¿qué le dices?",
-        options: ["Estás en las nubes", "¡Me estás tomando el pelo!", "Es pan comido"],
-        a: "¡Me estás tomando el pelo!"
-      }
+      q: "¿Qué significa realmente 'Tomar el pelo' a alguien?",
+      options: ["Lavarle el cabello", "Hacerle una broma o engañarle", "Cortarle el pelo"],
+      a: "Hacerle una broma o engañarle"
+    },
+    {
+      q: "Completa: «¿Me estás diciendo que el examen es hoy? ¡No me ________ el pelo!»",
+      options: ["tomes", "comes", "metas"],
+      a: "tomes"
+    },
+    {
+      q: "Si un amigo te dice algo increíble y no le crees, ¿qué le dices?",
+      options: ["Estás en las nubes", "¡Me estás tomando el pelo!", "Es pan comido"],
+      a: "¡Me estás tomando el pelo!"
+    }
     ]
   },
   {
@@ -140,10 +165,42 @@ export const idioms: Idiom[] = [
     category: 'Personalidad',
     exercises: [
       {
-        q: "¿Qué significa que una persona 'está como una cabra'?",
-        options: ["Que tiene hambre", "Que está loca o hace cosas raras", "Que es lenta"],
-        a: "Que está loca o hace cosas raras"
-      }
+      q: "¿Qué significa que una persona 'está como una cabra'?",
+      options: [
+        "Que tiene mucha hambre",
+        "Que está loca o hace cosas raras",
+        "Que es muy lenta"
+      ],
+      a: "Que está loca o hace cosas raras"
+    },
+    {
+      q: "Elige el verbo adecuado: «¿Has visto lo que hizo Marta? Realmente ________ como una cabra».",
+      options: ["es", "está", "tiene"],
+      a: "está"
+    },
+    {
+      q: "¿En qué situación usarías esta expresión?",
+      options: [
+        "Alguien que estudia mucho",
+        "Alguien que salta en paracaídas vestido de dinosaurio",
+        "Alguien que llega temprano"
+      ],
+      a: "Alguien que salta en paracaídas vestido de dinosaurio"
+    },
+    {
+      q: "¿Cuál es el significado más cercano a 'Estar como una cabra'?",
+      options: ["Estar cansado", "Estar loco", "Estar enfadado"],
+      a: "Estar loco"
+    },
+    {
+      q: "— ¡Mi vecino empezó a cantar ópera a las tres de la mañana! \n— ¡Ese hombre ________!",
+      options: [
+        "está como una cabra",
+        "es pan comido",
+        "está en las nubes"
+      ],
+      a: "está como una cabra"
+    }
     ]
   },
   {
@@ -155,10 +212,37 @@ export const idioms: Idiom[] = [
     category: 'Naturaleza',
     exercises: [
       {
-        q: "¿Qué clima hace si 'llueve a cántaros'?",
-        options: ["Hace mucho sol", "Lluvia fina", "Lluvia muy fuerte"],
-        a: "Lluvia muy fuerte"
-      }
+      q: "¿Qué clima hace si 'llueve a cántaros'?",
+      options: [
+        "Hace mucho sol",
+        "Hay una lluvia muy fina",
+        "Hay una lluvia muy fuerte"
+      ],
+      a: "Hay una lluvia muy fuerte"
+    },
+    {
+      q: "Completa la expresión: «¡Busca un paraguas! Está lloviendo a ________».",
+      options: ["cubos", "cántaros", "nubes"],
+      a: "cántaros"
+    },
+    {
+      q: "¿Qué accesorio necesitas imperativamente si está 'lloviendo a cántaros'?",
+      options: [
+        "Unas gafas de sol",
+        "Un paraguas grande",
+        "Una crema solar"
+      ],
+      a: "Un paraguas grande"
+    },
+    {
+      q: "¿Cuál de estas frases describe mejor la intensidad de 'Llover a cántaros'?",
+      options: [
+        "Llover muchísimo",
+        "No llover nada",
+        "Empezar a llover"
+      ],
+      a: "Llover muchísimo"
+    }
     ]
   },
   {
@@ -170,10 +254,37 @@ export const idioms: Idiom[] = [
     category: 'Motivación',
     exercises: [
       {
-        q: "¿Qué significa 'Ponerse las pilas'?",
-        options: ["Comprar baterías", "Trabajar con energía", "Irse a dormir"],
-        a: "Trabajar con energía"
-      }
+      q: "¿Qué significa realmente la expresión 'Ponerse las pilas'?",
+      options: [
+        "Comprar baterías nuevas",
+        "Trabajar o estudiar con energía",
+        "Irse a dormir temprano"
+      ],
+      a: "Trabajar o estudiar con energía"
+    },
+    {
+      q: "Un entrenador le dice a su equipo: «¡Vamos, chicos! ¡________ las pilas si queremos ganar!».",
+      options: ["Ponéis", "Poneos", "Ponía"],
+      a: "Poneos"
+    },
+    {
+      q: "¿En qué momento es más apropiado usar esta expresión?",
+      options: [
+        "Cuando alguien está de vacaciones",
+        "Cuando alguien está distraído y tiene tareas",
+        "Cuando alguien ya terminó su trabajo"
+      ],
+      a: "Cuando alguien está distraído y tiene tareas"
+    },
+    {
+      q: "¿Cuál de estas frases es un sinónimo cercano de 'Ponerse las pilas'?",
+      options: [
+        "Estar en las nubes",
+        "Esforzarse y activarse",
+        "Tomar el pelo"
+      ],
+      a: "Esforzarse y activarse"
+    }
     ]
   },
   {
@@ -185,10 +296,37 @@ export const idioms: Idiom[] = [
     category: 'Emociones',
     exercises: [
       {
-        q: "¿Cómo se siente una persona que 'se queda de piedra'?",
-        options: ["Cansada", "Extremadamente sorprendida", "Enfadada"],
-        a: "Extremadamente sorprendida"
-      }
+      q: "¿Cómo se siente una persona que 'se queda de piedra'?",
+      options: [
+        "Se siente muy cansada",
+        "Está extremadamente sorprendida",
+        "Está muy enfadada"
+      ],
+      a: "Está extremadamente sorprendida"
+    },
+    {
+      q: "Completa la frase: «Cuando vi el precio de la casa, me ________ de piedra».",
+      options: ["quedamos", "quedé", "quedas"],
+      a: "quedé"
+    },
+    {
+      q: "¿En qué situación es más probable que alguien 'se quede de piedra'?",
+      options: [
+        "Al ver una película repetida",
+        "Al descubrir que ganó la lotería",
+        "Al beber un vaso de agua"
+      ],
+      a: "Al descubrir que ganó la lotería"
+    },
+    {
+      q: "¿Cuál de estas expresiones significa lo mismo que 'Quedarse de piedra'?",
+      options: [
+        "Ponerse las pilas",
+        "Quedarse muy asombrado",
+        "Ser pan comido"
+      ],
+      a: "Quedarse muy asombrado"
+    }
     ]
   },
   {
@@ -200,10 +338,37 @@ export const idioms: Idiom[] = [
     category: 'Social',
     exercises: [
       {
-        q: "¿Cuál es el resultado de 'echar leña al fuego'?",
-        options: ["La discusión termina", "El conflicto se agrava", "Se piden perdón"],
-        a: "El conflicto se agrava"
-      }
+      q: "¿Cuál es el resultado de 'echar leña al fuego' en una conversación?",
+      options: [
+        "La discusión se termina rápido",
+        "El conflicto se vuelve más grave",
+        "Las personas se piden perdón"
+      ],
+      a: "El conflicto se vuelve más grave"
+    },
+    {
+      q: "Completa la frase: «Sé que estás enfadado, pero no quiero echar ________ al fuego ahora».",
+      options: ["agua", "leña", "aire"],
+      a: "leña"
+    },
+    {
+      q: "¿En cuál de estas situaciones se usa CORRECTAMENTE la expresión?",
+      options: [
+        "Mi amigo me ayudó mucho",
+        "Mi hermana insulta a mi hermano que ya está gritando",
+        "Hace frío y voy a calentar la casa"
+      ],
+      a: "Mi hermana insulta a mi hermano que ya está gritando"
+    },
+    {
+      q: "¿Qué verbo describe mejor el sentido de 'echar leña al fuego'?",
+      options: [
+        "Solucionar",
+        "Empeorar",
+        "Olvidar"
+      ],
+      a: "Empeorar"
+    }
     ]
   },
   {
@@ -215,10 +380,37 @@ export const idioms: Idiom[] = [
     category: 'Personalidad',
     exercises: [
       {
-        q: "¿Qué significa que una persona 'tiene mala leche'?",
-        options: ["Le gusta la leche", "Tiene mal carácter", "Es divertida"],
-        a: "Tiene mal carácter"
-      }
+      q: "¿Qué significa que una persona 'tiene mala leche'?",
+      options: [
+        "Que le gusta mucho la leche",
+        "Que tiene mal carácter o mala intención",
+        "Que es una persona muy divertida"
+      ],
+      a: "Que tiene mal carácter o mala intención"
+    },
+    {
+      q: "Completa: «¡Qué ________ leche tengo! He perdido el autobús por solo diez segundos».",
+      options: ["buena", "poca", "mala"],
+      a: "mala"
+    },
+    {
+      q: "¿A quién describirías con esta expresión?",
+      options: [
+        "A un camarero que te regala un café",
+        "A alguien que responde de forma antipática",
+        "A un niño que está durmiendo"
+      ],
+      a: "A alguien que responde de forma antipática"
+    },
+    {
+      q: "¿Cuál es un sinónimo de 'Tener mala leche' (referido al carácter)?",
+      options: [
+        "Ser generoso",
+        "Tener mal genio",
+        "Estar en las nubes"
+      ],
+      a: "Tener mal genio"
+    }
     ]
   },
   {
@@ -230,10 +422,37 @@ export const idioms: Idiom[] = [
     category: 'Decisiones',
     exercises: [
       {
-        q: "¿Qué hace alguien que 'consulta con la almohada'?",
-        options: ["Compra una almohada", "Espera al día siguiente para decidir", "Duerme mucho"],
-        a: "Espera al día siguiente para decidir"
-      }
+      q: "¿Qué hace una persona que 'consulta algo con la almohada'?",
+      options: [
+        "Compra una almohada nueva",
+        "Espera al día siguiente para decidir",
+        "Habla en voz alta mientras duerme"
+      ],
+      a: "Espera al día siguiente para decidir"
+    },
+    {
+      q: "Completa la frase: «Es una decisión difícil. Antes de aceptar, prefiero consultarlo con la ________».",
+      options: ["noche", "almohada", "cama"],
+      a: "almohada"
+    },
+    {
+      q: "¿En qué momento usarías esta expresión?",
+      options: [
+        "Para elegir un sabor de helado",
+        "Ante una oferta de trabajo importante",
+        "Cuando tienes mucha prisa"
+      ],
+      a: "Ante una oferta de trabajo importante"
+    },
+    {
+      q: "¿Cuál es la intención de alguien que 'consulta con la almohada'?",
+      options: [
+        "Reflexionar con calma",
+        "Ponerse las pilas",
+        "Meter la pata"
+      ],
+      a: "Reflexionar con calma"
+    }
     ]
   },
   {
@@ -245,10 +464,37 @@ export const idioms: Idiom[] = [
     category: 'Personalidad',
     exercises: [
       {
-        q: "¿Cómo es una persona que es 'un trozo de pan'?",
-        options: ["Tiene hambre", "Es muy bondadosa", "Cocina muy bien"],
-        a: "Es muy bondadosa"
-      }
+      q: "¿Cómo es una persona que es 'un trozo de pan'?",
+      options: [
+        "Alguien que siempre tiene hambre",
+        "Una persona muy buena y bondadosa",
+        "Alguien que cocina muy bien"
+      ],
+      a: "Una persona muy buena y bondadosa"
+    },
+    {
+      q: "Completa: «Mi hermano nunca se enfada y siempre ayuda. Él ________ un trozo de pan».",
+      options: ["está", "es", "tiene"],
+      a: "es"
+    },
+    {
+      q: "¿A cuál de estas personas describirías como 'un trozo de pan'?",
+      options: [
+        "A un vendedor que intenta engañarte",
+        "A un amigo que te cuida cuando estás enfermo",
+        "A alguien que está como una cabra"
+      ],
+      a: "A un amigo que te cuida cuando estás enfermo"
+    },
+    {
+      q: "¿Cuál de estas palabras describe mejor a un 'trozo de pan'?",
+      options: [
+        "Distraído",
+        "Bondadoso",
+        "Enojado"
+      ],
+      a: "Bondadoso"
+    }
     ]
   },
   {
@@ -260,10 +506,37 @@ export const idioms: Idiom[] = [
     category: 'Eficiencia',
     exercises: [
       {
-        q: "¿Qué significa realmente 'matar dos pájaros de un tiro'?",
-        options: ["Cazar", "Resolver dos asuntos con una acción", "Cometer dos errores"],
-        a: "Resolver dos asuntos con una acción"
-      }
+      q: "¿Qué significa realmente 'matar dos pájaros de un tiro'?",
+      options: [
+        "Que te gusta la caza",
+        "Resolver dos problemas con una acción",
+        "Cometer dos errores el mismo día"
+      ],
+      a: "Resolver dos problemas con una acción"
+    },
+    {
+      q: "Completa: «Si estudiamos juntos, aprendemos y nos divertimos; así matamos dos ________ de un ________».",
+      options: ["perros / salto", "pájaros / tiro", "aviones / vuelo"],
+      a: "pájaros / tiro"
+    },
+    {
+      q: "¿En qué situación estás 'matando dos pájaros de un tiro'?",
+      options: [
+        "Cuando olvidas las llaves en casa",
+        "Caminar al trabajo para hacer ejercicio y llegar a tiempo",
+        "Quedarse de piedra por una noticia"
+      ],
+      a: "Caminar al trabajo para hacer ejercicio y llegar a tiempo"
+    },
+    {
+      q: "¿Cuál de estas palabras describe mejor esta expresión?",
+      options: [
+        "Pereza",
+        "Eficiencia",
+        "Mala leche"
+      ],
+      a: "Eficiencia"
+    }
     ]
   },
   {
@@ -275,10 +548,41 @@ export const idioms: Idiom[] = [
     category: 'Dinero',
     exercises: [
       {
-        q: "¿Qué significa 'tirar la casa por la ventana'?",
-        options: ["Mudarse", "Gastar mucho dinero en una fiesta", "Limpiar la casa"],
-        a: "Gastar mucho dinero en una fiesta"
-      }
+      q: "Los García celebraron sus bodas de oro en el hotel más caro y con un jet privado. ¿Qué hicieron?",
+      options: [
+        "Están ahorrando dinero",
+        "Han decidido tirar la casa por la ventana",
+        "Consideran que la fiesta es pan comido"
+      ],
+      a: "Han decidido tirar la casa por la ventana"
+    },
+    {
+      q: "¿Cuál de estas oraciones utiliza la expresión de forma natural?",
+      options: [
+        "Tiramos la ventana por la casa",
+        "No todos los días se cumplen 18 años, vamos a tirar la casa por la ventana",
+        "Juan tiró la casa por la ventana porque no tenía dinero"
+      ],
+      a: "No todos los días se cumplen 18 años, vamos a tirar la casa por la ventana"
+    },
+    {
+      q: "¿En cuál de estas situaciones NO sería apropiado usar esta expresión?",
+      options: [
+        "Una empresa gasta millones en su aniversario",
+        "Unos padres compran regalos carísimos en Navidad",
+        "Una persona paga su factura de luz mensual con retraso"
+      ],
+      a: "Una persona paga su factura de luz mensual con retraso"
+    },
+    {
+      q: "¿Qué frase significa lo mismo que: 'El ayuntamiento no reparó en gastos con los fuegos'?",
+      options: [
+        "Decidió tirar la casa por la ventana",
+        "Decidió ponerse las pilas",
+        "Decidió consultar con la almohada"
+      ],
+      a: "Decidió tirar la casa por la ventana"
+    }
     ]
   },
   {
@@ -289,11 +593,43 @@ export const idioms: Idiom[] = [
     imageUrl: 'https://images.unsplash.com/photo-1628527304948-06157ee3c8a6',
     category: 'Dinero',
     exercises: [
-      {
-        q: "¿Cuál describe a alguien 'sin blanca'?",
-        options: ["Comprar una casa al contado", "Pedir prestado para el bus", "Ganar la lotería"],
-        a: "Pedir prestado para el bus"
-      }
+      exercises: [
+    {
+      q: "¿Cuál de estas situaciones describe a alguien que 'está sin blanca'?",
+      options: [
+        "Sergio va a comprar una casa al contado",
+        "Lola pidió prestado para el bus tras pagar el alquiler",
+        "Felipe acaba de ganar la lotería"
+      ],
+      a: "Lola pidió prestado para el bus tras pagar el alquiler"
+    },
+    {
+      q: "Si seguimos gastando así en vacaciones, para el miércoles ________ sin blanca.",
+      options: [
+        "habremos estado",
+        "nos quedaremos",
+        "somos"
+      ],
+      a: "nos quedaremos"
+    },
+    {
+      q: "Si alguien decide 'tirar la casa por la ventana', ¿qué le pasará después?",
+      options: [
+        "Se quedará de piedra",
+        "Se quedará sin blanca",
+        "Estará como una cabra"
+      ],
+      a: "Se quedará sin blanca"
+    },
+    {
+      q: "Transforma a lenguaje coloquial: 'Carezco totalmente de fondos líquidos'.",
+      options: [
+        "Estoy en las nubes",
+        "Estoy sin blanca",
+        "Tengo mala leche"
+      ],
+      a: "Estoy sin blanca"
+    }
     ]
   },
   {
@@ -305,10 +641,41 @@ export const idioms: Idiom[] = [
     category: 'Social',
     exercises: [
       {
-        q: "¿Qué significa realmente 'echar un cable'?",
-        options: ["Comprar cables", "Ayudar a una persona", "Estar enfadado"],
-        a: "Ayudar a una persona"
-      }
+      q: "¿Qué significa realmente 'echar un cable'?",
+      options: [
+        "Comprar cables para la televisión",
+        "Ayudar a una persona",
+        "Estar muy enfadado"
+      ],
+      a: "Ayudar a una persona"
+    },
+    {
+      q: "Tengo muchos problemas con la tarea de matemáticas, ¿puedes ______ un cable?",
+      options: [
+        "darme",
+        "hacerme",
+        "echarme"
+      ],
+      a: "echarme"
+    },
+    {
+      q: "¿Cómo dirías 'Mi hermano me ayudó con el proyecto' usando el modismo?",
+      options: [
+        "Mi hermano me echó un cable con el proyecto",
+        "Mi hermano tiró la casa por la ventana",
+        "Mi hermano se puso las pilas"
+      ],
+      a: "Mi hermano me echó un cable con el proyecto"
+    },
+    {
+      q: "Selecciona la situación donde es LÓGICO usar esta expresión:",
+      options: [
+        "Cuando alguien está durmiendo profundamente",
+        "Cuando ves a un amigo cargando bolsas pesadas",
+        "Cuando estás solo viendo la tele"
+      ],
+      a: "Cuando ves a un amigo cargando bolsas pesadas"
+    }
     ]
   },
   {
@@ -320,10 +687,41 @@ export const idioms: Idiom[] = [
     category: 'Comunicación',
     exercises: [
       {
-        q: "¿Qué significa 'ir al grano'?",
-        options: ["Comprar cereales", "Hablar de lo importante directamente", "Contar cuentos"],
-        a: "Hablar de lo importante directamente"
-      }
+      q: "¿Qué significa cuando alguien te pide 'ir al grano'?",
+      options: [
+        "Ir a comprar cereales",
+        "Hablar directamente de lo más importante",
+        "Contar una historia larga"
+      ],
+      a: "Hablar directamente de lo más importante"
+    },
+    {
+      q: "Deja de dar rodeos y ________ al grano, ¿cuánto cuesta el coche?",
+      options: [
+        "vas",
+        "va",
+        "ve"
+      ],
+      a: "ve"
+    },
+    {
+      q: "¿En qué situación es más apropiado decir 'Vamos al grano'?",
+      options: [
+        "En una primera cita romántica",
+        "En una reunión de trabajo que dura demasiado sin resultados",
+        "Contando un cuento infantil"
+      ],
+      a: "En una reunión de trabajo que dura demasiado sin resultados"
+    },
+    {
+      q: "¿Cuál de estas expresiones es lo OPUESTO a 'Ir al grano'?",
+      options: [
+        "Andarse por las ramas",
+        "Ponerse las pilas",
+        "Echar un cable"
+      ],
+      a: "Andarse por las ramas"
+    }
     ]
   },
   {
@@ -335,10 +733,41 @@ export const idioms: Idiom[] = [
     category: 'Éxito',
     exercises: [
       {
-        q: "¿Qué significa 'dar en el clavo'?",
-        options: ["Golpearse", "Acertar la solución exacta", "Olvidar algo"],
-        a: "Acertar la solución exacta"
-      }
+      q: "¿Qué significa 'dar en el clavo'?",
+      options: [
+        "Golpearse con un martillo",
+        "Acertar o encontrar la solución exacta",
+        "Olvidar una cita importante"
+      ],
+      a: "Acertar o encontrar la solución exacta"
+    },
+    {
+      q: "¡Exacto! Esa es la respuesta correcta. ________ en el clavo.",
+      options: [
+        "Damos",
+        "Has dado",
+        "Dabas"
+      ],
+      a: "Has dado"
+    },
+    {
+      q: "¿En cuál de estas situaciones se usa correctamente la expresión?",
+      options: [
+        "Alguien que se pierde buscando una dirección",
+        "Un detective que descubre al culpable con una sola pista",
+        "Una persona que está en las nubes"
+      ],
+      a: "Un detective que descubre al culpable con una sola pista"
+    },
+    {
+      q: "¿Cuál de estas frases es un sinónimo de 'dar en el clavo'?",
+      options: [
+        "Meter la pata",
+        "Ir al grano",
+        "Dar en el blanco"
+      ],
+      a: "Dar en el blanco"
+    }
     ]
   },
   {
@@ -350,10 +779,41 @@ export const idioms: Idiom[] = [
     category: 'Emociones',
     exercises: [
       {
-        q: "¿Cómo se siente alguien 'hecho un ají'?",
-        options: ["Tiene frío", "Está muy furioso", "Tiene hambre"],
-        a: "Está muy furioso"
-      }
+      q: "¿Cómo se siente una persona que 'está hecha un ají'?",
+      options: [
+        "Tiene mucho frío",
+        "Está muy enfadada o furiosa",
+        "Tiene mucha hambre"
+      ],
+      a: "Está muy enfadada o furiosa"
+    },
+    {
+      q: "Elige la forma correcta para una mujer: «Marta está ________ un ají porque cancelaron su vuelo».",
+      options: [
+        "hecho",
+        "hecha",
+        "haciendo"
+      ],
+      a: "hecha"
+    },
+    {
+      q: "¿Cuál de estas expresiones significa lo mismo que 'Estar hecho un ají'?",
+      options: [
+        "Estar en las nubes",
+        "Estar hecho una furia",
+        "Estar como una cabra"
+      ],
+      a: "Estar hecho una furia"
+    },
+    {
+      q: "Si alguien está 'hecho un ají', ¿qué es lo mejor que puedes hacer?",
+      options: [
+        "Echar leña al fuego",
+        "Dejar que se calme un poco",
+        "Tomarle el pelo"
+      ],
+      a: "Dejar que se calme un poco"
+    }
     ]
   },
   {
@@ -365,10 +825,41 @@ export const idioms: Idiom[] = [
     category: 'Comunicación',
     exercises: [
       {
-        q: "¿Qué significa 'hablar a la pared'?",
-        options: ["Pared delgada", "La otra persona te ignora", "Hablar solo"],
-        a: "La otra persona te ignora"
-      }
+      q: "¿Qué significa que una situación es 'como hablar a la pared'?",
+      options: [
+        "Que la pared es muy delgada",
+        "Que la otra persona te ignora y no te escucha",
+        "Que te gusta hablar solo"
+      ],
+      a: "Que la otra persona te ignora y no te escucha"
+    },
+    {
+      q: "«¡Qué frustrante! Intento explicarte el problema, pero parece que le ________ a la pared».",
+      options: [
+        "digo",
+        "hablo",
+        "miro"
+      ],
+      a: "hablo"
+    },
+    {
+      q: "¿En qué contexto usarías esta expresión con más frecuencia?",
+      options: [
+        "Con un amigo que siempre te ayuda",
+        "Con un adolescente que no sigue ninguna instrucción",
+        "Con un médico que da en el clavo"
+      ],
+      a: "Con un adolescente que no sigue ninguna instrucción"
+    },
+    {
+      q: "¿Cómo se siente una persona cuando siente que está 'hablando a la pared'?",
+      options: [
+        "Satisfecha y alegre",
+        "Frustrada e ignorada",
+        "Como un trozo de pan"
+      ],
+      a: "Frustrada e ignorada"
+    }
     ]
   },
   {
@@ -380,10 +871,41 @@ export const idioms: Idiom[] = [
     category: 'Dinero',
     exercises: [
       {
-        q: "¿Qué sucede cuando te 'dan gato por liebre'?",
-        options: ["Regalo nuevo", "Engaño con la calidad", "Descuento"],
-        a: "Engaño con la calidad"
-      }
+      q: "¿Qué sucede cuando te 'dan gato por liebre'?",
+      options: [
+        "Te regalan una mascota nueva",
+        "Te engañan con la calidad de algo que compraste",
+        "Recibes un descuento inesperado"
+      ],
+      a: "Te engañan con la calidad de algo que compraste"
+    },
+    {
+      q: "Ten cuidado al comprar en ese mercado, a veces intentan dar ______ por ______.",
+      options: [
+        "perro / gato",
+        "gato / liebre",
+        "vaca / pollo"
+      ],
+      a: "gato / liebre"
+    },
+    {
+      q: "¿En cuál de estas situaciones se aplica mejor esta expresión?",
+      options: [
+        "Un restaurante te sirve comida deliciosa y barata",
+        "Pagas por un hotel de lujo y es una pensión sucia",
+        "Un amigo te echa un cable"
+      ],
+      a: "Pagas por un hotel de lujo y es una pensión sucia"
+    },
+    {
+      q: "Si alguien intenta 'darte gato por liebre', esa persona está intentando...",
+      options: [
+        "Dar en el clavo",
+        "Tomarte el pelo",
+        "Ser un trozo de pan"
+      ],
+      a: "Tomarte el pelo"
+    }
     ]
   },
   {
@@ -394,11 +916,12 @@ export const idioms: Idiom[] = [
     imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a',
     category: 'Comunicación',
     exercises: [
-      {
-        q: "¿Qué haces al 'poner los puntos sobre las íes'?",
-        options: ["Buena caligrafía", "Dejar las cosas claras", "Error gramatical"],
-        a: "Dejar las cosas claras"
-      }
+      "Andarse por las ramas",
+        "Ir al grano y ser preciso",
+        "Estar en las nubes"
+      ],
+      a: "Ir al grano y ser preciso"
+    }
     ]
   },
   {
@@ -410,10 +933,40 @@ export const idioms: Idiom[] = [
     category: 'Emociones',
     exercises: [
       {
-        q: "¿Cómo se siente alguien 'como pez en el agua'?",
-        options: ["Cómodo y feliz", "Con frío", "Confundido"],
-        a: "Cómodo y feliz"
-      }
+      q: "¿Cómo se siente una persona que está 'como pez en el agua'?",
+      options: [
+        "Tiene mucho frío",
+        "Se siente muy cómoda y feliz",
+        "No sabe qué hacer"
+      ],
+      a: "Se siente muy cómoda y feliz"
+    },
+    {
+      q: "A mi hermano le gusta mucho hablar en público; él está como ______ en el agua.",
+      options: [
+        "Gato",
+        "Pez",
+        "Perro"
+      ],
+      a: "Pez"
+    },
+    {
+      q: "¿Quién está 'como pez en el agua'?",
+      options: [
+        "Un futbolista en un estadio de fútbol",
+        "Una persona con miedo a volar en un avión",
+        "Alguien sin blanca en una tienda cara"
+      ],
+      a: "Un futbolista en un estadio de fútbol"
+    },
+    {
+      q: "Si una persona está muy nerviosa en una fiesta, ¿está 'como pez en el agua'?",
+      options: [
+        "Verdadero",
+        "Falso"
+      ],
+      a: "Falso"
+    }
     ]
   },
   {
@@ -425,15 +978,41 @@ export const idioms: Idiom[] = [
     category: 'Psicología',
     exercises: [
       {
-        q: "¿Qué hace quien 'busca tres pies al gato'?",
-        options: ["Ayuda animales", "Complica las cosas", "Va al grano"],
-        a: "Complica las cosas"
-      },
-      {
-        q: "¿En qué situación se usa?",
-        options: ["Ver significados secretos donde no los hay", "Echar un cable", "Estar sin blanca"],
-        a: "Ver significados secretos donde no los hay"
-      }
+      q: "¿Qué hace una persona que le 'busca tres pies al gato'?",
+      options: [
+        "Ayuda a los animales",
+        "Complica las cosas sin necesidad",
+        "Va al grano muy rápido"
+      ],
+      a: "Complica las cosas sin necesidad"
+    },
+    {
+      q: "No seas tan complicado, no le busques ______ pies al gato.",
+      options: [
+        "cuatro",
+        "tres",
+        "cinco"
+      ],
+      a: "tres"
+    },
+    {
+      q: "¿En qué situación usarías esta expresión?",
+      options: [
+        "Cuando alguien te da gato por liebre",
+        "Cuando un amigo cree que un 'Hola' tiene un significado secreto y malvado",
+        "Cuando necesitas echar un cable"
+      ],
+      a: "Cuando un amigo cree que un 'Hola' tiene un significado secreto y malvado"
+    },
+    {
+      q: "¿Cuál es la intención de alguien que le 'busca tres pies al gato'?",
+      options: [
+        "Ver problemas donde todo es simple",
+        "Poner los puntos sobre las íes",
+        "Matar dos pájaros de un tiro"
+      ],
+      a: "Ver problemas donde todo es simple"
+    }
     ]
   },
     {
