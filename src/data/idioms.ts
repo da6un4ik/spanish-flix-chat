@@ -37,3 +37,46 @@ export const idioms: Idiom[] = [
     ]
   }
 ];
+{
+  id: '2',
+  expression: 'Ser pan comido',
+  meaning: 'Describe una tarea o actividad que es extremadamente fácil de realizar.',
+  example: 'No te preocupes por el examen; para ti va a ser pan comido.',
+  imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff', // Фото свежего хлеба
+  videoUrl: '/videos/pan_comido.mp4', // Если добавишь видео позже
+  category: 'Dificultad',
+  exercises: [
+    {
+      q: "¿Qué significa realmente cuando alguien dice que una tarea 'es pan comido'?",
+      options: [
+        "Que es muy aburrida",
+        "Que es muy fácil de hacer",
+        "Que es imposible de terminar"
+      ],
+      a: "Que es muy fácil de hacer"
+    },
+    {
+      q: "Completa la frase: «El rompecabezas de 10 piezas para el niño ________ pan comido».",
+      options: ["está", "fue", "tiene"],
+      a: "fue"
+    },
+    {
+      q: "¿Cuál de estas expresiones es un sinónimo de 'Ser pan comido'?",
+      options: [
+        "Ser algo muy sencillo",
+        "Ser algo muy caro",
+        "Ser algo muy peligroso"
+      ],
+      a: "Ser algo muy sencillo"
+    },
+    {
+      q: "— ¿Puedes arreglar mi computadora? \n— ¡Claro! Solo es un virus pequeño, ________.",
+      options: [
+        "estoy en las nubes",
+        "es pan comido",
+        "eres pan comido"
+      ],
+      a: "es pan comido"
+    }
+  ]
+},
