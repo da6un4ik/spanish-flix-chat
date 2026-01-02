@@ -17,7 +17,7 @@ export const idioms: Idiom[] = [
     example: 'Juan no escuchó la instrucción porque estaba en las nubes.',
     literal: 'To be in the clouds',
     imageUrl: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd',
-    videoUrl: '/videos/nubes_clip.mp4',
+    videoUrl: '/videos/estar_en_las_nubes.mp4', // <--- УКАЖИТЕ ПУТЬ
     category: 'Estado mental'
   },
   // Добавьте остальные идиомы в таком же формате
