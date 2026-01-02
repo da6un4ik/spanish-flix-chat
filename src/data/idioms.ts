@@ -435,5 +435,723 @@ export const idioms: Idiom[] = [
         a: "Ver significados secretos donde no los hay"
       }
     ]
-  }
+  },
+    {
+  id: '26',
+  expression: 'No hay mal que dure cien años',
+  meaning: 'Las situaciones malas no son infinitas; siempre terminan tarde o temprano.',
+  example: 'Sé que estás triste por tu trabajo, pero ten paciencia, no hay mal que dure cien años.',
+  imageUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94', // Imagen de un amanecer tras la tormenta
+  category: 'Psicología',
+  exercises: [
+    {
+      q: "¿Cuándo usamos esta expresión?",
+      options: [
+        "Para celebrar un éxito",
+        "Para consolar a alguien con un problema",
+        "Para ir al grano rápido"
+      ],
+      a: "Para consolar a alguien con un problema"
+    },
+    {
+      q: "Completa el refrán: «No hay ______ que dure cien años».",
+      options: [
+        "bien",
+        "mal",
+        "tiempo"
+      ],
+      a: "mal"
+    },
+    {
+      q: "¿Cuál es el mensaje principal de este refrán?",
+      options: [
+        "La vida es muy corta",
+        "Los problemas siempre terminan",
+        "La salud dura un siglo"
+      ],
+      a: "Los problemas siempre terminan"
+    },
+    {
+      q: "Si un amigo tiene una semana terrible, ¿qué le dirías para tranquilizarlo?",
+      options: [
+        "No le busques tres pies al gato",
+        "Ánimo, no hay mal que dure cien años",
+        "Estás como pez en el agua"
+      ],
+      a: "Ánimo, no hay mal que dure cien años"
+    }
+  ]
+},{
+  id: '27',
+  expression: 'Ser del año de la pera',
+  meaning: 'Algo que es muy antiguo, viejo o que está pasado de moda.',
+  example: 'Mira ese ordenador, no tiene ni internet; debe de ser del año de la pera.',
+  imageUrl: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03', // Imagen de una radio o cámara antigua
+  category: 'Tiempo',
+  exercises: [
+    {
+      q: "¿A qué se refiere alguien cuando dice que algo es 'del año de la pera'?",
+      options: [
+        "A una fruta muy rica",
+        "A algo muy viejo o antiguo",
+        "A algo muy moderno"
+      ],
+      a: "A algo muy viejo o antiguo"
+    },
+    {
+      q: "Esa chaqueta es del año de la ________, ya no se lleva nada.",
+      options: [
+        "manzana",
+        "pera",
+        "uva"
+      ],
+      a: "pera"
+    },
+    {
+      q: "¿En qué situación usarías esta expresión?",
+      options: [
+        "Al ver una película que se estrenó ayer",
+        "Al encontrar el coche de tu abuelo que tiene 50 años",
+        "Al hablar de un amigo bondadoso"
+      ],
+      a: "Al encontrar el coche de tu abuelo que tiene 50 años"
+    },
+    {
+      q: "¿Cuál sería el opuesto de algo que es 'del año de la pera'?",
+      options: [
+        "Algo que cuesta un ojo de la cara",
+        "Algo de última generación",
+        "Algo que es pan comido"
+      ],
+      a: "Algo de última generación"
+    }
+  ]
+},{
+  id: '28',
+  expression: 'Estar hasta las narices',
+  meaning: 'Estar muy cansado de algo o de alguien; no tener más paciencia.',
+  example: 'Llevo tres horas esperando y el tren no llega; estoy hasta las narices.',
+  imageUrl: 'https://images.unsplash.com/photo-15423938818e1-b113f5121887', // Imagen de alguien frustrado/cansado
+  category: 'Emociones',
+  exercises: [
+    {
+      q: "¿Cómo se siente una persona que está 'hasta las narices'?",
+      options: [
+        "Muy feliz",
+        "Muy harta o cansada",
+        "Tiene mucha hambre"
+      ],
+      a: "Muy harta o cansada"
+    },
+    {
+      q: "No quiero oír más excusas, estoy hasta las ________ de tus mentiras.",
+      options: [
+        "orejas",
+        "manos",
+        "narices"
+      ],
+      a: "narices"
+    },
+    {
+      q: "¿En qué situación es más probable decir esta frase?",
+      options: [
+        "Cuando estás como pez en el agua",
+        "Cuando el vecino pone la música alta todas las noches",
+        "Cuando un amigo te echa un cable"
+      ],
+      a: "Cuando el vecino pone la música alta todas las noches"
+    },
+    {
+      q: "Si alguien está 'hasta las narices', ¿cuál es el siguiente estado si el problema sigue?",
+      options: [
+        "Ser un trozo de pan",
+        "Estar hecho un ají",
+        "Consultar con la almohada"
+      ],
+      a: "Estar hecho un ají"
+    }
+  ]
+},{
+  id: '29',
+  expression: 'Dejar plantado a alguien',
+  meaning: 'No ir a una cita o encuentro planeado con otra persona, sin avisar.',
+  example: 'Ayer estuve esperando a Luis en el café durante una hora, pero no vino; me dejó plantado.',
+  imageUrl: 'https://images.unsplash.com/photo-1516455590571-18256e5bb9ff', // Imagen de una silla vacía en una mesa para dos
+  category: 'Social',
+  exercises: [
+    {
+      q: "¿Qué sucede si alguien te 'deja plantado'?",
+      options: [
+        "Te regala una planta",
+        "Llega tarde pero avisa",
+        "Tú vas a la cita, pero la otra persona no aparece"
+      ],
+      a: "Tú vas a la cita, pero la otra persona no aparece"
+    },
+    {
+      q: "Fui al cine a las ocho, pero mi novia no vino. Ella ______ dejó plantado.",
+      options: [
+        "le",
+        "me",
+        "se"
+      ],
+      a: "me"
+    },
+    {
+      q: "¿Cuál es la reacción más normal de alguien a quien han 'dejado plantado'?",
+      options: [
+        "Estar como pez en el agua",
+        "Estar hasta las narices o hecho un ají",
+        "Estar en las nubes"
+      ],
+      a: "Estar hasta las narices o hecho un ají"
+    },
+    {
+      q: "¿Cómo dirías coloquialmente: 'Juan no vino a nuestra cita y no me avisó'?",
+      options: [
+        "Juan me echó un cable",
+        "Juan me dejó plantado",
+        "Juan dio en el clavo"
+      ],
+      a: "Juan me dejó plantado"
+    }
+  ]
+},{
+  id: '30',
+  expression: 'Estar de mala uva',
+  meaning: 'Estar de mal humor, enfadado o irritable en un momento específico.',
+  example: 'No le pidas nada ahora a tu padre, que está de mala uva porque su equipo ha perdido.',
+  imageUrl: 'https://images.unsplash.com/photo-1595908129746-57ca1a63dd4d', // Imagen de alguien con gesto irritado
+  category: 'Emociones',
+  exercises: [
+    {
+      q: "¿Qué significa que alguien 'está de mala uva'?",
+      options: [
+        "Ha comprado fruta en mal estado",
+        "Está de mal humor",
+        "Tiene muchas ganas de trabajar"
+      ],
+      a: "Está de mal humor"
+    },
+    {
+      q: "Hoy mejor no hables con el jefe, parece que está de mala ______.",
+      options: [
+        "manzana",
+        "pera",
+        "uva"
+      ],
+      a: "uva"
+    },
+    {
+      q: "¿Cuál es la diferencia entre 'Tener mala leche' y 'Estar de mala uva'?",
+      options: [
+        "Son exactamente iguales",
+        "Mala leche es personalidad; mala uva es un estado temporal",
+        "Estar de mala uva solo se usa con el hambre"
+      ],
+      a: "Mala leche es personalidad; mala uva es un estado temporal"
+    },
+    {
+      q: "Si te han 'dejado plantado' y has perdido las llaves, lo más normal es que...",
+      options: [
+        "Estés como pez en el agua",
+        "Seas un trozo de pan",
+        "Estés de mala uva"
+      ],
+      a: "Estés de mala uva"
+    }
+  ]
+},{
+  id: '31',
+  expression: 'No tener ni pies ni cabeza',
+  meaning: 'Algo que no tiene sentido, es absurdo o no tiene lógica.',
+  example: 'Esa película que vimos ayer era malísima; la historia no tenía ni pies ni cabeza.',
+  imageUrl: 'https://images.unsplash.com/photo-1509228468518-180dd48a57a1', // Imagen abstracta o confusa
+  category: 'Psicología',
+  exercises: [
+    {
+      q: "¿Qué significa que una explicación 'no tiene ni pies ni cabeza'?",
+      options: [
+        "Que es corta y directa",
+        "Que no tiene lógica y es difícil de entender",
+        "Que la persona es muy baja"
+      ],
+      a: "Que no tiene lógica y es difícil de entender"
+    },
+    {
+      q: "Lo que dices es absurdo, tu argumento no tiene ni ________ ni ________.",
+      options: [
+        "manos / pies",
+        "ojos / orejas",
+        "pies / cabeza"
+      ],
+      a: "pies / cabeza"
+    },
+    {
+      q: "¿En qué situación usarías esta expresión?",
+      options: [
+        "Cuando alguien da en el clavo",
+        "Cuando el final de un libro no tiene relación con el principio",
+        "Cuando estás como pez en el agua"
+      ],
+      a: "Cuando el final de un libro no tiene relación con el principio"
+    }
+  ]
+},{
+  id: '32',
+  expression: 'Pedir peras al olmo',
+  meaning: 'Esperar algo imposible de una persona o cosa que no tiene esa capacidad.',
+  example: 'No pretendas que tu hermano pequeño guarde un secreto; eso es pedir peras al olmo.',
+  imageUrl: 'https://images.unsplash.com/photo-1511210041123-018247072559', // Imagen de un árbol frondoso o frutas mezcladas
+  category: 'Psicología',
+  exercises: [
+    {
+      q: "Si un amigo te dice que 'estás pidiendo peras al olmo', ¿qué intenta decirte?",
+      options: [
+        "Que eres una persona ambiciosa",
+        "Que lo que esperas es imposible",
+        "Que deberías comer más fruta",
+        "Que tienes que ser más paciente"
+      ],
+      a: "Que lo que esperas es imposible"
+    },
+    {
+      q: "— Quiero que mi perro hable español este fin de semana. — Pero hombre, ¡eso es pedirle ______ al olmo!",
+      options: [
+        "manzanas",
+        "ayuda",
+        "peras",
+        "tiempo"
+      ],
+      a: "peras"
+    },
+    {
+      q: "¿En cuál de estas situaciones se aplica mejor la expresión?",
+      options: [
+        "Pedir un aumento tras trabajar duro",
+        "Pedir que llueva en una ciudad lluviosa",
+        "Pedir que alguien sin conocimientos técnicos arregle un ordenador",
+        "Pedir mesa en un restaurante vacío"
+      ],
+      a: "Pedir que alguien sin conocimientos técnicos arregle un ordenador"
+    },
+    {
+      q: "¿Por qué la expresión usa 'peras' y 'olmo'?",
+      options: [
+        "Porque las peras del olmo son amargas",
+        "Porque el olmo no da frutos; es imposible obtener peras de él",
+        "Porque los olmos son sagrados",
+        "Porque las peras eran más baratas"
+      ],
+      a: "Porque el olmo no da frutos; es imposible obtener peras de él"
+    }
+  ]
+},{
+  id: '33',
+  expression: 'Ser la media naranja',
+  meaning: 'Ser la pareja ideal o la persona que complementa perfectamente a otra.',
+  example: 'Llevan diez años casados y son muy felices; él dice que ella es su media naranja.',
+  imageUrl: 'https://images.unsplash.com/photo-1551008475-4533d141425b', // Imagen de dos mitades de naranja que encajan
+  category: 'Social',
+  exercises: [
+    {
+      q: "Si alguien dice que ha encontrado a su 'media naranja', ¿qué significa?",
+      options: [
+        "Ha ido al supermercado",
+        "Ha encontrado a su persona ideal",
+        "Solo tiene la mitad de lo que necesita"
+      ],
+      a: "Ha encontrado a su persona ideal"
+    },
+    {
+      q: "Desde que conoció a Luis, ella dice que por fin ha encontrado a su media ________.",
+      options: [
+        "manzana",
+        "naranja",
+        "pera"
+      ],
+      a: "naranja"
+    },
+    {
+      q: "¿En qué situación usarías esta expresión de forma más adecuada?",
+      options: [
+        "En una entrevista de trabajo",
+        "En una boda, durante el brindis",
+        "Cuando te dejan plantado"
+      ],
+      a: "En una boda, durante el brindis"
+    },
+    {
+      q: "¿Por qué se usa una 'naranja' en esta expresión?",
+      options: [
+        "Es la fruta favorita en España",
+        "Solo su otra mitad encaja perfectamente para formar el círculo",
+        "El color naranja simboliza la amistad"
+      ],
+      a: "Solo su otra mitad encaja perfectamente para formar el círculo"
+    }
+  ]
+},{
+  id: '34',
+  expression: 'Hablar por los codos',
+  meaning: 'Hablar muchísimo, de forma constante y sin parar.',
+  example: 'Me gusta tomar café con Elena, pero es agotador porque habla por los codos y no me deja decir nada.',
+  imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f', // Imagen de personas conversando animadamente
+  category: 'Social',
+  exercises: [
+    {
+      q: "¿Qué hace una persona que 'habla por los codos'?",
+      options: [
+        "Habla muy bajito",
+        "Habla demasiado y sin parar",
+        "No le gusta hablar con desconocidos",
+        "Le duelen los brazos"
+      ],
+      a: "Habla demasiado y sin parar"
+    },
+    {
+      q: "¡Madre mía! Tu hermano no calla nunca, habla por los ________.",
+      options: [
+        "pies",
+        "ojos",
+        "codos",
+        "dedos"
+      ],
+      a: "codos"
+    },
+    {
+      q: "¿En qué situación es más probable usar esta frase?",
+      options: [
+        "Cuando alguien te deja plantado",
+        "Cuando tu amigo no para de hablar durante una película",
+        "En un examen de silencio"
+      ],
+      a: "Cuando tu amigo no para de hablar durante una película"
+    },
+    {
+      q: "Si una persona 'habla por los codos', lo opuesto sería alguien que...",
+      options: [
+        "No tiene ni pies ni cabeza",
+        "Es muy callado o de pocas palabras",
+        "Es su media naranja"
+      ],
+      a: "Es muy callado o de pocas palabras"
+    }
+  ]
+},{
+  id: '35',
+  expression: 'Estar en el quinto pino',
+  meaning: 'Estar en un lugar muy lejano o de difícil acceso.',
+  example: 'No quiero ir a esa fiesta, su casa está en el quinto pino y tardo dos horas en llegar.',
+  imageUrl: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9', // Imagen de un pino solitario a lo lejos
+  category: 'Lugar/Tiempo',
+  exercises: [
+    {
+      q: "Si un lugar está 'en el quinto pino', ¿qué significa?",
+      options: [
+        "Hay cinco árboles en la puerta",
+        "Es un lugar natural",
+        "Está muy lejos de donde estás"
+      ],
+      a: "Está muy lejos de donde estás"
+    },
+    {
+      q: "Tengo que coger tres autobuses para ir a verte porque vives en el ________ pino.",
+      options: [
+        "tercer",
+        "quinto",
+        "primer"
+      ],
+      a: "quinto"
+    },
+    {
+      q: "¿Cuál de estas situaciones describe mejor la expresión?",
+      options: [
+        "Tu oficina está a dos minutos andando",
+        "El súper está en otro pueblo y no tienes coche",
+        "Estás en una cita romántica"
+      ],
+      a: "El súper está en otro pueblo y no tienes coche"
+    },
+    {
+      q: "Si alguien te invita a un bar 'en el quinto pino' y estás de mala uva, ¿qué dirías?",
+      options: [
+        "¡Qué bien! Me encanta caminar",
+        "Ni hablar, no voy a ir tan lejos ahora mismo",
+        "Eso es pedirle peras al olmo"
+      ],
+      a: "Ni hablar, no voy a ir tan lejos ahora mismo"
+    }
+  ]
+},{
+  id: '36',
+  expression: 'A otra cosa, mariposa',
+  meaning: 'Dar por terminado un tema o tarea para pasar inmediatamente a lo siguiente.',
+  example: 'Ya hemos hablado mucho del tráfico. A otra cosa, mariposa: ¿qué película vamos a ver?',
+  imageUrl: 'https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd', // Imagen de una mariposa volando hacia otra flor
+  category: 'Social/Comunicación',
+  exercises: [
+    {
+      q: "¿Cuál es el objetivo principal de usar esta expresión?",
+      options: [
+        "Describir la naturaleza",
+        "Cambiar el tema de conversación",
+        "Pedir perdón"
+      ],
+      a: "Cambiar el tema de conversación"
+    },
+    {
+      q: "Ya hemos terminado de discutir por el dinero. ¡A otra ________, mariposa!",
+      options: [
+        "casa",
+        "persona",
+        "cosa"
+      ],
+      a: "cosa"
+    },
+    {
+      q: "Quieres que tu equipo deje de hablar de un problema pasado y se concentre en el futuro. ¿Qué dices?",
+      options: [
+        "Esto no tiene ni pies ni cabeza",
+        "Bueno, a otra cosa mariposa. Veamos los planes nuevos",
+        "Estoy hasta las narices"
+      ],
+      a: "Bueno, a otra cosa mariposa. Veamos los planes nuevos"
+    },
+    {
+      q: "Cuando alguien dice 'a otra cosa, mariposa', suele ser porque:",
+      options: [
+        "El tema actual ya está agotado o no es productivo",
+        "Quiere empezar una pelea",
+        "No ha entendido nada"
+      ],
+      a: "El tema actual ya está agotado o no es productivo"
+    }
+  ]
+},{
+  id: '37',
+  expression: 'Ser de carne y hueso',
+  meaning: 'Ser una persona real, con sentimientos, defectos y debilidades.',
+  example: 'A veces olvidamos que los presidentes también sufren; al final, todos somos de carne y hueso.',
+  imageUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18', // Imagen de personas abrazándose o mostrando emoción
+  category: 'Psicología',
+  exercises: [
+    {
+      q: "¿Qué significa que una persona es 'de carne y hueso'?",
+      options: [
+        "Le gusta mucho la carne",
+        "Es un ser humano con sentimientos y errores",
+        "Es muy fuerte y nunca se cansa"
+      ],
+      a: "Es un ser humano con sentimientos y errores"
+    },
+    {
+      q: "No esperes que sea perfecto siempre; recuerda que soy de carne y ________.",
+      options: [
+        "pelo",
+        "mano",
+        "hueso"
+      ],
+      a: "hueso"
+    },
+    {
+      q: "¿En qué situación es más adecuado usar esta expresión?",
+      options: [
+        "Al ver a un robot trabajando",
+        "Cuando un deportista famoso llora al perder",
+        "En la carnicería comprando comida"
+      ],
+      a: "Cuando un deportista famoso llora al perder"
+    },
+    {
+      q: "Si un empleado dice 'Perdone, soy de carne y hueso', ¿qué quiere decir?",
+      options: [
+        "Que errar es humano y puede equivocarse",
+        "Que necesita comer más",
+        "Que se ha roto un hueso"
+      ],
+      a: "Que errar es humano y puede equivocarse"
+    }
+  ]
+},{
+  id: '38',
+  expression: 'Tirar la toalla',
+  meaning: 'Rendirse ante una situación difícil o dejar de intentar algo.',
+  example: 'He intentado aprender piano meses, pero es muy difícil; estoy a punto de tirar la toalla.',
+  imageUrl: 'https://images.unsplash.com/photo-1584735174914-6b1272458e3e', // Imagen de una toalla en el suelo o un ring
+  category: 'Psicología/Deportes',
+  exercises: [
+    {
+      q: "¿Qué hace una persona que 'tira la toalla'?",
+      options: [
+        "Se va a la piscina",
+        "Empieza un proyecto nuevo",
+        "Deja de intentar algo porque se rinde"
+      ],
+      a: "Deja de intentar algo porque se rinde"
+    },
+    {
+      q: "Sé que el examen es difícil, pero no puedes ________ la toalla ahora.",
+      options: [
+        "comprar",
+        "tirar",
+        "limpiar"
+      ],
+      a: "tirar"
+    },
+    {
+      q: "¿En cuál de estos casos sería más lógico usar la expresión?",
+      options: [
+        "Ganar una medalla de oro",
+        "Abandonar la carrera en el último año",
+        "Comprar toallas nuevas"
+      ],
+      a: "Abandonar la carrera en el último año"
+    },
+    {
+      q: "¿Qué significa en el boxeo que el entrenador tire la toalla?",
+      options: [
+        "Admite que su boxeador no puede seguir",
+        "Que ya es muy tarde",
+        "Que el boxeador necesita secarse el sudor"
+      ],
+      a: "Admite que su boxeador no puede seguir"
+    }
+  ]
+},{
+  id: '39',
+  expression: 'Más vale tarde que nunca',
+  meaning: 'Es preferible que algo bueno suceda con retraso a que no suceda en absoluto.',
+  example: 'Perdona por no llamarte ayer por tu cumpleaños, ¡pero felicidades! Más vale tarde que nunca.',
+  imageUrl: 'https://images.unsplash.com/photo-1508962850731-15b044d22635', // Imagen de un reloj antiguo o alguien llegando feliz
+  category: 'Filosofía/Tiempo',
+  exercises: [
+    {
+      q: "¿Cuándo usamos esta expresión?",
+      options: [
+        "Cuando alguien llega puntual",
+        "Cuando algo positivo ocurre con retraso",
+        "Cuando decidimos no hacer algo"
+      ],
+      a: "Cuando algo positivo ocurre con retraso"
+    },
+    {
+      q: "Sé que te debía este dinero desde el año pasado, aquí tienes. Más vale tarde que ________.",
+      options: [
+        "siempre",
+        "ayer",
+        "nunca"
+      ],
+      a: "nunca"
+    },
+    {
+      q: "¿En qué situación es más adecuado usar esta frase?",
+      options: [
+        "Un tren que llega con adelanto",
+        "Una persona que aprende a conducir a los 70 años",
+        "Alguien que olvida una tarea y no la hace"
+      ],
+      a: "Una persona que aprende a conducir a los 70 años"
+    },
+    {
+      q: "Si alguien envía un regalo tarde y dice esta frase, ¿qué intenta?",
+      options: [
+        "Justificar el retraso dando importancia al detalle",
+        "Presumir de su dinero",
+        "Quejarse del servicio de correos"
+      ],
+      a: "Justificar el retraso dando importancia al detalle"
+    }
+  ]
+},{
+  id: '40',
+  expression: 'Estar al pie del cañón',
+  meaning: 'Mantenerse firme en un trabajo o situación difícil sin rendirse.',
+  example: 'Aunque la empresa pasa por un mal momento, los empleados siguen ahí, al pie del cañón.',
+  imageUrl: 'https://images.unsplash.com/photo-1590644365607-1c5a519a7a37', // Imagen de un faro en una tormenta o alguien trabajando con esfuerzo
+  category: 'Trabajo/Actitud',
+  exercises: [
+    {
+      q: "¿Qué hace una persona que está 'al pie del cañón'?",
+      options: [
+        "Le gusta la historia militar",
+        "Busca excusas para no trabajar",
+        "Cumple su deber y se mantiene firme ante problemas"
+      ],
+      a: "Cumple su deber y se mantiene firme ante problemas"
+    },
+    {
+      q: "Mi madre siempre ha estado al ________ del cañón para ayudar a la familia.",
+      options: [
+        "lado",
+        "pie",
+        "final"
+      ],
+      a: "pie"
+    },
+    {
+      q: "¿En qué escenario usarías esta expresión?",
+      options: [
+        "Un estudiante que se va de vacaciones antes de un examen",
+        "Un médico trabajando horas extra en una emergencia",
+        "Alguien que llega tarde y no se disculpa"
+      ],
+      a: "Un médico trabajando horas extra en una emergencia"
+    },
+    {
+      q: "Si alguien te dice: 'Gracias por estar al pie del cañón', ¿qué significa?",
+      options: [
+        "Agradece tu lealtad y esfuerzo constante",
+        "Cree que eres una persona agresiva",
+        "Quiere que te vayas a descansar"
+      ],
+      a: "Agradece tu lealtad y esfuerzo constante"
+    }
+  ]
+},{
+  id: '41',
+  expression: 'Irse el santo al cielo',
+  meaning: 'Olvidar de repente lo que se iba a decir o hacer, o distraerse mucho.',
+  example: 'Entré en la cocina, pero me puse a mirar el móvil y se me fue el santo al cielo; ya no recuerdo a qué venía.',
+  imageUrl: 'https://images.unsplash.com/photo-1508349132032-44161a4c8402', // Imagen de alguien mirando al horizonte distraído
+  category: 'Psicología/Atención',
+  exercises: [
+    {
+      q: "¿Qué sucede cuando a alguien 'se le va el santo al cielo'?",
+      options: [
+        "Ha tenido una idea brillante",
+        "Se ha distraído u olvidado lo que hacía",
+        "Tiene muchas ganas de dormir"
+      ],
+      a: "Se ha distraído u olvidado lo que hacía"
+    },
+    {
+      q: "Perdona, me quedé mirando por la ventana y se me ha ido el ________ al cielo.",
+      options: [
+        "ángel",
+        "santo",
+        "pájaro"
+      ],
+      a: "santo"
+    },
+    {
+      q: "¿En qué situación es más probable usar esta frase?",
+      options: [
+        "Llegar puntual a una reunión",
+        "Cuando se te quema la comida por estar leyendo",
+        "Explicar una dirección detalladamente"
+      ],
+      a: "Cuando se te quema la comida por estar leyendo"
+    },
+    {
+      q: "Si dices: 'Espera, se me ha ido el santo al cielo' mientras hablas, ¿qué quieres decir?",
+      options: [
+        "Has perdido el hilo y no recuerdas qué ibas a decir",
+        "Tienes que irte a la iglesia",
+        "Estás muy enfadado con tu amigo"
+      ],
+      a: "Has perdido el hilo y no recuerdas qué ibas a decir"
+    }
+  ]
+},
 ];
