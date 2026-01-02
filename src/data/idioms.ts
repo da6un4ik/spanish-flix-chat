@@ -22,7 +22,7 @@ export const idioms: Idiom[] = [
     meaning: 'Estar despistado o pensando en cosas lejanas a la realidad.',
     example: 'Ana no escuchó la explicación del profesor porque estaba en las nubes.',
     imageUrl: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd',
-    videoUrl: '/videos/nubes.mp4',
+    videoUrl: '/videos/estar_en_las_nubes.mp4',
     category: 'Estado mental',
     exercises: [
       {
