@@ -593,34 +593,27 @@ export const idioms: Idiom[] = [
     imageUrl: 'https://images.unsplash.com/photo-1628527304948-06157ee3c8a6',
     category: 'Dinero',
     exercises: [
-      exercises: [
-    {
-      q: "¿Cuál de estas situaciones describe a alguien que 'está sin blanca'?",
-      options: [
-        "Sergio va a comprar una casa al contado",
-        "Lola pidió prestado para el bus tras pagar el alquiler",
-        "Felipe acaba de ganar la lotería"
-      ],
-      a: "Lola pidió prestado para el bus tras pagar el alquiler"
-    },
-    {
-      q: "Si seguimos gastando así en vacaciones, para el miércoles ________ sin blanca.",
-      options: [
-        "habremos estado",
-        "nos quedaremos",
-        "somos"
-      ],
-      a: "nos quedaremos"
-    },
-    {
-      q: "Si alguien decide 'tirar la casa por la ventana', ¿qué le pasará después?",
-      options: [
-        "Se quedará de piedra",
-        "Se quedará sin blanca",
-        "Estará como una cabra"
-      ],
-      a: "Se quedará sin blanca"
-    },
+      {
+        q: "¿Cuál de estas situaciones describe a alguien que 'está sin blanca'?",
+        options: [
+          "Sergio va a comprar una casa al contado",
+          "Lola pidió prestado para el bus tras pagar el alquiler",
+          "Felipe acaba de ganar la lotería"
+        ],
+        a: "Lola pidió prestado para el bus tras pagar el alquiler"
+      },
+      {
+        q: "Si seguimos gastando así en vacaciones, para el miércoles ________ sin blanca.",
+        options: ["habremos estado", "nos quedaremos", "somos"],
+        a: "nos quedaremos"
+      },
+      {
+        q: "Si alguien decide 'tirar la casa por la ventana', ¿qué le pasará después?",
+        options: ["Se quedará de piedra", "Se quedará sin blanca", "Estará como una cabra"],
+        a: "Se quedará sin blanca"
+      }
+    ]
+  },
     {
       q: "Transforma a lenguaje coloquial: 'Carezco totalmente de fondos líquidos'.",
       options: [
@@ -916,12 +909,15 @@ export const idioms: Idiom[] = [
     imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a',
     category: 'Comunicación',
     exercises: [
-      "Andarse por las ramas",
-        "Ir al grano y ser preciso",
-        "Estar en las nubes"
-      ],
-      a: "Ir al grano y ser preciso"
-    }
+      {
+        q: "¿Qué significa 'poner los puntos sobre las íes'?",
+        options: [
+          "Andarse por las ramas",
+          "Ir al grano и ser preciso",
+          "Estar en las nubes"
+        ],
+        a: "Ir al grano и ser preciso"
+      }
     ]
   },
   {
@@ -1373,40 +1369,18 @@ export const idioms: Idiom[] = [
 },{
   id: '34',
   expression: 'Hablar por los codos',
-  meaning: 'Hablar muchísimo, de forma constante y sin parar.',
-  example: 'Me gusta tomar café con Elena, pero es agotador porque habla por los codos y no me deja decir nada.',
-  imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f', // Imagen de personas conversando animadamente
-  category: 'Social',
-  exercises: [
-    {
-      q: "¿Qué hace una persona que 'habla por los codos'?",
-      options: [
-        "Habla muy bajito",
-        "Habla demasiado y sin parar",
-        "No le gusta hablar con desconocidos",
-        "Le duelen los brazos"
-      ],
-      a: "Habla demasiado y sin parar"
-    },
-    {
-      q: "¡Madre mía! Tu hermano no calla nunca, habla por los ________.",
-      options: [
-        "pies",
-        "ojos",
-        "codos",
-        "dedos"
-      ],
-      a: "codos"
-    },
-    {
-      q: "¿En qué situación es más probable usar esta frase?",
-      options: [
-        "Cuando alguien te deja plantado",
-        "Cuando tu amigo no para de hablar durante una película",
-        "En un examen de silencio"
-      ],
-      a: "Cuando tu amigo no para de hablar durante una película"
-    },
+    meaning: 'Hablar muchísimo и sin parar.',
+    example: 'Mi tía no me dejó decir nada en toda la tarde; ¡habla por los codos!',
+    imageUrl: 'https://images.unsplash.com/photo-1522071823945-388b90623a07',
+    category: 'Comunicación',
+    exercises: [
+      {
+        q: "¿Qué hace alguien que 'habla por los codos'?",
+        options: ["Habla muy poco", "Habla de forma muy ruidosa", "Habla demasiado"],
+        a: "Habla demasiado"
+      }
+    ]
+  }
     {
       q: "Si una persona 'habla por los codos', lo opuesto sería alguien que...",
       options: [
@@ -1417,7 +1391,8 @@ export const idioms: Idiom[] = [
       a: "Es muy callado o de pocas palabras"
     }
   ]
-},{
+},
+{
   id: '35',
   expression: 'Estar en el quinto pino',
   meaning: 'Estar en un lugar muy lejano o de difícil acceso.',
