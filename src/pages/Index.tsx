@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProgressBar } from '@/components/ProgressBar';
 import { IdiomPractice } from '@/components/IdiomPractice';
@@ -43,6 +43,22 @@ const Index = () => {
     localStorage.setItem('modismo-favs', JSON.stringify(favorites));
   }, [favorites]);
 
+  // --- БОНУС: ЛОГИКА ПОИСКА С УЧЕТОМ АКЦЕНТОВ (НОРМАЛИЗАЦИЯ) ---
+  const filteredIdioms = useMemo(() => {
+    const normalize = (str: string) => 
+      str ? str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() : "";
+    
+    const query = normalize(searchQuery);
+
+    if (!query) return idioms;
+
+    return idioms.filter((idiom) => 
+      normalize(idiom.expression).includes(query) ||
+      normalize(idiom.meaning).includes(query) ||
+      normalize(idiom.category || "").includes(query)
+    );
+  }, [searchQuery]);
+
   // Улучшенная озвучка
   const speak = (text: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -81,7 +97,6 @@ const Index = () => {
     }
 
     setIsPracticing(false);
-    // Небольшая задержка для плавности анимации перехода
     setTimeout(() => {
       setPracticeIdiom(next);
       setIsDetailView(true);
@@ -91,7 +106,7 @@ const Index = () => {
   const openIdiom = (idiom: Idiom) => {
     setPracticeIdiom(idiom);
     setIsDetailView(true);
-    setIsProfileOpen(false); // Закрываем профиль, если переходим из него
+    setIsProfileOpen(false); 
     setSearchQuery('');
   };
 
@@ -114,9 +129,9 @@ const Index = () => {
           <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Buscar modismos..." />
         </div>
 
-        {/* СЕТКА ИДИОМ */}
+        {/* СЕТКА ИДИОМ (ТЕПЕРЬ ИСПОЛЬЗУЕТ FILTERED) */}
         <div className="grid grid-cols-2 gap-4 mt-8">
-          {idioms.map((idiom) => (
+          {filteredIdioms.map((idiom) => (
             <motion.div 
               key={idiom.id} 
               whileTap={{ scale: 0.95 }} 
@@ -125,7 +140,6 @@ const Index = () => {
             >
               <img src={idiom.imageUrl} className="absolute inset-0 w-full h-full object-cover opacity-60" />
               
-              {/* Кнопка сердечка работает отдельно */}
               <button 
                 onClick={(e) => toggleFavorite(idiom.id, e)} 
                 className="absolute top-3 right-3 z-30 p-2 bg-black/40 backdrop-blur-md rounded-full border border-white/10 active:scale-125 transition-transform"
@@ -142,6 +156,13 @@ const Index = () => {
               </div>
             </motion.div>
           ))}
+          
+          {/* СООБЩЕНИЕ, ЕСЛИ НИЧЕГО НЕ НАЙДЕНО */}
+          {filteredIdioms.length === 0 && (
+            <div className="col-span-2 py-10 text-center text-gray-500 italic">
+              No se encontraron resultados para "{searchQuery}"
+            </div>
+          )}
         </div>
       </main>
 
@@ -170,7 +191,6 @@ const Index = () => {
 
               <p className="text-red-600 font-bold text-lg mb-6 italic leading-snug">{practiceIdiom.meaning}</p>
               
-              {/* ПРИМЕР С ОЗВУЧКОЙ */}
               <div onClick={(e) => speak(practiceIdiom.example, e)} className="bg-white/5 p-6 rounded-3xl border-l-4 border-red-600 mb-10 active:bg-white/10 transition-colors cursor-pointer group">
                 <p className="text-[9px] font-black uppercase text-gray-500 mb-2 tracking-widest italic flex items-center gap-2">
                   <Volume2 size={12} className="group-active:text-red-500" /> Ejemplo de uso
@@ -217,7 +237,6 @@ const Index = () => {
         )}
       </AnimatePresence>
 
-      {/* НИЖНЯЯ ПАНЕЛЬ */}
       <nav className="fixed bottom-0 inset-x-0 h-20 bg-black/80 backdrop-blur-2xl border-t border-white/5 flex items-center justify-center z-[45]">
         <button onClick={() => { setIsDetailView(false); setIsProfileOpen(false); setIsPracticing(false); }} className="flex flex-col items-center gap-1 text-red-600 uppercase font-black text-[10px] tracking-widest italic active:scale-90 transition-transform">
           <Home size={22} /> Inicio
