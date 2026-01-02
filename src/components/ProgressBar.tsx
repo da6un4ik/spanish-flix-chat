@@ -6,10 +6,10 @@ export const ProgressBar = ({ learned, total }: { learned: number, total: number
     <div className="mt-4">
       <div className="flex justify-between items-end mb-2">
         <div>
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Твой прогресс</p>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Mi progreso</p>
           <p className="text-2xl font-black">{percentage}%</p>
         </div>
-        <p className="text-xs text-gray-500 font-medium">{learned} из {total} идиом</p>
+        <p className="text-xs text-gray-500 font-medium">{learned} de {total} idiomas</p>
       </div>
       <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
         <motion.div 
