@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 const VideoPlayer = ({
   src,
@@ -7,6 +7,29 @@ const VideoPlayer = ({
   src: string;
   onClose: () => void;
 }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    const tryPlay = async () => {
+      try {
+        await video.play();
+      } catch (err) {
+        console.log("Telegram blocked autoplay, waiting for user tap");
+      }
+    };
+
+    // Запускаем видео после загрузки метаданных
+    video.addEventListener("loadedmetadata", tryPlay);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", tryPlay);
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
       <div className="w-full max-w-md">
@@ -16,11 +39,14 @@ const VideoPlayer = ({
         </div>
 
         <video
+          ref={videoRef}
           src={src}
           controls
-          autoPlay
+          playsInline
           className="w-full rounded-xl bg-black"
-        />
+        >
+          Ваш браузер не поддерживает видео.
+        </video>
       </div>
     </div>
   );
