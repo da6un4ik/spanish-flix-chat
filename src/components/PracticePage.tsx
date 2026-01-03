@@ -4,10 +4,12 @@ const PracticePage = ({
   idiom,
   onClose,
   onFinish,
+  addXP,
 }: {
   idiom: any;
   onClose: () => void;
   onFinish: () => void;
+  addXP: (amount: number) => void;
 }) => {
   const exercises = idiom.exercises || [];
   const [step, setStep] = useState(0);
@@ -31,9 +33,12 @@ const PracticePage = ({
     setSelected(opt);
     setIsCorrect(correct);
 
-    // ⭐ Вибрация при правильном ответе
-    if (correct && navigator.vibrate) {
-      navigator.vibrate(120);
+    if (correct) {
+      // ⭐ Вибрация
+      if (navigator.vibrate) navigator.vibrate(120);
+
+      // ⭐ XP за правильный ответ
+      addXP(10);
     }
   };
 
@@ -41,6 +46,8 @@ const PracticePage = ({
     const isLast = step === exercises.length - 1;
 
     if (isLast) {
+      // ⭐ XP за завершение упражнения
+      addXP(20);
       onFinish();
       return;
     }
