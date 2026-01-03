@@ -61,6 +61,16 @@ const Index = () => {
   const todayIndex = new Date().getDate() % idioms.length;
   const idiomOfTheDay = idioms[todayIndex];
 
+  // ⭐ Подсветка совпадений
+  const highlight = (text: string, query: string) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.replace(
+      regex,
+      "<mark class='bg-yellow-400 text-black'>$1</mark>"
+    );
+  };
+
   // 🔍 Поиск по выражению, значению, примеру и категории
   const filteredIdioms = idioms.filter((idiom) => {
     const q = searchQuery.toLowerCase();
@@ -73,7 +83,7 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 pb-24">
+    <div className="min-h-screen bg-black text-white p-4 pb-10">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
@@ -118,29 +128,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* CONTINUAR APRENDIENDO */}
-      {searchQuery.trim() === "" && (
-        <>
-          <h3 className="text-xl font-bold mt-8 mb-3">Continuar aprendiendo</h3>
-
-          <div className="grid grid-cols-3 gap-3 mb-10">
-            {idioms.slice(1, 4).map((idiom) => (
-              <div
-                key={idiom.id}
-                onClick={() => openIdiom(idiom)}
-                className="bg-white/10 rounded-xl overflow-hidden cursor-pointer hover:bg-white/20 transition"
-              >
-                <img
-                  src={idiom.imageUrl}
-                  className="w-full h-24 object-cover"
-                />
-                <p className="text-sm p-2">{idiom.expression}</p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
       {/* PROFILE MODAL */}
       <Profile
         isOpen={isProfileOpen}
@@ -153,9 +140,10 @@ const Index = () => {
         favorites={favorites}
         onSelectIdiom={(id) => openIdiom(idioms.find((i) => i.id === id)!)}
         user={tgUser}
+        idioms={idioms}
       />
 
-      {/* SEARCH OVERLAY — BELOW SEARCH BAR */}
+      {/* SEARCH OVERLAY */}
       {searchQuery.trim() !== "" && (
         <div
           className="
@@ -188,9 +176,26 @@ const Index = () => {
                 }}
                 className="p-4 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition"
               >
-                <p className="text-lg font-semibold">{idiom.expression}</p>
-                <p className="text-sm text-gray-400">{idiom.meaning}</p>
-                <p className="text-xs text-blue-400 mt-1">📂 {idiom.category}</p>
+                <p
+                  className="text-lg font-semibold"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.expression, searchQuery),
+                  }}
+                />
+
+                <p
+                  className="text-sm text-gray-400"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.meaning, searchQuery),
+                  }}
+                />
+
+                <p
+                  className="text-xs text-blue-400 mt-1"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.category, searchQuery),
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -239,48 +244,6 @@ const Index = () => {
       {videoSrc && (
         <VideoPlayer src={videoSrc} onClose={() => setVideoSrc(null)} />
       )}
-
-      {/* BOTTOM NAV */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 py-3 flex justify-around text-center text-sm z-40">
-        <button
-          className="flex flex-col items-center text-white"
-          onClick={() => {
-            setSelectedIdiom(null);
-            setPracticeIdiom(null);
-            setSearchQuery("");
-          }}
-        >
-          <span className="text-xl">🏠</span>
-          <span>Inicio</span>
-        </button>
-
-        <button
-          onClick={() => {
-            const input = document.querySelector("input[type='text']");
-            if (input) (input as HTMLInputElement).focus();
-          }}
-          className="flex flex-col items-center text-white"
-        >
-          <span className="text-xl">🔍</span>
-          <span>Buscar</span>
-        </button>
-
-        <button
-          onClick={() => setIsProfileOpen(true)}
-          className="flex flex-col items-center text-white"
-        >
-          <span className="text-xl">⭐</span>
-          <span>Mi lista</span>
-        </button>
-
-        <button
-          onClick={() => setIsProfileOpen(true)}
-          className="flex flex-col items-center text-white"
-        >
-          <span className="text-xl">👤</span>
-          <span>Perfil</span>
-        </button>
-      </div>
     </div>
   );
 };
