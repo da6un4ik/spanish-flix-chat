@@ -74,3 +74,33 @@ const PracticePage = ({
               >
                 {opt}
               </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {isCorrect !== null && (
+        <div className="mb-4">
+          {isCorrect ? (
+            <p className="text-green-400">¡Correcto!</p>
+          ) : (
+            <p className="text-red-400">
+              Incorrecto. Respuesta correcta:{" "}
+              <span className="font-semibold">{current.a}</span>
+            </p>
+          )}
+        </div>
+      )}
+
+      <button
+        onClick={handleNext}
+        className="w-full bg-blue-600 py-2 rounded-xl font-semibold mt-2"
+        disabled={isCorrect === null}
+      >
+        Siguiente pregunta →
+      </button>
+    </div>
+  );
+};
+
+export default PracticePage;
