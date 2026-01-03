@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
-import idioms from "../data/idioms";
+import { idioms } from "../data/idioms";
 import Profile from "../components/Profile";
 import IdiomPractice from "../components/IdiomPractice";
+import PracticePage from "../components/PracticePage";
 import SearchBar from "../components/SearchBar";
+import VideoPlayer from "../components/VideoPlayer";
 
 const Index = () => {
   const [selectedIdiom, setSelectedIdiom] = useState<any>(null);
+  const [practiceIdiom, setPracticeIdiom] = useState<any>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [progressMap, setProgressMap] = useState<Record<string, boolean>>({});
   const [favorites, setFavorites] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [tgUser, setTgUser] = useState<any>(null);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
-  // INIT TELEGRAM
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
-
     if (tg) {
       tg.ready();
       tg.expand();
       tg.setHeaderColor("#0A0A0A");
-
       const user = tg.initDataUnsafe?.user;
       if (user) setTgUser(user);
     }
@@ -34,14 +35,12 @@ const Index = () => {
     window.speechSynthesis.getVoices();
   }, []);
 
-  // SAVE PROGRESS
   const toggleLearned = (id: string) => {
     const updated = { ...progressMap, [id]: !progressMap[id] };
     setProgressMap(updated);
     localStorage.setItem("modismo-pro", JSON.stringify(updated));
   };
 
-  // FAVORITES
   const toggleFavorite = (id: string) => {
     const updated = favorites.includes(id)
       ? favorites.filter((f) => f !== id)
@@ -51,21 +50,17 @@ const Index = () => {
     localStorage.setItem("modismo-favs", JSON.stringify(updated));
   };
 
-  // OPEN IDIOM
-  const openIdiom = (idiom: any) => {
-    setSelectedIdiom(idiom);
+  const openIdiom = (idiom: any) => setSelectedIdiom(idiom);
+  const openPractice = (idiom: any) => setPracticeIdiom(idiom);
+
+  const openVideo = (idiom: any) => {
+    const src = idiom.videoUrl || "/videos/default.mp4";
+    setVideoSrc(src);
   };
 
-  // NEXT IDIOM
-  const openNextIdiom = () => {
-    if (!selectedIdiom) return;
+  const todayIndex = new Date().getDate() % idioms.length;
+  const idiomOfTheDay = idioms[todayIndex];
 
-    const currentIndex = idioms.findIndex((i) => i.id === selectedIdiom.id);
-    const nextIndex = (currentIndex + 1) % idioms.length;
-    setSelectedIdiom(idioms[nextIndex]);
-  };
-
-  // FILTER
   const filteredIdioms = idioms.filter((idiom) => {
     const q = searchQuery.toLowerCase();
     return (
@@ -75,17 +70,11 @@ const Index = () => {
     );
   });
 
-  // IDIOMA DEL DÍA
-  const todayIndex = new Date().getDate() % idioms.length;
-  const idiomOfTheDay = idioms[todayIndex];
-
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-24">
-
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Modismo Pro</h1>
-
         <button
           onClick={() => setIsProfileOpen(true)}
           className="px-4 py-2 bg-white/10 rounded-xl hover:bg-white/20 transition"
@@ -94,16 +83,13 @@ const Index = () => {
         </button>
       </div>
 
-      {/* SEARCH */}
-      <div className="mb-6">
+      {/* SEARCH BAR */}
+      <div className="mb-4">
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </div>
 
       {/* IDIOMA DEL DÍA */}
-      <div
-        onClick={() => openIdiom(idiomOfTheDay)}
-        className="bg-white/10 rounded-2xl p-4 mb-8 cursor-pointer hover:bg-white/20 transition"
-      >
+      <div className="bg-white/10 rounded-2xl p-4 mt-2">
         <img
           src={idiomOfTheDay.imageUrl}
           className="w-full h-44 object-cover rounded-xl mb-3"
@@ -113,43 +99,26 @@ const Index = () => {
         <h2 className="text-2xl font-bold mt-1">{idiomOfTheDay.expression}</h2>
         <p className="text-gray-400 mt-1">{idiomOfTheDay.meaning}</p>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            openIdiom(idiomOfTheDay);
-          }}
-          className="mt-4 w-full bg-blue-600 py-2 rounded-xl font-semibold"
-        >
-          Aprender ahora
-        </button>
+        <div className="flex gap-3 mt-4">
+          <button
+            onClick={() => openPractice(idiomOfTheDay)}
+            className="flex-1 bg-blue-600 py-2 rounded-xl font-semibold"
+          >
+            Aprender ahora
+          </button>
+          <button
+            onClick={() => openIdiom(idiomOfTheDay)}
+            className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
+          >
+            Ver tarjeta
+          </button>
+        </div>
       </div>
 
-      {/* SEARCH RESULTS */}
-      {searchQuery.trim() !== "" && (
-        <div className="space-y-3 mb-10">
-          {filteredIdioms.map((idiom) => (
-            <div
-              key={idiom.id}
-              onClick={() => openIdiom(idiom)}
-              className="p-4 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition"
-            >
-              <p className="text-lg font-semibold">{idiom.expression}</p>
-              <p className="text-sm text-gray-400">{idiom.meaning}</p>
-            </div>
-          ))}
-
-          {filteredIdioms.length === 0 && (
-            <p className="text-gray-400 text-center mt-4">
-              No se encontraron resultados…
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* CONTINUAR APRENDIENDO */}
+      {/* CONTINUAR APRENDIENDO (если нет поиска) */}
       {searchQuery.trim() === "" && (
         <>
-          <h3 className="text-xl font-bold mb-3">Continuar aprendiendo</h3>
+          <h3 className="text-xl font-bold mt-8 mb-3">Continuar aprendiendo</h3>
 
           <div className="grid grid-cols-3 gap-3 mb-10">
             {idioms.slice(1, 4).map((idiom) => (
@@ -183,7 +152,44 @@ const Index = () => {
         user={tgUser}
       />
 
-      {/* IDIOM PRACTICE MODAL */}
+      {/* SEARCH OVERLAY — поверх всего */}
+      {searchQuery.trim() !== "" && (
+        <div className="fixed inset-0 bg-black/95 z-50 p-4 overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Resultados</h2>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="text-gray-400 text-xl"
+            >
+              ✕
+            </button>
+          </div>
+
+          {filteredIdioms.length === 0 && (
+            <p className="text-gray-400 text-center mt-10">
+              No se encontraron resultados…
+            </p>
+          )}
+
+          <div className="space-y-3">
+            {filteredIdioms.map((idiom) => (
+              <div
+                key={idiom.id}
+                onClick={() => {
+                  openIdiom(idiom);
+                  setSearchQuery("");
+                }}
+                className="p-4 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition"
+              >
+                <p className="text-lg font-semibold">{idiom.expression}</p>
+                <p className="text-sm text-gray-400">{idiom.meaning}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* IDIOM CARD MODAL */}
       {selectedIdiom && (
         <IdiomPractice
           idiom={selectedIdiom}
@@ -192,14 +198,43 @@ const Index = () => {
           onToggleFavorite={() => toggleFavorite(selectedIdiom.id)}
           isFavorite={favorites.includes(selectedIdiom.id)}
           isLearned={progressMap[selectedIdiom.id]}
-          onNext={openNextIdiom}
+          onNext={() => {
+            const idx = idioms.findIndex((i) => i.id === selectedIdiom.id);
+            const nextIdx = (idx + 1) % idioms.length;
+            setSelectedIdiom(idioms[nextIdx]);
+          }}
           onHome={() => setSelectedIdiom(null)}
+          onOpenPractice={() => {
+            setPracticeIdiom(selectedIdiom);
+            setSelectedIdiom(null);
+          }}
+          onOpenVideo={() => openVideo(selectedIdiom)}
         />
       )}
 
+      {/* PRACTICE PAGE */}
+      {practiceIdiom && (
+        <PracticePage
+          idiom={practiceIdiom}
+          onClose={() => setPracticeIdiom(null)}
+        />
+      )}
+
+      {/* VIDEO PLAYER */}
+      {videoSrc && (
+        <VideoPlayer src={videoSrc} onClose={() => setVideoSrc(null)} />
+      )}
+
       {/* BOTTOM NAV */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 py-3 flex justify-around text-center text-sm z-50">
-        <button className="flex flex-col items-center text-white">
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 py-3 flex justify-around text-center text-sm z-40">
+        <button
+          className="flex flex-col items-center text-white"
+          onClick={() => {
+            setSelectedIdiom(null);
+            setPracticeIdiom(null);
+            setSearchQuery("");
+          }}
+        >
           <span className="text-xl">🏠</span>
           <span>Inicio</span>
         </button>
@@ -207,7 +242,7 @@ const Index = () => {
         <button
           onClick={() => {
             const input = document.querySelector("input[type='text']");
-            if (input) input.focus();
+            if (input) (input as HTMLInputElement).focus();
           }}
           className="flex flex-col items-center text-white"
         >
