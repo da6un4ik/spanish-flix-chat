@@ -35,7 +35,10 @@ const IdiomPractice = ({
 
         {/* HEADER */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">{idiom.expression}</h2>
+          <div>
+            <h2 className="text-2xl font-bold">{idiom.expression}</h2>
+            <p className="text-sm text-blue-400 mt-1">📂 {idiom.category}</p>
+          </div>
           <button onClick={onClose} className="text-gray-400 text-xl">✕</button>
         </div>
 
