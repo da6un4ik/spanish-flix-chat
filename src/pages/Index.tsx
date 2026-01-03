@@ -61,12 +61,14 @@ const Index = () => {
   const todayIndex = new Date().getDate() % idioms.length;
   const idiomOfTheDay = idioms[todayIndex];
 
+  // 🔍 Поиск по выражению, значению, примеру и категории
   const filteredIdioms = idioms.filter((idiom) => {
     const q = searchQuery.toLowerCase();
     return (
       idiom.expression.toLowerCase().includes(q) ||
       idiom.meaning.toLowerCase().includes(q) ||
-      idiom.example.toLowerCase().includes(q)
+      idiom.example.toLowerCase().includes(q) ||
+      idiom.category.toLowerCase().includes(q)
     );
   });
 
@@ -139,7 +141,7 @@ const Index = () => {
         </>
       )}
 
-      {/* PROFILE */}
+      {/* PROFILE MODAL */}
       <Profile
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
@@ -188,6 +190,7 @@ const Index = () => {
               >
                 <p className="text-lg font-semibold">{idiom.expression}</p>
                 <p className="text-sm text-gray-400">{idiom.meaning}</p>
+                <p className="text-xs text-blue-400 mt-1">📂 {idiom.category}</p>
               </div>
             ))}
           </div>
