@@ -9,6 +9,8 @@ const IdiomPractice = ({
   isLearned,
   onNext,
   onHome,
+  onOpenPractice,
+  onOpenVideo,
 }: {
   idiom: any;
   onClose: () => void;
@@ -18,11 +20,13 @@ const IdiomPractice = ({
   isLearned: boolean;
   onNext: () => void;
   onHome: () => void;
+  onOpenPractice: () => void;
+  onOpenVideo: () => void;
 }) => {
   const playAudio = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "es-ES";
-    speechSynthesis.speak(utterance);
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "es-ES";
+    speechSynthesis.speak(u);
   };
 
   return (
@@ -32,7 +36,9 @@ const IdiomPractice = ({
         {/* HEADER */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">{idiom.expression}</h2>
-          <button onClick={onClose} className="text-gray-400 text-xl">✕</button>
+          <button onClick={onClose} className="text-gray-400 text-xl">
+            ✕
+          </button>
         </div>
 
         {/* IMAGE */}
@@ -43,10 +49,10 @@ const IdiomPractice = ({
         />
 
         {/* MEANING */}
-        <p className="text-gray-300 mb-2">{idiom.meaning}</p>
+        <p className="text-gray-300 mb-4">{idiom.meaning}</p>
 
-        {/* BUTTONS */}
-        <div className="flex gap-3 mb-4">
+        {/* MAIN ACTIONS */}
+        <div className="flex flex-wrap gap-3 mb-6">
           <button
             onClick={() => playAudio(idiom.expression)}
             className="flex-1 bg-blue-600 py-2 rounded-xl font-semibold"
@@ -58,7 +64,7 @@ const IdiomPractice = ({
             onClick={onToggleLearned}
             className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
           >
-            {isLearned ? "✔️ Aprendido" : "⭕ Aprender"}
+            {isLearned ? "✔️ Aprendido" : "⭕ Marcar aprendido"}
           </button>
 
           <button
@@ -69,35 +75,40 @@ const IdiomPractice = ({
           </button>
         </div>
 
-        {/* EXAMPLES */}
-        <h3 className="text-lg font-bold mb-2">Ejemplos</h3>
+        {/* EXAMPLE */}
+        <h3 className="text-lg font-bold mb-2">Ejemplo</h3>
 
-        <div className="space-y-3 mb-6">
-          <div className="bg-white/5 p-3 rounded-xl">
-            <p>{idiom.example}</p>
+        <div className="bg-white/5 p-3 rounded-xl mb-6">
+          <p>{idiom.example}</p>
+          <button
+            onClick={() => playAudio(idiom.example)}
+            className="mt-2 text-sm text-blue-400"
+          >
+            ▶ Escuchar ejemplo
+          </button>
+        </div>
+
+        {/* EXTRA ACTIONS */}
+        <div className="flex gap-3 mb-6">
+          <button
+            onClick={onOpenPractice}
+            className="flex-1 bg-green-600 py-2 rounded-xl font-semibold"
+          >
+            Practicar
+          </button>
+
+          {idiom.videoUrl && (
             <button
-              onClick={() => playAudio(idiom.example)}
-              className="mt-2 text-sm text-blue-400"
+              onClick={onOpenVideo}
+              className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
-              ▶ Escuchar ejemplo
+              Ver video
             </button>
-          </div>
-
-          {idiom.exercises?.slice(0, 2).map((ex, i) => (
-            <div key={i} className="bg-white/5 p-3 rounded-xl">
-              <p>{ex.q}</p>
-              <button
-                onClick={() => playAudio(ex.q)}
-                className="mt-2 text-sm text-blue-400"
-              >
-                ▶ Escuchar ejemplo
-              </button>
-            </div>
-          ))}
+          )}
         </div>
 
         {/* NAVIGATION */}
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3">
           <button
             onClick={onHome}
             className="flex-1 bg-white/10 py-2 rounded-xl font-semibold"
