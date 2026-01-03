@@ -19,3 +19,4 @@ export const ProgressBar = ({ learned, total }: { learned: number; total: number
     </div>
   );
 };
+export default ProgressBar
