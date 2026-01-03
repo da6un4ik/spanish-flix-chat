@@ -26,8 +26,15 @@ const PracticePage = ({
   const current = exercises[step];
 
   const handleOptionClick = (opt: string) => {
+    const correct = opt === current.a;
+
     setSelected(opt);
-    setIsCorrect(opt === current.a);
+    setIsCorrect(correct);
+
+    // ⭐ Вибрация при правильном ответе
+    if (correct && navigator.vibrate) {
+      navigator.vibrate(120);
+    }
   };
 
   const handleNext = () => {
