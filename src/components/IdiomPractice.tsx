@@ -22,16 +22,13 @@ const IdiomPractice = ({
   onNext: () => void;
   onHome: () => void;
   onOpenPractice: () => void;
-  onOpenVideo: () => void;
+  onOpenVideo: (idiom: any) => void;   // ← исправлено: функция принимает idiom
   addXP: (amount: number) => void;
 }) => {
   const playAudio = (text: string) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "es-ES";
     speechSynthesis.speak(u);
-
-    // ⭐ Хочешь — могу добавить XP за прослушивание
-    // addXP(1);
   };
 
   return (
@@ -69,7 +66,7 @@ const IdiomPractice = ({
           <button
             onClick={() => {
               onToggleLearned();
-              addXP(15); // ⭐ XP за "выучено"
+              addXP(15);
             }}
             className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
           >
@@ -79,7 +76,7 @@ const IdiomPractice = ({
           <button
             onClick={() => {
               onToggleFavorite();
-              addXP(3); // ⭐ XP за избранное
+              addXP(3);
             }}
             className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
           >
@@ -112,8 +109,8 @@ const IdiomPractice = ({
           {idiom.videoUrl && (
             <button
               onClick={() => {
-                addXP(5); // ⭐ XP за просмотр видео
-                onOpenVideo();
+                addXP(5);
+                onOpenVideo(idiom);   // ← исправлено: передаём idiom
               }}
               className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
@@ -144,4 +141,3 @@ const IdiomPractice = ({
 };
 
 export default IdiomPractice;
-
