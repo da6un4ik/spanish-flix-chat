@@ -72,6 +72,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-24">
+
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Modismo Pro</h1>
@@ -115,7 +116,7 @@ const Index = () => {
         </div>
       </div>
 
-      {/* CONTINUAR APRENDIENDO (если нет поиска) */}
+      {/* CONTINUAR APRENDIENDO */}
       {searchQuery.trim() === "" && (
         <>
           <h3 className="text-xl font-bold mt-8 mb-3">Continuar aprendiendo</h3>
@@ -138,7 +139,7 @@ const Index = () => {
         </>
       )}
 
-      {/* PROFILE MODAL */}
+      {/* PROFILE */}
       <Profile
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
@@ -152,18 +153,22 @@ const Index = () => {
         user={tgUser}
       />
 
-      {/* SEARCH OVERLAY — поверх всего */}
+      {/* SEARCH OVERLAY — BELOW SEARCH BAR */}
       {searchQuery.trim() !== "" && (
-        <div className="fixed inset-0 bg-black/95 z-50 p-4 overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Resultados</h2>
-            <button
-              onClick={() => setSearchQuery("")}
-              className="text-gray-400 text-xl"
-            >
-              ✕
-            </button>
-          </div>
+        <div
+          className="
+            fixed 
+            left-0 
+            right-0 
+            top-[110px] 
+            bottom-0 
+            bg-black/95 
+            z-50 
+            p-4 
+            overflow-y-auto
+          "
+        >
+          <h2 className="text-xl font-bold mb-4">Resultados</h2>
 
           {filteredIdioms.length === 0 && (
             <p className="text-gray-400 text-center mt-10">
@@ -189,7 +194,7 @@ const Index = () => {
         </div>
       )}
 
-      {/* IDIOM CARD MODAL */}
+      {/* IDIOM CARD */}
       {selectedIdiom && (
         <IdiomPractice
           idiom={selectedIdiom}
@@ -217,6 +222,13 @@ const Index = () => {
         <PracticePage
           idiom={practiceIdiom}
           onClose={() => setPracticeIdiom(null)}
+          onFinish={() => {
+            const idx = idioms.findIndex((i) => i.id === practiceIdiom.id);
+            const nextIdx = (idx + 1) % idioms.length;
+
+            setPracticeIdiom(null);
+            setSelectedIdiom(idioms[nextIdx]);
+          }}
         />
       )}
 
