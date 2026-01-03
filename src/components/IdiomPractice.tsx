@@ -14,19 +14,22 @@ type IdiomPracticeProps = {
   addXP: (amount: number) => void;
 };
 
-const IdiomPractice = ({
-  idiom,
-  onClose,
-  onToggleLearned,
-  onToggleFavorite,
-  isFavorite,
-  isLearned,
-  onNext,
-  onHome,
-  onOpenPractice,
-  onOpenVideo,
-  addXP,
-}: IdiomPracticeProps) => {
+const IdiomPractice = (props: IdiomPracticeProps) => {
+  // 💛 Деструктурируем ТОЛЬКО внутри — порядок больше не важен
+  const {
+    idiom,
+    onClose,
+    onToggleLearned,
+    onToggleFavorite,
+    isFavorite,
+    isLearned,
+    onNext,
+    onHome,
+    onOpenPractice,
+    onOpenVideo,
+    addXP,
+  } = props;
+
   const playAudio = (text: string) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "es-ES";
