@@ -7,6 +7,7 @@ const Profile = ({
   favorites,
   onSelectIdiom,
   user,
+  idioms,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -18,6 +19,7 @@ const Profile = ({
   favorites: string[];
   onSelectIdiom: (id: string) => void;
   user: any;
+  idioms: any[];
 }) => {
   if (!isOpen) return null;
 
@@ -63,35 +65,6 @@ const Profile = ({
         </div>
       </div>
 
-      {/* CONTINUE LEARNING */}
-      <h3 className="text-xl font-bold mb-3">Continuar aprendiendo</h3>
-
-      <div className="space-y-3 mb-8">
-        <div className="bg-white/10 p-4 rounded-xl flex justify-between items-center">
-          <div>
-            <p className="font-semibold">Modismos básicos</p>
-            <p className="text-gray-400 text-sm">Quedan 3 min</p>
-          </div>
-          <span className="text-xl">📘</span>
-        </div>
-
-        <div className="bg-white/10 p-4 rounded-xl flex justify-between items-center">
-          <div>
-            <p className="font-semibold">Cultura y expresiones</p>
-            <p className="text-gray-400 text-sm">Quedan 12 min</p>
-          </div>
-          <span className="text-xl">🌎</span>
-        </div>
-
-        <div className="bg-white/10 p-4 rounded-xl flex justify-between items-center">
-          <div>
-            <p className="font-semibold">Romance</p>
-            <p className="text-green-400 text-sm">Nuevo</p>
-          </div>
-          <span className="text-xl">❤️</span>
-        </div>
-      </div>
-
       {/* WEEKLY ACTIVITY */}
       <h3 className="text-xl font-bold mb-3">Actividad semanal</h3>
 
@@ -129,15 +102,19 @@ const Profile = ({
       )}
 
       <div className="space-y-3 mb-10">
-        {favorites.map((id) => (
-          <button
-            key={id}
-            onClick={() => onSelectIdiom(id)}
-            className="w-full bg-white/10 p-4 rounded-xl text-left hover:bg-white/20 transition"
-          >
-            ⭐ Idioma #{id}
-          </button>
-        ))}
+        {favorites.map((id) => {
+          const idiom = idioms.find((i) => i.id === id);
+
+          return (
+            <button
+              key={id}
+              onClick={() => onSelectIdiom(id)}
+              className="w-full bg-white/10 p-4 rounded-xl text-left hover:bg-white/20 transition"
+            >
+              ⭐ {idiom?.expression}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
