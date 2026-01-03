@@ -16,6 +16,10 @@ const Index = () => {
   const [tgUser, setTgUser] = useState<any>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
+  // ⭐ Новые состояния для XP и streak
+  const [xp, setXp] = useState(0);
+  const [streak, setStreak] = useState(0);
+
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
     if (tg) {
@@ -28,12 +32,52 @@ const Index = () => {
 
     const savedProgress = localStorage.getItem("modismo-pro");
     const savedFavs = localStorage.getItem("modismo-favs");
+    const savedXP = localStorage.getItem("xp");
+    const savedStreak = localStorage.getItem("streak");
+    const savedLastDay = localStorage.getItem("last-active-day");
 
     if (savedProgress) setProgressMap(JSON.parse(savedProgress));
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
+    if (savedXP) setXp(JSON.parse(savedXP));
+    if (savedStreak) setStreak(JSON.parse(savedStreak));
 
+    // ⚡ Инициализируем голоса для озвучки
     window.speechSynthesis.getVoices();
+
+    // 🔥 Логика streak по дням
+    const today = new Date().toDateString();
+
+    if (!savedLastDay) {
+      // Первый запуск — просто записываем сегодня как активный день
+      localStorage.setItem("last-active-day", today);
+    } else if (savedLastDay !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+
+      if (savedLastDay === yesterday) {
+        // Вчера был активный день → продолжаем streak
+        const baseStreak = savedStreak ? JSON.parse(savedStreak) : 0;
+        const newStreak = baseStreak + 1;
+        setStreak(newStreak);
+        localStorage.setItem("streak", JSON.stringify(newStreak));
+      } else {
+        // Пропуск дня → сбрасываем streak
+        setStreak(0);
+        localStorage.setItem("streak", "0");
+      }
+
+      localStorage.setItem("last-active-day", today);
+    }
   }, []);
+
+  // ⭐ Функция начисления XP
+  const addXP = (amount: number) => {
+    const updated = xp + amount;
+    setXp(updated);
+    localStorage.setItem("xp", JSON.stringify(updated));
+
+    // Любая активность обновляет дату последней активности
+    localStorage.setItem("last-active-day", new Date().toDateString());
+  };
 
   const toggleLearned = (id: string) => {
     const updated = { ...progressMap, [id]: !progressMap[id] };
@@ -56,6 +100,8 @@ const Index = () => {
   const openVideo = (idiom: any) => {
     const src = idiom.videoUrl || "/videos/default.mp4";
     setVideoSrc(src);
+    // ✅ XP за просмотр видео (например, 5 XP)
+    addXP(5);
   };
 
   const todayIndex = new Date().getDate() % idioms.length;
@@ -135,12 +181,13 @@ const Index = () => {
         stats={{
           learnedCount: Object.keys(progressMap).length,
           totalCount: idioms.length,
-          streak: 0,
         }}
         favorites={favorites}
         onSelectIdiom={(id) => openIdiom(idioms.find((i) => i.id === id)!)}
         user={tgUser}
         idioms={idioms}
+        xp={xp}
+        streak={streak}
       />
 
       {/* SEARCH OVERLAY */}
@@ -207,8 +254,16 @@ const Index = () => {
         <IdiomPractice
           idiom={selectedIdiom}
           onClose={() => setSelectedIdiom(null)}
-          onToggleLearned={() => toggleLearned(selectedIdiom.id)}
-          onToggleFavorite={() => toggleFavorite(selectedIdiom.id)}
+          onToggleLearned={() => {
+            toggleLearned(selectedIdiom.id);
+            // ✅ XP за отметку "выучено"
+            addXP(15);
+          }}
+          onToggleFavorite={() => {
+            toggleFavorite(selectedIdiom.id);
+            // ✅ XP за добавление в избранное
+            addXP(3);
+          }}
           isFavorite={favorites.includes(selectedIdiom.id)}
           isLearned={progressMap[selectedIdiom.id]}
           onNext={() => {
@@ -236,7 +291,10 @@ const Index = () => {
 
             setPracticeIdiom(null);
             setSelectedIdiom(idioms[nextIdx]);
+            // ✅ XP за завершение упражнения
+            addXP(20);
           }}
+          addXP={addXP}
         />
       )}
 
