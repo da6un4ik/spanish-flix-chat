@@ -10,7 +10,7 @@ type IdiomPracticeProps = {
   onNext: () => void;
   onHome: () => void;
   onOpenPractice: () => void;
-  onOpenVideo: (idiom: any) => void;   // ← правильная сигнатура
+  onOpenVideo: (idiom: any) => void;
   addXP: (amount: number) => void;
 };
 
@@ -32,6 +32,8 @@ const IdiomPractice = ({
     u.lang = "es-ES";
     speechSynthesis.speak(u);
   };
+
+  console.log("📌 IdiomPractice rendered with idiom:", idiom);
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
@@ -111,8 +113,10 @@ const IdiomPractice = ({
           {idiom.videoUrl && (
             <button
               onClick={() => {
+                console.log("🎬 CLICK: Ver video");
+                console.log("🎬 idiom passed to onOpenVideo:", idiom);
                 addXP(5);
-                onOpenVideo(idiom);   // ← теперь работает корректно
+                onOpenVideo(idiom);
               }}
               className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
