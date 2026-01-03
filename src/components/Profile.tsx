@@ -131,4 +131,16 @@ const Profile = ({
       <div className="space-y-3 mb-10">
         {favorites.map((id) => (
           <button
-            key={
+            key={id}
+            onClick={() => onSelectIdiom(id)}
+            className="w-full bg-white/10 p-4 rounded-xl text-left hover:bg-white/20 transition"
+          >
+            ⭐ Idioma #{id}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
