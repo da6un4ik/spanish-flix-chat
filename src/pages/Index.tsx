@@ -11,11 +11,9 @@ const Index = () => {
   const [progressMap, setProgressMap] = useState<Record<string, boolean>>({});
   const [favorites, setFavorites] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [tgUser, setTgUser] = useState<any>(null); // ← Telegram user
+  const [tgUser, setTgUser] = useState<any>(null);
 
-  // -----------------------------
   // INIT TELEGRAM WEBAPP + LOAD USER
-  // -----------------------------
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
 
@@ -31,29 +29,23 @@ const Index = () => {
       }
     }
 
-    // Load progress & favorites
     const savedProgress = localStorage.getItem("modismo-pro");
     const savedFavs = localStorage.getItem("modismo-favs");
 
     if (savedProgress) setProgressMap(JSON.parse(savedProgress));
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
 
-    // Preload voices
     window.speechSynthesis.getVoices();
   }, []);
 
-  // -----------------------------
   // SAVE PROGRESS
-  // -----------------------------
   const toggleLearned = (id: string) => {
     const updated = { ...progressMap, [id]: !progressMap[id] };
     setProgressMap(updated);
     localStorage.setItem("modismo-pro", JSON.stringify(updated));
   };
 
-  // -----------------------------
   // FAVORITES
-  // -----------------------------
   const toggleFavorite = (id: string) => {
     const updated = favorites.includes(id)
       ? favorites.filter((f) => f !== id)
@@ -63,20 +55,20 @@ const Index = () => {
     localStorage.setItem("modismo-favs", JSON.stringify(updated));
   };
 
-  // -----------------------------
   // OPEN IDIOM
-  // -----------------------------
   const openIdiom = (idiom: any) => {
     setSelectedIdiom(idiom);
   };
 
-  // -----------------------------
-  // FILTER IDIOMS
-  // -----------------------------
-  const filteredIdioms = idioms.filter((idiom) =>
-    idiom.spanish.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    idiom.english.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // FILTER IDIOMS — FIXED!
+  const filteredIdioms = idioms.filter((idiom) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      idiom.expression.toLowerCase().includes(q) ||
+      idiom.meaning.toLowerCase().includes(q) ||
+      idiom.example.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-24">
@@ -111,8 +103,8 @@ const Index = () => {
           >
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-lg font-semibold">{idiom.spanish}</p>
-                <p className="text-sm text-gray-400">{idiom.english}</p>
+                <p className="text-lg font-semibold">{idiom.expression}</p>
+                <p className="text-sm text-gray-400">{idiom.meaning}</p>
               </div>
 
               <div className="flex gap-3">
@@ -152,7 +144,7 @@ const Index = () => {
         }}
         favorites={favorites}
         onSelectIdiom={(id) => openIdiom(idioms.find((i) => i.id === id)!)}
-        user={tgUser} // ← передаём Telegram user
+        user={tgUser}
       />
 
       {/* IDIOM PRACTICE MODAL */}
