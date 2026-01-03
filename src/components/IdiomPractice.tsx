@@ -1,5 +1,19 @@
 import React from "react";
 
+type IdiomPracticeProps = {
+  idiom: any;
+  onClose: () => void;
+  onToggleLearned: () => void;
+  onToggleFavorite: () => void;
+  isFavorite: boolean;
+  isLearned: boolean;
+  onNext: () => void;
+  onHome: () => void;
+  onOpenPractice: () => void;
+  onOpenVideo: (idiom: any) => void;   // ← правильная сигнатура
+  addXP: (amount: number) => void;
+};
+
 const IdiomPractice = ({
   idiom,
   onClose,
@@ -12,19 +26,7 @@ const IdiomPractice = ({
   onOpenPractice,
   onOpenVideo,
   addXP,
-}: {
-  idiom: any;
-  onClose: () => void;
-  onToggleLearned: () => void;
-  onToggleFavorite: () => void;
-  isFavorite: boolean;
-  isLearned: boolean;
-  onNext: () => void;
-  onHome: () => void;
-  onOpenPractice: () => void;
-  onOpenVideo: (idiom: any) => void;   // ← исправлено: функция принимает idiom
-  addXP: (amount: number) => void;
-}) => {
+}: IdiomPracticeProps) => {
   const playAudio = (text: string) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "es-ES";
@@ -110,7 +112,7 @@ const IdiomPractice = ({
             <button
               onClick={() => {
                 addXP(5);
-                onOpenVideo(idiom);   // ← исправлено: передаём idiom
+                onOpenVideo(idiom);   // ← теперь работает корректно
               }}
               className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
