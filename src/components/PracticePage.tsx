@@ -3,9 +3,11 @@ import React, { useState } from "react";
 const PracticePage = ({
   idiom,
   onClose,
+  onFinish,
 }: {
   idiom: any;
   onClose: () => void;
+  onFinish: () => void;
 }) => {
   const exercises = idiom.exercises || [];
   const [step, setStep] = useState(0);
@@ -29,9 +31,16 @@ const PracticePage = ({
   };
 
   const handleNext = () => {
+    const isLast = step === exercises.length - 1;
+
+    if (isLast) {
+      onFinish();
+      return;
+    }
+
     setSelected(null);
     setIsCorrect(null);
-    setStep((prev) => (prev + 1) % exercises.length);
+    setStep(step + 1);
   };
 
   return (
@@ -65,32 +74,3 @@ const PracticePage = ({
               >
                 {opt}
               </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {isCorrect !== null && (
-        <div className="mb-4">
-          {isCorrect ? (
-            <p className="text-green-400">¡Correcto!</p>
-          ) : (
-            <p className="text-red-400">
-              Incorrecto. Respuesta correcta:{" "}
-              <span className="font-semibold">{current.a}</span>
-            </p>
-          )}
-        </div>
-      )}
-
-      <button
-        onClick={handleNext}
-        className="w-full bg-blue-600 py-2 rounded-xl font-semibold mt-2"
-      >
-        Siguiente pregunta →
-      </button>
-    </div>
-  );
-};
-
-export default PracticePage;
