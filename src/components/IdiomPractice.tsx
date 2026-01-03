@@ -127,3 +127,5 @@ export const IdiomPractice = ({ idiom, onClose, onFullyLearned }: { idiom: Idiom
     </div>
   );
 };
+export default IdiomPractice;
+
