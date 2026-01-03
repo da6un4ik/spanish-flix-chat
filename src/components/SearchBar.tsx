@@ -37,3 +37,5 @@ export const SearchBar = ({ value, onChange, placeholder = 'Поиск идио�
     </div>
   );
 };
+export default SearchBar;
+
