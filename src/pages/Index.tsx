@@ -276,7 +276,7 @@ const Index = () => {
             setPracticeIdiom(selectedIdiom);
             setSelectedIdiom(null);
           }}
-          onOpenVideo={() => openVideo(selectedIdiom)}
+          onOpenVideo={(idiom) => openVideo(idiom)}
         />
       )}
 
