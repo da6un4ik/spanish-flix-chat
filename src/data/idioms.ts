@@ -1903,3 +1903,5 @@ export const idioms: Idiom[] = [
     ],
   },
 ];
+export default idioms;
+
