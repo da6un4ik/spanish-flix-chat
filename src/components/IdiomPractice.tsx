@@ -36,9 +36,7 @@ const IdiomPractice = ({
         {/* HEADER */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">{idiom.expression}</h2>
-          <button onClick={onClose} className="text-gray-400 text-xl">
-            ✕
-          </button>
+          <button onClick={onClose} className="text-gray-400 text-xl">✕</button>
         </div>
 
         {/* IMAGE */}
@@ -51,7 +49,7 @@ const IdiomPractice = ({
         {/* MEANING */}
         <p className="text-gray-300 mb-4">{idiom.meaning}</p>
 
-        {/* MAIN ACTIONS */}
+        {/* ACTION BUTTONS */}
         <div className="flex flex-wrap gap-3 mb-6">
           <button
             onClick={() => playAudio(idiom.expression)}
