@@ -8,18 +8,21 @@ const Profile = ({
   onSelectIdiom,
   user,
   idioms,
+  xp,
+  streak,
 }: {
   isOpen: boolean;
   onClose: () => void;
   stats: {
     learnedCount: number;
     totalCount: number;
-    streak: number;
   };
   favorites: string[];
   onSelectIdiom: (id: string) => void;
   user: any;
   idioms: any[];
+  xp: number;
+  streak: number;
 }) => {
   if (!isOpen) return null;
 
@@ -40,9 +43,9 @@ const Profile = ({
 
         <div>
           <p className="text-xl font-bold">{user?.first_name || "Usuario"}</p>
-          <p className="text-gray-300 text-sm">Aprendiz avanzado</p>
+          <p className="text-gray-300 text-sm">Aprendiz dedicado</p>
           <p className="text-blue-400 font-semibold mt-1">
-            🔥 {stats.streak} días seguidos
+            🔥 {streak} días seguidos
           </p>
         </div>
       </div>
@@ -55,13 +58,13 @@ const Profile = ({
         </div>
 
         <div className="bg-white/10 p-4 rounded-xl text-center">
-          <p className="text-2xl font-bold">85%</p>
-          <p className="text-gray-400 text-sm">Score</p>
+          <p className="text-2xl font-bold">{xp}</p>
+          <p className="text-gray-400 text-sm">XP</p>
         </div>
 
         <div className="bg-white/10 p-4 rounded-xl text-center">
-          <p className="text-2xl font-bold">2.4k</p>
-          <p className="text-gray-400 text-sm">XP</p>
+          <p className="text-2xl font-bold">{streak}</p>
+          <p className="text-gray-400 text-sm">Streak 🔥</p>
         </div>
       </div>
 
@@ -88,9 +91,14 @@ const Profile = ({
       <h3 className="text-xl font-bold mb-3">Mis logros</h3>
 
       <div className="bg-white/10 p-4 rounded-xl mb-8">
-        <p className="text-gray-300 mb-2">12 / 50 completados</p>
+        <p className="text-gray-300 mb-2">Progreso general</p>
         <div className="w-full bg-white/20 h-3 rounded-full overflow-hidden">
-          <div className="bg-green-500 h-3" style={{ width: "24%" }} />
+          <div
+            className="bg-green-500 h-3"
+            style={{
+              width: `${Math.min((stats.learnedCount / stats.totalCount) * 100, 100)}%`,
+            }}
+          />
         </div>
       </div>
 
