@@ -11,6 +11,7 @@ const IdiomPractice = ({
   onHome,
   onOpenPractice,
   onOpenVideo,
+  addXP,
 }: {
   idiom: any;
   onClose: () => void;
@@ -22,11 +23,15 @@ const IdiomPractice = ({
   onHome: () => void;
   onOpenPractice: () => void;
   onOpenVideo: () => void;
+  addXP: (amount: number) => void;
 }) => {
   const playAudio = (text: string) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "es-ES";
     speechSynthesis.speak(u);
+
+    // ⭐ Хочешь — могу добавить XP за прослушивание
+    // addXP(1);
   };
 
   return (
@@ -62,14 +67,20 @@ const IdiomPractice = ({
           </button>
 
           <button
-            onClick={onToggleLearned}
+            onClick={() => {
+              onToggleLearned();
+              addXP(15); // ⭐ XP за "выучено"
+            }}
             className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
           >
             {isLearned ? "✔️ Aprendido" : "⭕ Marcar aprendido"}
           </button>
 
           <button
-            onClick={onToggleFavorite}
+            onClick={() => {
+              onToggleFavorite();
+              addXP(3); // ⭐ XP за избранное
+            }}
             className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
           >
             {isFavorite ? "⭐ Favorito" : "☆ Guardar"}
@@ -100,7 +111,10 @@ const IdiomPractice = ({
 
           {idiom.videoUrl && (
             <button
-              onClick={onOpenVideo}
+              onClick={() => {
+                addXP(5); // ⭐ XP за просмотр видео
+                onOpenVideo();
+              }}
               className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
               Ver video
@@ -130,3 +144,4 @@ const IdiomPractice = ({
 };
 
 export default IdiomPractice;
+
