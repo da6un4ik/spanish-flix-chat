@@ -7,7 +7,7 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export const SearchBar = ({ value, onChange, placeholder = 'Поиск идиом...' }: SearchBarProps) => {
+export const SearchBar = ({ value, onChange, placeholder = 'Buscar...' }: SearchBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
