@@ -141,7 +141,7 @@ export const idioms: Idiom[] = [
     meaning:
       'Burlarse de alguien de manera amistosa o intentar engañarle con una broma.',
     example: '¿De verdad ganaste la lotería? ¡No me tomes el pelo!',
-    imageUrl: 'https://images.unsplash.com/photo-1509248961158-e54f6934749c',
+    imageUrl: "/idioms/tomar_pelo.jpg",
     videoUrl: '/videos/tomar_pelo.mp4',
     category: 'Social',
     exercises: [
