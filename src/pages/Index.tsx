@@ -60,34 +60,36 @@ const Index = () => {
     }
     localStorage.setItem("last-active-day", today);
 
-    // --- 4. Авто-открытие карточки (Рандомная или Старая) ---
+    // --- 4. Умное открытие карточки при старте ---
     const timer = setTimeout(() => {
       const unlearned = idioms.filter(i => !currentProgress[i.id]);
+      
       if (unlearned.length > 0) {
-        // Есть новые идиомы -> берем случайную
+        // Есть неизученные -> выбираем случайную
         const random = unlearned[Math.floor(Math.random() * unlearned.length)];
         setSelectedIdiom(random);
       } else {
-        // Все выучено -> берем ту, что учили дольше всего назад
+        // Все изучены -> ищем самую старую по времени изучения
         const entries = Object.entries(currentProgress);
         if (entries.length > 0) {
           entries.sort((a, b) => a[1] - b[1]);
-          const oldest = idioms.find(i => i.id === entries[0][0]);
-          if (oldest) setSelectedIdiom(oldest);
+          const oldestId = entries[0][0];
+          const oldestIdiom = idioms.find(i => i.id === oldestId);
+          if (oldestIdiom) setSelectedIdiom(oldestIdiom);
         }
       }
-    }, 600);
+    }, 800); // Небольшая задержка для красоты появления
 
     return () => clearTimeout(timer);
   }, []);
 
-  // --- Функции управления ---
+  // --- Функции управления прогрессом ---
   const toggleLearned = (id: string) => {
     const updated = { ...progressMap };
     if (updated[id]) {
       delete updated[id];
     } else {
-      updated[id] = Date.now();
+      updated[id] = Date.now(); // Сохраняем время изучения
     }
     setProgressMap(updated);
     localStorage.setItem("modismo-pro", JSON.stringify(updated));
@@ -111,19 +113,19 @@ const Index = () => {
         <h1 className="text-3xl font-bold">Modismo Pro</h1>
         <button 
           onClick={() => setIsProfileOpen(true)} 
-          className="px-4 py-2 bg-white/10 rounded-xl hover:bg-white/20 transition"
+          className="px-4 py-2 bg-white/10 rounded-xl hover:bg-white/20 transition active:scale-95"
         >
           Perfil
         </button>
       </div>
 
-      {/* SEARCH */}
+      {/* SEARCH BAR */}
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
       {/* IDIOMA DEL DÍA */}
       <div className="bg-white/10 rounded-2xl p-4 mt-4 border border-white/5">
-        <img src={idiomOfTheDay.imageUrl} className="w-full h-44 object-cover rounded-xl mb-3 shadow-lg" />
-        <p className="text-xs text-blue-400 font-bold tracking-wider uppercase">Idioma del día</p>
+        <img src={idiomOfTheDay.imageUrl} className="w-full h-44 object-cover rounded-xl mb-3 shadow-lg" alt="" />
+        <p className="text-xs text-blue-400 font-bold uppercase tracking-wider">Idioma del día</p>
         <h2 className="text-2xl font-bold mt-1">{idiomOfTheDay.expression}</h2>
         <p className="text-gray-400 mt-1">{idiomOfTheDay.meaning}</p>
         <button 
@@ -149,17 +151,17 @@ const Index = () => {
         }}
       />
 
-      {/* MODAL: IDIOM PRACTICE (CARD) */}
+      {/* MODAL: IDIOM CARD (PRACTICE MODE) */}
       {selectedIdiom && (
         <IdiomPractice
           idiom={selectedIdiom}
           isFavorite={favorites.includes(selectedIdiom.id)}
           isLearned={!!progressMap[selectedIdiom.id]}
           onClose={() => setSelectedIdiom(null)}
-          onHome={() => setSelectedIdiom(null)} // Кнопка Inicio теперь работает
+          onHome={() => setSelectedIdiom(null)} // Исправлено: закрывает карточку
           onToggleLearned={() => toggleLearned(selectedIdiom.id)}
           onToggleFavorite={() => toggleFavorite(selectedIdiom.id)}
-          onOpenVideo={(i: any) => i.videoUrl && setVideoSrc(i.videoUrl)}
+          onOpenVideo={(i: any) => i.videoUrl && setVideoSrc(i.videoUrl)} // Открывает видео
           onOpenPractice={() => { 
             setPracticeIdiom(selectedIdiom); 
             setSelectedIdiom(null); 
@@ -171,15 +173,17 @@ const Index = () => {
         />
       )}
 
-      {/* MODAL: PRACTICE PAGE (EXERCISES) */}
+      {/* MODAL: EXERCISES PAGE */}
       {practiceIdiom && (
         <PracticePage
           idiom={practiceIdiom}
           onClose={() => setPracticeIdiom(null)}
           onFinish={() => {
-            const idx = idioms.findIndex(i => i.id === practiceIdiom.id);
+            // Переход к следующей идиоме после завершения всех упражнений
+            const currentIndex = idioms.findIndex(i => i.id === practiceIdiom.id);
+            const nextIdiom = idioms[(currentIndex + 1) % idioms.length];
             setPracticeIdiom(null);
-            setSelectedIdiom(idioms[(idx + 1) % idioms.length]);
+            setSelectedIdiom(nextIdiom);
           }}
         />
       )}
