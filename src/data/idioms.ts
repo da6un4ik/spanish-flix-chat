@@ -1636,7 +1636,7 @@ export const idioms: Idiom[] = [
       'Fingir que no se ha visto algo (un error o falta) para evitar problemas o favorecer a alguien.',
     example:
       'El profesor vio que el alumno usaba el móvil, pero hizo la vista gorda porque era el último día.',
-    imageUrl: 'https://images.unsplash.com/photo-1590595906931-81f04f0ccebb',
+    imageUrl: "/idioms/gorda.jpg",
     videoUrl: '/videos/gorda.mp4',
     category: 'Social/Ética',
     exercises: [
@@ -1681,7 +1681,7 @@ export const idioms: Idiom[] = [
       'No tener interés en una cosa o ignorar a una persona a propósito.',
     example:
       'Mis amigos quieren ir a la discoteca, pero yo paso de salir hoy; prefiero quedarme en casa.',
-    imageUrl: 'https://images.unsplash.com/photo-1516534775068-ba3e7458af70',
+    imageUrl: "/idioms/pasar.jpg",
     videoUrl: '/videos/pasar.mp4',
     category: 'Social/Interés',
     exercises: [
@@ -1726,7 +1726,7 @@ export const idioms: Idiom[] = [
       'Estar de muy mal humor, irritable o tener malas intenciones.',
     example:
       'No le preguntes nada ahora a tu hermano, que está de mala leche porque ha perdido su equipo.',
-    imageUrl: 'https://images.unsplash.com/photo-1594499468121-f45e83e30df4',
+    imageUrl: "/idioms/estar_leche.jpg",
     videoUrl: '/videos/estar_leche.mp4',
     category: 'Emociones',
     exercises: [
@@ -1771,7 +1771,7 @@ export const idioms: Idiom[] = [
       'Las personas que se esfuerzan y empiezan sus tareas pronto tienen más probabilidades de éxito.',
     example:
       'Mañana me levantaré a las seis para estudiar antes del examen; ya sabes que a quien madruga, Dios le ayuda.',
-    imageUrl: 'https://images.unsplash.com/photo-1470252649358-96962407e946',
+    imageUrl: "/idioms/madruga.jpg",
     videoUrl: '/videos/madruga.mp4',
     category: 'Sabiduría Popular',
     exercises: [
@@ -1816,7 +1816,7 @@ export const idioms: Idiom[] = [
       'Sentirse o ser alguien que no tiene ninguna influencia o cuya opinión no es valorada.',
     example:
       'En las reuniones de vecinos siento que soy un cero a la izquierda, nadie escucha mis propuestas.',
-    imageUrl: 'https://images.unsplash.com/photo-1590595601323-999330999017',
+    imageUrl: "/idioms/cero.jpg",
     videoUrl: '/videos/cero.mp4',
     category: 'Social/Sentimientos',
     exercises: [
@@ -1861,7 +1861,7 @@ export const idioms: Idiom[] = [
       'Salir por la noche con amigos para tomar bebidas y socializar en bares o pubs.',
     example:
       'Hoy es viernes y por fin he terminado el proyecto; ¿nos vamos de copas para celebrar?',
-    imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
+    imageUrl: "/idioms/copas.jpg",
     videoUrl: '/videos/copas.mp4',
     category: 'Social/Ocio',
     exercises: [
@@ -1906,7 +1906,7 @@ export const idioms: Idiom[] = [
       'Dormir muy profundamente, con total tranquilidad y sin interrupciones.',
     example:
       'Como ayer terminé todos mis exámenes, anoche pude dormir a pierna suelta por fin.',
-    imageUrl: 'https://images.unsplash.com/photo-1541480601022-2308c0f02487',
+    imageUrl: "/idioms/suelta.jpg",
     videoUrl: '/videos/suelta.mp4',
     category: 'Salud/Bienestar',
     exercises: [
