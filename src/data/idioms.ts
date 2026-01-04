@@ -1123,7 +1123,7 @@ export const idioms: Idiom[] = [
       'Estar de mal humor, enfadado o irritable en un momento específico.',
     example:
       'No le pidas nada ahora a tu padre, que está de mala uva porque su equipo ha perdido.',
-    imageUrl: 'https://images.unsplash.com/photo-1595908129746-57ca1a63dd4d',
+    imageUrl: "/idioms/uva.jpg",
     videoUrl: '/videos/uva.mp4',
     category: 'Emociones',
     exercises: [
@@ -1167,7 +1167,7 @@ export const idioms: Idiom[] = [
     meaning: 'Algo que no tiene sentido, es absurdo o no tiene lógica.',
     example:
       'Esa película que vimos ayer era malísima; la historia no tenía ni pies ni cabeza.',
-    imageUrl: 'https://images.unsplash.com/photo-1509228468518-180dd48a57a1',
+    imageUrl: "/idioms/ni.jpg",
     videoUrl: '/videos/ni.mp4',
     category: 'Psicología',
     exercises: [
@@ -1203,7 +1203,7 @@ export const idioms: Idiom[] = [
       'Esperar algo imposible de una persona o cosa que no tiene esa capacidad.',
     example:
       'No pretendas que tu hermano pequeño guarde un secreto; eso es pedir peras al olmo.',
-    imageUrl: 'https://images.unsplash.com/photo-1511210041123-018247072559',
+    imageUrl: "/idioms/peras.jpg",
     videoUrl: '/videos/peras.mp4',
     category: 'Psicología',
     exercises: [
@@ -1251,7 +1251,7 @@ export const idioms: Idiom[] = [
       'Ser la pareja ideal o la persona que complementa perfectamente a otra.',
     example:
       'Llevan diez años casados y son muy felices; él dice que ella es su media naranja.',
-    imageUrl: 'https://images.unsplash.com/photo-1551008475-4533d141425b',
+    imageUrl: "/idioms/naranja.jpg",
     videoUrl: '/videos/naranja.mp4',
     category: 'Social',
     exercises: [
@@ -1295,7 +1295,7 @@ export const idioms: Idiom[] = [
     meaning: 'Hablar muchísimo y sin parar.',
     example:
       'Mi tía no me dejó decir nada en toda la tarde; ¡habla por los codos!',
-    imageUrl: 'https://images.unsplash.com/photo-1522071823945-388b90623a07',
+    imageUrl: "/idioms/codos.jpg",
     videoUrl: '/videos/codos.mp4',
     category: 'Comunicación',
     exercises: [
@@ -1321,7 +1321,7 @@ export const idioms: Idiom[] = [
     meaning: 'Estar en un lugar muy lejano o de difícil acceso.',
     example:
       'No quiero ir a esa fiesta, su casa está en el quinto pino y tardo dos horas en llegar.',
-    imageUrl: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9',
+    imageUrl: "/idioms/pino.jpg",
     videoUrl: '/videos/pino.mp4',
     category: 'Lugar/Tiempo',
     exercises: [
@@ -1366,7 +1366,7 @@ export const idioms: Idiom[] = [
       'Dar por terminado un tema o tarea para pasar inmediatamente a lo siguiente.',
     example:
       'Ya hemos hablado mucho del tráfico. A otra cosa, mariposa: ¿qué película vamos a ver?',
-    imageUrl: 'https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd',
+    imageUrl: "/idioms/mariposa.jpg",
     videoUrl: '/videos/mariposa.mp4',
     category: 'Social/Comunicación',
     exercises: [
@@ -1411,7 +1411,7 @@ export const idioms: Idiom[] = [
       'Ser una persona real, con sentimientos, defectos y debilidades.',
     example:
       'A veces olvidamos que los presidentes también sufren; al final, todos somos de carne y hueso.',
-    imageUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18',
+    imageUrl: "/idioms/carne.jpg",
     videoUrl: '/videos/carne.mp4',
     category: 'Psicología',
     exercises: [
@@ -1456,7 +1456,7 @@ export const idioms: Idiom[] = [
       'Rendirse ante una situación difícil o dejar de intentar algo.',
     example:
       'He intentado aprender piano meses, pero es muy difícil; estoy a punto de tirar la toalla.',
-    imageUrl: 'https://images.unsplash.com/photo-1584735174914-6b1272458e3e',
+    imageUrl: "/idioms/toalla.jpg",
     videoUrl: '/videos/toalla.mp4',
     category: 'Psicología/Deportes',
     exercises: [
@@ -1501,7 +1501,7 @@ export const idioms: Idiom[] = [
       'Es preferible que algo bueno suceda con retraso a que no suceda en absoluto.',
     example:
       'Perdona por no llamarte ayer por tu cumpleaños, ¡pero felicidades! Más vale tarde que nunca.',
-    imageUrl: 'https://images.unsplash.com/photo-1508962850731-15b044d22635',
+    imageUrl: "/idioms/nunca.jpg",
     videoUrl: '/videos/nunca.mp4',
     category: 'Filosofía/Tiempo',
     exercises: [
@@ -1546,7 +1546,7 @@ export const idioms: Idiom[] = [
       'Mantenerse firme en un trabajo o situación difícil sin rendirse.',
     example:
       'Aunque la empresa pasa por un mal momento, los empleados siguen ahí, al pie del cañón.',
-    imageUrl: 'https://images.unsplash.com/photo-1590644365607-1c5a519a7a37',
+    imageUrl: "/idioms/canon.jpg",
     videoUrl: '/videos/canon.mp4',
     category: 'Trabajo/Actitud',
     exercises: [
@@ -1591,7 +1591,7 @@ export const idioms: Idiom[] = [
       'Olvidar de repente lo que se iba a decir o hacer, o distraerse mucho.',
     example:
       'Entré en la cocina, pero me puse a mirar el móvil y se me fue el santo al cielo; ya no recuerdo a qué venía.',
-    imageUrl: 'https://images.unsplash.com/photo-1508349132032-44161a4c8402',
+    imageUrl: "/idioms/cielo.jpg",
     videoUrl: '/videos/cielo.mp4',
     category: 'Psicología/Atención',
     exercises: [
