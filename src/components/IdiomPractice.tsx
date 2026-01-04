@@ -122,3 +122,11 @@ const IdiomPractice = ({
             className="flex-1 bg-blue-600 py-2 rounded-xl font-semibold"
           >
             Siguiente →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default IdiomPractice;
