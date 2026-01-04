@@ -18,7 +18,7 @@ const Index = () => {
   const [streak, setStreak] = useState(0);
 
   useEffect(() => {
-    // --- 1. Инициализация Telegram ---
+    // --- 1. Инициализация Telegram Web App ---
     const tg = (window as any).Telegram?.WebApp;
     if (tg) {
       tg.ready();
@@ -28,7 +28,7 @@ const Index = () => {
       if (user) setTgUser(user);
     }
 
-    // --- 2. Загрузка данных ---
+    // --- 2. Загрузка данных из LocalStorage ---
     const savedProgress = localStorage.getItem("modismo-pro");
     const savedFavs = localStorage.getItem("modismo-favs");
     const savedStreak = localStorage.getItem("streak");
@@ -39,13 +39,13 @@ const Index = () => {
       try {
         currentProgress = JSON.parse(savedProgress);
         setProgressMap(currentProgress);
-      } catch (e) { console.error(e); }
+      } catch (e) { console.error("Error loading progress", e); }
     }
 
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
     if (savedStreak) setStreak(JSON.parse(savedStreak));
 
-    // --- 3. Логика Стрика ---
+    // --- 3. Логика Стрика (Серия дней) ---
     const today = new Date().toDateString();
     if (savedLastDay && savedLastDay !== today) {
       const yesterday = new Date(Date.now() - 86400000).toDateString();
@@ -60,13 +60,15 @@ const Index = () => {
     }
     localStorage.setItem("last-active-day", today);
 
-    // --- 4. Авто-открытие карточки ---
+    // --- 4. Авто-открытие карточки (Рандомная или Старая) ---
     const timer = setTimeout(() => {
       const unlearned = idioms.filter(i => !currentProgress[i.id]);
       if (unlearned.length > 0) {
+        // Есть новые идиомы -> берем случайную
         const random = unlearned[Math.floor(Math.random() * unlearned.length)];
         setSelectedIdiom(random);
       } else {
+        // Все выучено -> берем ту, что учили дольше всего назад
         const entries = Object.entries(currentProgress);
         if (entries.length > 0) {
           entries.sort((a, b) => a[1] - b[1]);
@@ -79,10 +81,14 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // --- Функции управления ---
   const toggleLearned = (id: string) => {
     const updated = { ...progressMap };
-    if (updated[id]) delete updated[id];
-    else updated[id] = Date.now();
+    if (updated[id]) {
+      delete updated[id];
+    } else {
+      updated[id] = Date.now();
+    }
     setProgressMap(updated);
     localStorage.setItem("modismo-pro", JSON.stringify(updated));
   };
@@ -95,31 +101,40 @@ const Index = () => {
     localStorage.setItem("modismo-favs", JSON.stringify(updated));
   };
 
-  // Остальные функции (поиск, видео и т.д.)
   const idiomOfTheDay = idioms[new Date().getDate() % idioms.length];
 
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-10">
+      
+      {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Modismo Pro</h1>
-        <button onClick={() => setIsProfileOpen(true)} className="px-4 py-2 bg-white/10 rounded-xl">
+        <button 
+          onClick={() => setIsProfileOpen(true)} 
+          className="px-4 py-2 bg-white/10 rounded-xl hover:bg-white/20 transition"
+        >
           Perfil
         </button>
       </div>
 
+      {/* SEARCH */}
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
-      {/* Карточка дня */}
-      <div className="bg-white/10 rounded-2xl p-4 mt-4">
-        <img src={idiomOfTheDay.imageUrl} className="w-full h-44 object-cover rounded-xl mb-3" />
-        <h2 className="text-2xl font-bold">{idiomOfTheDay.expression}</h2>
-        <p className="text-gray-400">{idiomOfTheDay.meaning}</p>
-        <button onClick={() => setPracticeIdiom(idiomOfTheDay)} className="w-full bg-blue-600 py-3 rounded-xl mt-4 font-bold">
+      {/* IDIOMA DEL DÍA */}
+      <div className="bg-white/10 rounded-2xl p-4 mt-4 border border-white/5">
+        <img src={idiomOfTheDay.imageUrl} className="w-full h-44 object-cover rounded-xl mb-3 shadow-lg" />
+        <p className="text-xs text-blue-400 font-bold tracking-wider uppercase">Idioma del día</p>
+        <h2 className="text-2xl font-bold mt-1">{idiomOfTheDay.expression}</h2>
+        <p className="text-gray-400 mt-1">{idiomOfTheDay.meaning}</p>
+        <button 
+          onClick={() => setPracticeIdiom(idiomOfTheDay)} 
+          className="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl mt-4 font-bold transition shadow-lg active:scale-95"
+        >
           Aprender ahora
         </button>
       </div>
 
-      {/* Модалки */}
+      {/* MODAL: PROFILE */}
       <Profile 
         isOpen={isProfileOpen} 
         onClose={() => setIsProfileOpen(false)} 
@@ -128,23 +143,35 @@ const Index = () => {
         streak={streak}
         favorites={favorites}
         idioms={idioms}
-        onSelectIdiom={(id) => setSelectedIdiom(idioms.find(i => i.id === id))}
+        onSelectIdiom={(id) => {
+          setSelectedIdiom(idioms.find(i => i.id === id));
+          setIsProfileOpen(false);
+        }}
       />
 
+      {/* MODAL: IDIOM PRACTICE (CARD) */}
       {selectedIdiom && (
         <IdiomPractice
           idiom={selectedIdiom}
           isFavorite={favorites.includes(selectedIdiom.id)}
           isLearned={!!progressMap[selectedIdiom.id]}
           onClose={() => setSelectedIdiom(null)}
+          onHome={() => setSelectedIdiom(null)} // Кнопка Inicio теперь работает
           onToggleLearned={() => toggleLearned(selectedIdiom.id)}
           onToggleFavorite={() => toggleFavorite(selectedIdiom.id)}
-          onOpenVideo={(i) => setVideoSrc(i.videoUrl)}
-          onOpenPractice={() => { setPracticeIdiom(selectedIdiom); setSelectedIdiom(null); }}
-          onNext={() => setSelectedIdiom(idioms[(idioms.findIndex(i => i.id === selectedIdiom.id) + 1) % idioms.length])}
+          onOpenVideo={(i: any) => i.videoUrl && setVideoSrc(i.videoUrl)}
+          onOpenPractice={() => { 
+            setPracticeIdiom(selectedIdiom); 
+            setSelectedIdiom(null); 
+          }}
+          onNext={() => {
+            const idx = idioms.findIndex(i => i.id === selectedIdiom.id);
+            setSelectedIdiom(idioms[(idx + 1) % idioms.length]);
+          }}
         />
       )}
 
+      {/* MODAL: PRACTICE PAGE (EXERCISES) */}
       {practiceIdiom && (
         <PracticePage
           idiom={practiceIdiom}
@@ -157,7 +184,13 @@ const Index = () => {
         />
       )}
 
-      {videoSrc && <VideoPlayer src={videoSrc} onClose={() => setVideoSrc(null)} />}
+      {/* VIDEO PLAYER OVERLAY */}
+      {videoSrc && (
+        <VideoPlayer 
+          src={videoSrc} 
+          onClose={() => setVideoSrc(null)} 
+        />
+      )}
     </div>
   );
 };
