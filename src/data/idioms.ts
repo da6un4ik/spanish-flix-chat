@@ -170,6 +170,7 @@ export const idioms: Idiom[] = [
     example:
       'Mi abuelo se bañó en el río en pleno invierno, ¡está como una cabra!',
     imageUrl: 'https://images.unsplash.com/photo-1524024973431-2ad916746881',
+    videoUrl: '/videos/cabra.mp4',
     category: 'Personalidad',
     exercises: [
       {
@@ -213,6 +214,7 @@ export const idioms: Idiom[] = [
     meaning: 'Se utiliza cuando la lluvia es muy intensa y abundante.',
     example: 'No podemos ir al parque ahora, está lloviendo a cántaros.',
     imageUrl: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0',
+    videoUrl: '/videos/llover.mp4',
     category: 'Naturaleza',
     exercises: [
       {
@@ -243,6 +245,7 @@ export const idioms: Idiom[] = [
     meaning: 'Empezar a esforzarse o actuar con energía y rapidez.',
     example: 'Si quieres aprobar, tienes que ponerte las pilas y estudiar ya.',
     imageUrl: 'https://images.unsplash.com/photo-1619641634305-677a5bc690ab',
+    videoUrl: '/videos/pilas.mp4',
     category: 'Motivación',
     exercises: [
       {
@@ -282,6 +285,7 @@ export const idioms: Idiom[] = [
     example:
       'Cuando me dijo que se mudaba mañana mismo, me quedé de piedra.',
     imageUrl: 'https://images.unsplash.com/photo-1549887534-1541e9326642',
+    videoUrl: '/videos/piedra.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -320,6 +324,7 @@ export const idioms: Idiom[] = [
     meaning: 'Hacer o decir algo que empeora una situación conflictiva.',
     example: 'Ellos ya están discutiendo; por favor, no eches leña al fuego.',
     imageUrl: 'https://images.unsplash.com/photo-1545147986-a9d6f210df77',
+    videoUrl: '/videos/fuego.mp4',
     category: 'Social',
     exercises: [
       {
@@ -358,6 +363,7 @@ export const idioms: Idiom[] = [
     meaning: 'Tener mal carácter, mala intención o mala suerte.',
     example: 'Ten cuidado con el jefe hoy; ha venido con muy mala leche.',
     imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150',
+    videoUrl: '/videos/tener_mala_leche.mp4',
     category: 'Personalidad',
     exercises: [
       {
@@ -396,6 +402,7 @@ export const idioms: Idiom[] = [
     meaning: 'Tomar tiempo para pensar antes de tomar una decisión importante.',
     example: 'Es una buena oferta, pero necesito consultarlo con la almohada.',
     imageUrl: 'https://images.unsplash.com/photo-1520206115501-d70d3f023821',
+    videoUrl: '/videos/almohada.mp4',
     category: 'Decisiones',
     exercises: [
       {
@@ -434,6 +441,7 @@ export const idioms: Idiom[] = [
     meaning: 'Describe a una persona que es extremadamente buena y generosa.',
     example: 'Mi abuela ayuda a todos los vecinos; es un trozo de pan.',
     imageUrl: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73',
+    videoUrl: '/videos/trozo.mp4',
     category: 'Personalidad',
     exercises: [
       {
@@ -472,7 +480,8 @@ export const idioms: Idiom[] = [
     meaning: 'Lograr dos objetivos con una sola acción.',
     example:
       'Ya que voy al banco, compraré el pan; así mato dos pájaros de un tiro.',
-    imageUrl: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890',
+    imageUrl: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890',\
+    videoUrl: '/videos/pajaros.mp4',
     category: 'Eficiencia',
     exercises: [
       {
@@ -512,6 +521,7 @@ export const idioms: Idiom[] = [
     example:
       'Para la boda de su hija, decidieron tirar la casa por la ventana.',
     imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
+    videoUrl: '/videos/ventana.mp4',
     category: 'Dinero',
     exercises: [
       {
@@ -558,6 +568,7 @@ export const idioms: Idiom[] = [
     meaning: 'No tener nada de dinero en un momento determinado.',
     example: 'Me encantaría ir al cine, pero me he quedado sin blanca.',
     imageUrl: 'https://images.unsplash.com/photo-1628527304948-06157ee3c8a6',
+    videoUrl: '/videos/blanca.mp4',
     category: 'Dinero',
     exercises: [
       {
@@ -593,6 +604,7 @@ export const idioms: Idiom[] = [
       'Ayudar a alguien en una situación difícil o con mucho trabajo.',
     example: 'Si quieres voy esta tarde para echarte un cable con las cajas.',
     imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca',
+    videoUrl: '/videos/cable.mp4',
     category: 'Social',
     exercises: [
       {
@@ -635,6 +647,7 @@ export const idioms: Idiom[] = [
     meaning: 'Hablar de lo más importante directamente, sin rodeos.',
     example: 'No tenemos tiempo, así que, por favor, ve al grano.',
     imageUrl: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44',
+    videoUrl: '/videos/grano.mp4',
     category: 'Comunicación',
     exercises: [
       {
@@ -673,6 +686,7 @@ export const idioms: Idiom[] = [
     meaning: 'Acertar plenamente o encontrar la solución exacta a un problema.',
     example: 'Cuando dijiste que el problema era el cable, diste en el clavo.',
     imageUrl: 'https://images.unsplash.com/photo-1581147036324-c17ac41dfa6c',
+    videoUrl: '/videos/clavo.mp4',
     category: 'Éxito',
     exercises: [
       {
@@ -711,6 +725,7 @@ export const idioms: Idiom[] = [
     meaning: 'Estar muy enojado, furioso o irritado.',
     example: 'Cuando vio el coche rayado, se puso hecho un ají.',
     imageUrl: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d',
+    videoUrl: '/videos/aji.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -754,6 +769,7 @@ export const idioms: Idiom[] = [
     example:
       'Le digo que ordene su cuarto, pero es como hablar a la pared.',
     imageUrl: 'https://images.unsplash.com/photo-1516961642265-531546e84af2',
+    videoUrl: '/videos/pared.mp4',
     category: 'Comunicación',
     exercises: [
       {
@@ -793,6 +809,7 @@ export const idioms: Idiom[] = [
       'Engañar a alguien dándole algo de menor calidad de lo acordado.',
     example: 'El teléfono no funciona; me han dado gato por liebre.',
     imageUrl: 'https://images.unsplash.com/photo-1592194996308-7b43878e84a6',
+    videoUrl: '/videos/liebre.mp4',
     category: 'Dinero',
     exercises: [
       {
@@ -831,6 +848,7 @@ export const idioms: Idiom[] = [
     meaning: 'Aclarar las cosas con detalle para que no haya dudas.',
     example: 'Vamos a poner los puntos sobre las íes para saber qué hacer.',
     imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a',
+    videoUrl: '/videos/ies.mp4',
     category: 'Comunicación',
     exercises: [
       {
@@ -850,6 +868,7 @@ export const idioms: Idiom[] = [
     meaning: 'Sentirse muy cómodo y seguro en un lugar o actividad.',
     example: 'En la piscina, María está como pez en el agua.',
     imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
+    videoUrl: '/videos/pez.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -888,6 +907,7 @@ export const idioms: Idiom[] = [
     meaning: 'Complicar algo sencillo o buscar problemas donde no los hay.',
     example: 'No intentes buscarle tres pies al gato; es muy simple.',
     imageUrl: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba',
+    videoUrl: '/videos/pies.mp4',
     category: 'Psicología',
     exercises: [
       {
@@ -932,6 +952,7 @@ export const idioms: Idiom[] = [
     example:
       'Sé que estás triste por tu trabajo, pero ten paciencia, no hay mal que dure cien años.',
     imageUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94',
+    videoUrl: '/videos/cien.mp4',
     category: 'Psicología',
     exercises: [
       {
@@ -976,6 +997,7 @@ export const idioms: Idiom[] = [
     example:
       'Mira ese ordenador, no tiene ni internet; debe de ser del año de la pera.',
     imageUrl: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03',
+    videoUrl: '/videos/pera.mp4',
     category: 'Tiempo',
     exercises: [
       {
@@ -1020,6 +1042,7 @@ export const idioms: Idiom[] = [
     example:
       'Llevo tres horas esperando y el tren no llega; estoy hasta las narices.',
     imageUrl: 'https://images.unsplash.com/photo-15423938818e1-b113f5121887',
+    videoUrl: '/videos/narices.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -1057,6 +1080,7 @@ export const idioms: Idiom[] = [
       'Ayer estuve esperando a Luis en el café durante una hora, pero no vino; me dejó plantado.',
     imageUrl:
       'https://images.unsplash.com/photo-1516455590571-18256e5bb9ff',
+    videoUrl: '/videos/plantado.mp4',
     category: 'Social',
     exercises: [
       {
@@ -1101,6 +1125,7 @@ export const idioms: Idiom[] = [
     example:
       'No le pidas nada ahora a tu padre, que está de mala uva porque su equipo ha perdido.',
     imageUrl: 'https://images.unsplash.com/photo-1595908129746-57ca1a63dd4d',
+    videoUrl: '/videos/uva.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -1144,6 +1169,7 @@ export const idioms: Idiom[] = [
     example:
       'Esa película que vimos ayer era malísima; la historia no tenía ni pies ni cabeza.',
     imageUrl: 'https://images.unsplash.com/photo-1509228468518-180dd48a57a1',
+    videoUrl: '/videos/ni.mp4',
     category: 'Psicología',
     exercises: [
       {
@@ -1179,6 +1205,7 @@ export const idioms: Idiom[] = [
     example:
       'No pretendas que tu hermano pequeño guarde un secreto; eso es pedir peras al olmo.',
     imageUrl: 'https://images.unsplash.com/photo-1511210041123-018247072559',
+    videoUrl: '/videos/peras.mp4',
     category: 'Psicología',
     exercises: [
       {
@@ -1226,6 +1253,7 @@ export const idioms: Idiom[] = [
     example:
       'Llevan diez años casados y son muy felices; él dice que ella es su media naranja.',
     imageUrl: 'https://images.unsplash.com/photo-1551008475-4533d141425b',
+    videoUrl: '/videos/naranja.mp4',
     category: 'Social',
     exercises: [
       {
@@ -1269,6 +1297,7 @@ export const idioms: Idiom[] = [
     example:
       'Mi tía no me dejó decir nada en toda la tarde; ¡habla por los codos!',
     imageUrl: 'https://images.unsplash.com/photo-1522071823945-388b90623a07',
+    videoUrl: '/videos/codos.mp4',
     category: 'Comunicación',
     exercises: [
       {
@@ -1294,6 +1323,7 @@ export const idioms: Idiom[] = [
     example:
       'No quiero ir a esa fiesta, su casa está en el quinto pino y tardo dos horas en llegar.',
     imageUrl: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9',
+    videoUrl: '/videos/pino.mp4',
     category: 'Lugar/Tiempo',
     exercises: [
       {
@@ -1338,6 +1368,7 @@ export const idioms: Idiom[] = [
     example:
       'Ya hemos hablado mucho del tráfico. A otra cosa, mariposa: ¿qué película vamos a ver?',
     imageUrl: 'https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd',
+    videoUrl: '/videos/mariposa.mp4',
     category: 'Social/Comunicación',
     exercises: [
       {
@@ -1382,6 +1413,7 @@ export const idioms: Idiom[] = [
     example:
       'A veces olvidamos que los presidentes también sufren; al final, todos somos de carne y hueso.',
     imageUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18',
+    videoUrl: '/videos/carne.mp4',
     category: 'Psicología',
     exercises: [
       {
@@ -1426,6 +1458,7 @@ export const idioms: Idiom[] = [
     example:
       'He intentado aprender piano meses, pero es muy difícil; estoy a punto de tirar la toalla.',
     imageUrl: 'https://images.unsplash.com/photo-1584735174914-6b1272458e3e',
+    videoUrl: '/videos/toalla.mp4',
     category: 'Psicología/Deportes',
     exercises: [
       {
@@ -1470,6 +1503,7 @@ export const idioms: Idiom[] = [
     example:
       'Perdona por no llamarte ayer por tu cumpleaños, ¡pero felicidades! Más vale tarde que nunca.',
     imageUrl: 'https://images.unsplash.com/photo-1508962850731-15b044d22635',
+    videoUrl: '/videos/nunca.mp4',
     category: 'Filosofía/Tiempo',
     exercises: [
       {
@@ -1514,6 +1548,7 @@ export const idioms: Idiom[] = [
     example:
       'Aunque la empresa pasa por un mal momento, los empleados siguen ahí, al pie del cañón.',
     imageUrl: 'https://images.unsplash.com/photo-1590644365607-1c5a519a7a37',
+    videoUrl: '/videos/canon.mp4',
     category: 'Trabajo/Actitud',
     exercises: [
       {
@@ -1558,6 +1593,7 @@ export const idioms: Idiom[] = [
     example:
       'Entré en la cocina, pero me puse a mirar el móvil y se me fue el santo al cielo; ya no recuerdo a qué venía.',
     imageUrl: 'https://images.unsplash.com/photo-1508349132032-44161a4c8402',
+    videoUrl: '/videos/cielo.mp4',
     category: 'Psicología/Atención',
     exercises: [
       {
@@ -1602,6 +1638,7 @@ export const idioms: Idiom[] = [
     example:
       'El profesor vio que el alumno usaba el móvil, pero hizo la vista gorda porque era el último día.',
     imageUrl: 'https://images.unsplash.com/photo-1590595906931-81f04f0ccebb',
+    videoUrl: '/videos/gorda.mp4',
     category: 'Social/Ética',
     exercises: [
       {
@@ -1646,6 +1683,7 @@ export const idioms: Idiom[] = [
     example:
       'Mis amigos quieren ir a la discoteca, pero yo paso de salir hoy; prefiero quedarme en casa.',
     imageUrl: 'https://images.unsplash.com/photo-1516534775068-ba3e7458af70',
+    videoUrl: '/videos/pasar.mp4',
     category: 'Social/Interés',
     exercises: [
       {
@@ -1690,6 +1728,7 @@ export const idioms: Idiom[] = [
     example:
       'No le preguntes nada ahora a tu hermano, que está de mala leche porque ha perdido su equipo.',
     imageUrl: 'https://images.unsplash.com/photo-1594499468121-f45e83e30df4',
+    videoUrl: '/videos/estar_leche.mp4',
     category: 'Emociones',
     exercises: [
       {
@@ -1734,6 +1773,7 @@ export const idioms: Idiom[] = [
     example:
       'Mañana me levantaré a las seis para estudiar antes del examen; ya sabes que a quien madruga, Dios le ayuda.',
     imageUrl: 'https://images.unsplash.com/photo-1470252649358-96962407e946',
+    videoUrl: '/videos/madruga.mp4',
     category: 'Sabiduría Popular',
     exercises: [
       {
@@ -1778,6 +1818,7 @@ export const idioms: Idiom[] = [
     example:
       'En las reuniones de vecinos siento que soy un cero a la izquierda, nadie escucha mis propuestas.',
     imageUrl: 'https://images.unsplash.com/photo-1590595601323-999330999017',
+    videoUrl: '/videos/cero.mp4',
     category: 'Social/Sentimientos',
     exercises: [
       {
@@ -1822,6 +1863,7 @@ export const idioms: Idiom[] = [
     example:
       'Hoy es viernes y por fin he terminado el proyecto; ¿nos vamos de copas para celebrar?',
     imageUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
+    videoUrl: '/videos/copas.mp4',
     category: 'Social/Ocio',
     exercises: [
       {
@@ -1866,6 +1908,7 @@ export const idioms: Idiom[] = [
     example:
       'Como ayer terminé todos mis exámenes, anoche pude dormir a pierna suelta por fin.',
     imageUrl: 'https://images.unsplash.com/photo-1541480601022-2308c0f02487',
+    videoUrl: '/videos/suelta.mp4',
     category: 'Salud/Bienestar',
     exercises: [
       {
