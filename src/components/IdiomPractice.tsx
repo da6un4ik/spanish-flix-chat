@@ -1,90 +1,124 @@
 import React from "react";
 
-interface IdiomPracticeProps {
-  idiom: any;
-  isFavorite: boolean;
-  isLearned: boolean;
-  onClose: () => void;
-  onHome: () => void;
-  onToggleLearned: () => void;
-  onToggleFavorite: () => void;
-  onOpenVideo: (idiom: any) => void;
-  onOpenPractice: () => void;
-  onNext: () => void;
-}
-
 const IdiomPractice = ({
   idiom,
-  isFavorite,
-  isLearned,
   onClose,
-  onHome,
   onToggleLearned,
   onToggleFavorite,
-  onOpenVideo,
-  onOpenPractice,
+  isFavorite,
+  isLearned,
   onNext,
-}: IdiomPracticeProps) => {
+  onHome,
+  onOpenPractice,
+  onOpenVideo,
+}: {
+  idiom: any;
+  onClose: () => void;
+  onToggleLearned: () => void;
+  onToggleFavorite: () => void;
+  isFavorite: boolean;
+  isLearned: boolean;
+  onNext: () => void;
+  onHome: () => void;
+  onOpenPractice: () => void;
+  onOpenVideo: () => void;
+}) => {
+  const playAudio = (text: string) => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "es-ES";
+    speechSynthesis.speak(u);
+  };
+
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      {/* Изображение и верхняя панель */}
-      <div className="relative h-2/5">
-        <img src={idiom.imageUrl} className="w-full h-full object-cover" alt="" />
-        <div className="absolute top-4 left-4 right-4 flex justify-between">
-          <button onClick={onHome} className="bg-black/50 p-2 rounded-full backdrop-blur-md">
-             {/* Иконка Домой */}
-             <span className="text-white px-2">Inicio</span>
-          </button>
-          <button onClick={onToggleFavorite} className="bg-black/50 p-2 rounded-full backdrop-blur-md">
-            {isFavorite ? "❤️" : "🤍"}
-          </button>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-black text-white max-w-md w-full rounded-2xl p-6 overflow-y-auto max-h-[90vh]">
+
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">{idiom.expression}</h2>
+            <p className="text-sm text-blue-400 mt-1">📂 {idiom.category}</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 text-xl">✕</button>
         </div>
-      </div>
 
-      {/* Контент */}
-      <div className="flex-1 bg-black rounded-t-3xl -mt-6 p-6 flex flex-col border-t border-white/10">
-        <h2 className="text-3xl font-bold mb-2">{idiom.expression}</h2>
-        <p className="text-blue-400 font-medium mb-4">{idiom.category}</p>
-        <p className="text-gray-300 text-lg mb-6">{idiom.meaning}</p>
+        {/* IMAGE */}
+        <img
+          src={idiom.imageUrl}
+          alt={idiom.expression}
+          className="w-full h-40 object-cover rounded-xl mb-4"
+        />
 
-        <div className="space-y-3 mt-auto">
-          {/* КНОПКА ВИДЕО — ПРОВЕРКА ТУТ */}
-          {idiom.videoUrl && (
-            <button
-              onClick={() => onOpenVideo(idiom)}
-              className="w-full bg-white/10 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-white/20 transition"
-            >
-              <span>▶</span> Ver ejemplo en video
-            </button>
-          )}
+        {/* MEANING */}
+        <p className="text-gray-300 mb-4">{idiom.meaning}</p>
+
+        {/* ACTION BUTTONS */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          <button
+            onClick={() => playAudio(idiom.expression)}
+            className="flex-1 bg-blue-600 py-2 rounded-xl font-semibold"
+          >
+            Escuchar
+          </button>
 
           <button
+            onClick={onToggleLearned}
+            className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
+          >
+            {isLearned ? "✔️ Aprendido" : "⭕ Marcar aprendido"}
+          </button>
+
+          <button
+            onClick={onToggleFavorite}
+            className="flex-1 bg-white/20 py-2 rounded-xl font-semibold"
+          >
+            {isFavorite ? "⭐ Favorito" : "☆ Guardar"}
+          </button>
+        </div>
+
+        {/* EXAMPLE */}
+        <h3 className="text-lg font-bold mb-2">Ejemplo</h3>
+
+        <div className="bg-white/5 p-3 rounded-xl mb-6">
+          <p>{idiom.example}</p>
+          <button
+            onClick={() => playAudio(idiom.example)}
+            className="mt-2 text-sm text-blue-400"
+          >
+            ▶ Escuchar ejemplo
+          </button>
+        </div>
+
+        {/* EXTRA ACTIONS */}
+        <div className="flex gap-3 mb-6">
+          <button
             onClick={onOpenPractice}
-            className="w-full bg-blue-600 py-4 rounded-2xl font-bold text-xl transition active:scale-95"
+            className="flex-1 bg-green-600 py-2 rounded-xl font-semibold"
           >
             Practicar
           </button>
 
-          <div className="flex gap-3">
+          {idiom.videoUrl && (
             <button
-              onClick={onToggleLearned}
-              className={`flex-1 py-3 rounded-xl font-semibold border ${
-                isLearned ? "bg-green-600 border-green-600" : "border-white/20"
-              }`}
+              onClick={onOpenVideo}
+              className="flex-1 bg-white/15 py-2 rounded-xl font-semibold"
             >
-              {isLearned ? "✓ Aprendido" : "Marcar como aprendido"}
+              Ver video
             </button>
-            <button
-              onClick={onNext}
-              className="px-6 py-3 bg-white/10 rounded-xl font-semibold"
-            >
-              →
-            </button>
-          </div>
+          )}
         </div>
-      </div>
-    </div>
-  );
-};
 
-export default IdiomPractice;
+        {/* NAVIGATION */}
+        <div className="flex gap-3">
+          <button
+            onClick={onHome}
+            className="flex-1 bg-white/10 py-2 rounded-xl font-semibold"
+          >
+            Inicio
+          </button>
+
+          <button
+            onClick={onNext}
+            className="flex-1 bg-blue-600 py-2 rounded-xl font-semibold"
+          >
+            Siguiente →
