@@ -480,7 +480,7 @@ export const idioms: Idiom[] = [
     meaning: 'Lograr dos objetivos con una sola acción.',
     example:
       'Ya que voy al banco, compraré el pan; así mato dos pájaros de un tiro.',
-    imageUrl: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890',\
+    imageUrl: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890',
     videoUrl: '/videos/pajaros.mp4',
     category: 'Eficiencia',
     exercises: [
