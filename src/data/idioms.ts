@@ -21,7 +21,7 @@ export const idioms: Idiom[] = [
     expression: 'Estar en las nubes',
     meaning: 'Estar despistado o pensando en cosas lejanas a la realidad.',
     example: 'Ana no escuchó la explicación del profesor porque estaba en las nubes.',
-    imageUrl: 'https://images.unsplash.com/photo-1534067783941-51c9c23ecefd',
+    imageUrl: "/idioms/estar_nubes.jpg",
     videoUrl: '/videos/estar_en_las_nubes.mp4',
     category: 'Estado mental',
     exercises: [
@@ -47,7 +47,7 @@ export const idioms: Idiom[] = [
     expression: 'Ser pan comido',
     meaning: 'Describe una tarea o actividad que es extremadamente fácil de realizar.',
     example: 'No te preocupes por el examen de conducir; para ti va a ser pan comido.',
-    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff',
+    imageUrl: "/idioms/pan_comido.jpg",
     videoUrl: '/videos/pan_comido.mp4',
     category: 'Dificultad',
     exercises: [
@@ -73,7 +73,7 @@ export const idioms: Idiom[] = [
     expression: 'Costar un ojo de la cara',
     meaning: 'Se utiliza para decir que algo es extremadamente caro.',
     example: 'Me encanta ese coche deportivo, pero debe costar un ojo de la cara.',
-    imageUrl: 'https://images.unsplash.com/photo-1589758438368-0ad531db3366',
+    imageUrl: "/idioms/ojo_cara.jpg",
     videoUrl: '/videos/ojo_cara.mp4',
     category: 'Dinero',
     exercises: [
@@ -105,7 +105,7 @@ export const idioms: Idiom[] = [
     meaning: 'Cometer un error o decir algo inoportuno en una situación social.',
     example:
       '¡Uy, metí la pata! Le pregunté a Laura por su novio, pero se habían separado.',
-    imageUrl: 'https://images.unsplash.com/photo-1599599810694-b5b37304c041',
+    imageUrl: "/idioms/meter_pata.jpg",
     videoUrl: '/videos/meter_pata.mp4',
     category: 'Social',
     exercises: [
@@ -169,7 +169,7 @@ export const idioms: Idiom[] = [
       'Se utiliza para decir que alguien está loco o hace cosas muy extrañas.',
     example:
       'Mi abuelo se bañó en el río en pleno invierno, ¡está como una cabra!',
-    imageUrl: 'https://images.unsplash.com/photo-1524024973431-2ad916746881',
+    imageUrl: "/idioms/estar_cabra.jpg",
     videoUrl: '/videos/cabra.mp4',
     category: 'Personalidad',
     exercises: [
@@ -213,7 +213,7 @@ export const idioms: Idiom[] = [
     expression: 'Llover a cántaros',
     meaning: 'Se utiliza cuando la lluvia es muy intensa y abundante.',
     example: 'No podemos ir al parque ahora, está lloviendo a cántaros.',
-    imageUrl: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0',
+    imageUrl: "/idioms/llover.jpg",
     videoUrl: '/videos/llover.mp4',
     category: 'Naturaleza',
     exercises: [
@@ -244,7 +244,7 @@ export const idioms: Idiom[] = [
     expression: 'Ponerse las pilas',
     meaning: 'Empezar a esforzarse o actuar con energía y rapidez.',
     example: 'Si quieres aprobar, tienes que ponerte las pilas y estudiar ya.',
-    imageUrl: 'https://images.unsplash.com/photo-1619641634305-677a5bc690ab',
+    imageUrl: "/idioms/pilas.jpg",
     videoUrl: '/videos/pilas.mp4',
     category: 'Motivación',
     exercises: [
@@ -284,7 +284,7 @@ export const idioms: Idiom[] = [
     meaning: 'Sentir una sorpresa tan fuerte que no puedes reaccionar.',
     example:
       'Cuando me dijo que se mudaba mañana mismo, me quedé de piedra.',
-    imageUrl: 'https://images.unsplash.com/photo-1549887534-1541e9326642',
+    imageUrl: "/idioms/piedra.jpg",
     videoUrl: '/videos/piedra.mp4',
     category: 'Emociones',
     exercises: [
@@ -323,7 +323,7 @@ export const idioms: Idiom[] = [
     expression: 'Echar leña al fuego',
     meaning: 'Hacer o decir algo que empeora una situación conflictiva.',
     example: 'Ellos ya están discutiendo; por favor, no eches leña al fuego.',
-    imageUrl: 'https://images.unsplash.com/photo-1545147986-a9d6f210df77',
+    imageUrl: "/idioms/fuego.jpg",
     videoUrl: '/videos/fuego.mp4',
     category: 'Social',
     exercises: [
@@ -362,7 +362,7 @@ export const idioms: Idiom[] = [
     expression: 'Tener mala leche',
     meaning: 'Tener mal carácter, mala intención o mala suerte.',
     example: 'Ten cuidado con el jefe hoy; ha venido con muy mala leche.',
-    imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150',
+    imageUrl: "/idioms/tener_leche.jpg",
     videoUrl: '/videos/tener_mala_leche.mp4',
     category: 'Personalidad',
     exercises: [
@@ -401,7 +401,7 @@ export const idioms: Idiom[] = [
     expression: 'Consultar con la almohada',
     meaning: 'Tomar tiempo para pensar antes de tomar una decisión importante.',
     example: 'Es una buena oferta, pero necesito consultarlo con la almohada.',
-    imageUrl: 'https://images.unsplash.com/photo-1520206115501-d70d3f023821',
+    imageUrl: "/idioms/almohada.jpg",
     videoUrl: '/videos/almohada.mp4',
     category: 'Decisiones',
     exercises: [
@@ -440,7 +440,7 @@ export const idioms: Idiom[] = [
     expression: 'Ser un trozo de pan',
     meaning: 'Describe a una persona que es extremadamente buena y generosa.',
     example: 'Mi abuela ayuda a todos los vecinos; es un trozo de pan.',
-    imageUrl: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73',
+    imageUrl: "/idioms/trozo.jpg",
     videoUrl: '/videos/trozo.mp4',
     category: 'Personalidad',
     exercises: [
@@ -480,7 +480,7 @@ export const idioms: Idiom[] = [
     meaning: 'Lograr dos objetivos con una sola acción.',
     example:
       'Ya que voy al banco, compraré el pan; así mato dos pájaros de un tiro.',
-    imageUrl: 'https://images.unsplash.com/photo-1452570053594-1b985d6ea890',
+    imageUrl: "/idioms/pajaros.jpg",
     videoUrl: '/videos/pajaros.mp4',
     category: 'Eficiencia',
     exercises: [
@@ -520,7 +520,7 @@ export const idioms: Idiom[] = [
     meaning: 'Derrochar mucho dinero en una ocasión especial.',
     example:
       'Para la boda de su hija, decidieron tirar la casa por la ventana.',
-    imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
+    imageUrl: "/idioms/tirar_casa.jpg",
     videoUrl: '/videos/ventana.mp4',
     category: 'Dinero',
     exercises: [
@@ -567,7 +567,7 @@ export const idioms: Idiom[] = [
     expression: 'Estar sin blanca',
     meaning: 'No tener nada de dinero en un momento determinado.',
     example: 'Me encantaría ir al cine, pero me he quedado sin blanca.',
-    imageUrl: 'https://images.unsplash.com/photo-1628527304948-06157ee3c8a6',
+    imageUrl: "/idioms/blanca.jpg",
     videoUrl: '/videos/blanca.mp4',
     category: 'Dinero',
     exercises: [
@@ -603,7 +603,7 @@ export const idioms: Idiom[] = [
     meaning:
       'Ayudar a alguien en una situación difícil o con mucho trabajo.',
     example: 'Si quieres voy esta tarde para echarte un cable con las cajas.',
-    imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca',
+    imageUrl: "/idioms/cable.jpg",
     videoUrl: '/videos/cable.mp4',
     category: 'Social',
     exercises: [
@@ -646,7 +646,7 @@ export const idioms: Idiom[] = [
     expression: 'Ir al grano',
     meaning: 'Hablar de lo más importante directamente, sin rodeos.',
     example: 'No tenemos tiempo, así que, por favor, ve al grano.',
-    imageUrl: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44',
+    imageUrl: "/idioms/grano.jpg",
     videoUrl: '/videos/grano.mp4',
     category: 'Comunicación',
     exercises: [
@@ -685,7 +685,7 @@ export const idioms: Idiom[] = [
     expression: 'Dar en el clavo',
     meaning: 'Acertar plenamente o encontrar la solución exacta a un problema.',
     example: 'Cuando dijiste que el problema era el cable, diste en el clavo.',
-    imageUrl: 'https://images.unsplash.com/photo-1581147036324-c17ac41dfa6c',
+    imageUrl: "/idioms/clavo.jpg",
     videoUrl: '/videos/clavo.mp4',
     category: 'Éxito',
     exercises: [
@@ -724,7 +724,7 @@ export const idioms: Idiom[] = [
     expression: 'Estar hecho un ají',
     meaning: 'Estar muy enojado, furioso o irritado.',
     example: 'Cuando vio el coche rayado, se puso hecho un ají.',
-    imageUrl: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d',
+    imageUrl: "/idioms/aji.jpg",
     videoUrl: '/videos/aji.mp4',
     category: 'Emociones',
     exercises: [
@@ -768,7 +768,7 @@ export const idioms: Idiom[] = [
     meaning: 'Intentar hablar con alguien que no te presta atención.',
     example:
       'Le digo que ordene su cuarto, pero es como hablar a la pared.',
-    imageUrl: 'https://images.unsplash.com/photo-1516961642265-531546e84af2',
+    imageUrl: "/idioms/pared.jpg",
     videoUrl: '/videos/pared.mp4',
     category: 'Comunicación',
     exercises: [
@@ -808,7 +808,7 @@ export const idioms: Idiom[] = [
     meaning:
       'Engañar a alguien dándole algo de menor calidad de lo acordado.',
     example: 'El teléfono no funciona; me han dado gato por liebre.',
-    imageUrl: 'https://images.unsplash.com/photo-1592194996308-7b43878e84a6',
+    imageUrl: "/idioms/liebre.jpg",
     videoUrl: '/videos/liebre.mp4',
     category: 'Dinero',
     exercises: [
@@ -847,7 +847,7 @@ export const idioms: Idiom[] = [
     expression: 'Poner los puntos sobre las íes',
     meaning: 'Aclarar las cosas con detalle para que no haya dudas.',
     example: 'Vamos a poner los puntos sobre las íes para saber qué hacer.',
-    imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a',
+    imageUrl: "/idioms/ies.jpg",
     videoUrl: '/videos/ies.mp4',
     category: 'Comunicación',
     exercises: [
@@ -867,7 +867,7 @@ export const idioms: Idiom[] = [
     expression: 'Estar como pez en el agua',
     meaning: 'Sentirse muy cómodo y seguro en un lugar o actividad.',
     example: 'En la piscina, María está como pez en el agua.',
-    imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
+    imageUrl: "/idioms/pez.jpg",
     videoUrl: '/videos/pez.mp4',
     category: 'Emociones',
     exercises: [
@@ -906,7 +906,7 @@ export const idioms: Idiom[] = [
     expression: 'Buscarle tres pies al gato',
     meaning: 'Complicar algo sencillo o buscar problemas donde no los hay.',
     example: 'No intentes buscarle tres pies al gato; es muy simple.',
-    imageUrl: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba',
+    imageUrl: "/idioms/pies.jpg",
     videoUrl: '/videos/pies.mp4',
     category: 'Psicología',
     exercises: [
@@ -951,7 +951,7 @@ export const idioms: Idiom[] = [
       'Las situaciones malas no son infinitas; siempre terminan tarde o temprano.',
     example:
       'Sé que estás triste por tu trabajo, pero ten paciencia, no hay mal que dure cien años.',
-    imageUrl: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94',
+    imageUrl: "/idioms/cien.jpg",
     videoUrl: '/videos/cien.mp4',
     category: 'Psicología',
     exercises: [
@@ -996,7 +996,7 @@ export const idioms: Idiom[] = [
       'Algo que es muy antiguo, viejo o que está pasado de moda.',
     example:
       'Mira ese ordenador, no tiene ni internet; debe de ser del año de la pera.',
-    imageUrl: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03',
+    imageUrl: "/idioms/pera.jpg",
     videoUrl: '/videos/pera.mp4',
     category: 'Tiempo',
     exercises: [
@@ -1041,7 +1041,7 @@ export const idioms: Idiom[] = [
       'Estar muy cansado de algo o de alguien; no tener más paciencia.',
     example:
       'Llevo tres horas esperando y el tren no llega; estoy hasta las narices.',
-    imageUrl: 'https://images.unsplash.com/photo-15423938818e1-b113f5121887',
+    imageUrl: "/idioms/narices.jpg",
     videoUrl: '/videos/narices.mp4',
     category: 'Emociones',
     exercises: [
@@ -1078,8 +1078,7 @@ export const idioms: Idiom[] = [
       'No ir a una cita o encuentro planeado con otra persona, sin avisar.',
     example:
       'Ayer estuve esperando a Luis en el café durante una hora, pero no vino; me dejó plantado.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1516455590571-18256e5bb9ff',
+    imageUrl: "/idioms/plantado.jpg",
     videoUrl: '/videos/plantado.mp4',
     category: 'Social',
     exercises: [
