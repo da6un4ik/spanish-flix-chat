@@ -61,6 +61,16 @@ const Index = () => {
   const todayIndex = new Date().getDate() % idioms.length;
   const idiomOfTheDay = idioms[todayIndex];
 
+  // ⭐ Подсветка совпадений
+  const highlight = (text: string, query: string) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.replace(
+      regex,
+      "<mark class='bg-yellow-400 text-black'>$1</mark>"
+    );
+  };
+
   // 🔍 Поиск по выражению, значению, примеру и категории
   const filteredIdioms = idioms.filter((idiom) => {
     const q = searchQuery.toLowerCase();
@@ -118,8 +128,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* CONTINUAR APRENDIENDO — УДАЛЕНО */}
-
       {/* PROFILE MODAL */}
       <Profile
         isOpen={isProfileOpen}
@@ -135,7 +143,7 @@ const Index = () => {
         idioms={idioms}
       />
 
-      {/* SEARCH OVERLAY — BELOW SEARCH BAR */}
+      {/* SEARCH OVERLAY */}
       {searchQuery.trim() !== "" && (
         <div
           className="
@@ -168,9 +176,26 @@ const Index = () => {
                 }}
                 className="p-4 bg-white/10 rounded-xl cursor-pointer hover:bg-white/20 transition"
               >
-                <p className="text-lg font-semibold">{idiom.expression}</p>
-                <p className="text-sm text-gray-400">{idiom.meaning}</p>
-                <p className="text-xs text-blue-400 mt-1">📂 {idiom.category}</p>
+                <p
+                  className="text-lg font-semibold"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.expression, searchQuery),
+                  }}
+                />
+
+                <p
+                  className="text-sm text-gray-400"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.meaning, searchQuery),
+                  }}
+                />
+
+                <p
+                  className="text-xs text-blue-400 mt-1"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(idiom.category, searchQuery),
+                  }}
+                />
               </div>
             ))}
           </div>
