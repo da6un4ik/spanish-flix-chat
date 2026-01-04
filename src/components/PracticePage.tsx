@@ -1,118 +1,76 @@
 import React, { useState } from "react";
 
-const PracticePage = ({
-  idiom,
-  onClose,
-  onFinish,
-  addXP,
-}: {
+interface PracticePageProps {
   idiom: any;
   onClose: () => void;
   onFinish: () => void;
-  addXP: (amount: number) => void;
-}) => {
-  const exercises = idiom.exercises || [];
-  const [step, setStep] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+}
 
-  if (!exercises.length) {
-    return (
-      <div className="fixed inset-0 bg-black text-white p-6 z-50">
-        <button onClick={onClose} className="text-gray-400 text-xl mb-4">✕</button>
-        <p>No hay ejercicios para esta expresión.</p>
-      </div>
-    );
-  }
+const PracticePage = ({ idiom, onClose, onFinish }: PracticePageProps) => {
+  // Допустим, у нас 2 шага (выбор слова и сборка фразы)
+  const [step, setStep] = useState(1); 
+  const [isFinished, setIsFinished] = useState(false);
 
-  const current = exercises[step];
-
-  const handleOptionClick = (opt: string) => {
-    const correct = opt === current.a;
-
-    setSelected(opt);
-    setIsCorrect(correct);
-
-    if (correct) {
-      // ⭐ Вибрация
-      if (navigator.vibrate) navigator.vibrate(120);
-
-      // ⭐ XP за правильный ответ
-      addXP(10);
+  const handleNextStep = () => {
+    if (step < 2) {
+      setStep(step + 1);
+    } else {
+      setIsFinished(true); // Все шаги пройдены
     }
-  };
-
-  const handleNext = () => {
-    const isLast = step === exercises.length - 1;
-
-    if (isLast) {
-      // ⭐ XP за завершение упражнения
-      addXP(20);
-      onFinish();
-      return;
-    }
-
-    setSelected(null);
-    setIsCorrect(null);
-    setStep(step + 1);
   };
 
   return (
-    <div className="fixed inset-0 bg-black text-white p-6 z-50 overflow-y-auto">
-      <button onClick={onClose} className="text-gray-400 text-xl mb-4">✕</button>
-
-      <h2 className="text-2xl font-bold mb-2">Práctica</h2>
-      <p className="text-lg text-blue-300 mb-6">{idiom.expression}</p>
-
-      <div className="bg-white/10 p-4 rounded-xl mb-4">
-        <p className="mb-4">{current.q}</p>
-
-        <div className="space-y-3">
-          {current.options.map((opt: string) => {
-            const isSelected = selected === opt;
-            const correct = opt === current.a;
-
-            let bg = "bg-white/20";
-            if (selected) {
-              if (isSelected && correct) bg = "bg-green-600";
-              else if (isSelected && !correct) bg = "bg-red-600";
-              else if (!isSelected && correct) bg = "bg-green-800/40";
-            }
-
-            return (
-              <button
-                key={opt}
-                onClick={() => handleOptionClick(opt)}
-                className={`w-full py-2 rounded-xl text-left px-3 ${bg}`}
-                disabled={!!selected}
-              >
-                {opt}
-              </button>
-            );
-          })}
+    <div className="fixed inset-0 bg-black z-50 flex flex-col p-6">
+      {/* Шапка */}
+      <div className="flex justify-between items-center mb-8">
+        <button onClick={onClose} className="text-gray-400">Cancelar</button>
+        <div className="h-2 flex-1 mx-4 bg-white/10 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-blue-500 transition-all duration-300" 
+            style={{ width: isFinished ? '100%' : `${(step / 2) * 100}%` }}
+          ></div>
         </div>
+        <span className="text-sm font-mono">{isFinished ? "✓" : step}</span>
       </div>
 
-      {isCorrect !== null && (
-        <div className="mb-4">
-          {isCorrect ? (
-            <p className="text-green-400">¡Correcto!</p>
-          ) : (
-            <p className="text-red-400">
-              Incorrecto. Respuesta correcta:{" "}
-              <span className="font-semibold">{current.a}</span>
-            </p>
-          )}
+      {!isFinished ? (
+        <div className="flex-1 flex flex-col justify-center">
+          {/* ТУТ ВАША ЛОГИКА УПРАЖНЕНИЙ */}
+          <h2 className="text-xl text-center mb-10">Практика: {idiom.expression}</h2>
+          
+          <button 
+            onClick={handleNextStep}
+            className="bg-white/10 p-6 rounded-2xl hover:bg-white/20 transition"
+          >
+            [Задание {step}] Нажмите, чтобы ответить правильно
+          </button>
+        </div>
+      ) : (
+        /* ЭКРАН ЗАВЕРШЕНИЯ */
+        <div className="flex-1 flex flex-col items-center justify-center text-center animate-in zoom-in duration-300">
+          <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
+            <span className="text-5xl">🎉</span>
+          </div>
+          <h2 className="text-3xl font-bold mb-2">¡Excelente!</h2>
+          <p className="text-gray-400 mb-10 text-lg">
+            Has dominado esta expresión. <br /> ¿Listo для следующей?
+          </p>
+          
+          <button 
+            onClick={onFinish}
+            className="w-full bg-green-600 hover:bg-green-500 py-4 rounded-2xl font-bold text-xl shadow-lg shadow-green-900/20 transition-all active:scale-95"
+          >
+            Siguiente idioma
+          </button>
+
+          <button 
+            onClick={onClose}
+            className="mt-4 text-gray-500 font-medium"
+          >
+            Volver al inicio
+          </button>
         </div>
       )}
-
-      <button
-        onClick={handleNext}
-        className="w-full bg-blue-600 py-2 rounded-xl font-semibold mt-2"
-        disabled={isCorrect === null}
-      >
-        Siguiente pregunta →
-      </button>
     </div>
   );
 };
