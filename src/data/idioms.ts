@@ -1943,7 +1943,236 @@ export const idioms: Idiom[] = [
         a: 'Su calidad de sueño fue excelente y se siente renovado',
       },
     ],
-  },
+  },{
+  id: '50',
+  expression: 'Pensar en las musarañas',
+  meaning:
+    'Estar distraído o absorto en pensamientos ajenos a lo que se está haciendo o diciendo.',
+  example:
+    '¡Oye, préstame atención! Te estoy explicando algo importante y parece que estás pensando en las musarañas.',
+  imageUrl: "/idioms/musaranas.jpg",
+  videoUrl: '/videos/musaranas.mp4',
+  category: 'Mente/Atención',
+  exercises: [
+    {
+      q: "¿Qué significa realmente que alguien está 'pensando en las musarañas'?",
+      options: [
+        'Que está muy concentrado en su trabajo',
+        'Que está distraído o en las nubes',
+        'Que está estudiando sobre animales pequeños',
+      ],
+      a: 'Que está distraído o en las nubes',
+    },
+    {
+      q: 'El profesor se enfadó conmigo porque mientras explicaba la lección, yo estaba pensando en las ________.',
+      options: ['musarañas', 'hormigas', 'estrellas'],
+      a: 'musarañas',
+    },
+    {
+      q: '¿En qué situación usarías esta expresión?',
+      options: [
+        'Cuando un amigo no te escucha porque está mirando fijamente a la nada',
+        'Cuando estás planificando tus metas de forma muy seria',
+        'Cuando te duele la cabeza por estudiar demasiado',
+      ],
+      a: 'Cuando un amigo no te escucha porque está mirando fijamente a la nada',
+    },
+    {
+      q: "Si un jefe le dice a su empleado 'deja de pensar en las musarañas', le está pidiendo que:",
+      options: [
+        'Se tome un descanso y se relaje',
+        'Se concentre en la tarea que tiene delante',
+        'Sea más creativo e imagine cosas nuevas',
+      ],
+      a: 'Se concentre en la tarea que tiene delante',
+    },
+  ],
+},
+
+{
+  id: '52',
+  expression: 'Lo que faltaba',
+  meaning:
+    'Se usa para expresar que una situación ya era mala y acaba de ocurrir algo nuevo que la empeora aún más.',
+  example:
+    'Llego tarde al trabajo, está lloviendo y ahora me doy cuenta de que no tengo las llaves del coche. ¡Lo que faltaba!',
+  imageUrl: "/idioms/faltaba.jpg",
+  videoUrl: '/videos/faltaba.mp4',
+  category: 'Reacción/Ironía',
+  exercises: [
+    {
+      q: "¿En qué tono se suele decir '¡Lo que faltaba!'?",
+      options: [
+        'En tono de alegría y sorpresa positiva',
+        'En tono irónico, con frustración o resignación',
+        'En tono de duda o pregunta',
+      ],
+      a: 'En tono irónico, con frustración o resignación',
+    },
+    {
+      q: 'Se ha ido la luz y tengo que terminar el informe para mañana. ¡Lo que ________!',
+      options: ['sobraba', 'quería', 'faltaba'],
+      a: 'faltaba',
+    },
+    {
+      q: '¿En qué situación es más adecuado usar esta frase?',
+      options: [
+        'Cuando recibes un regalo inesperado que te encanta',
+        'Cuando después de un día agotador, llegas a casa y descubres que se ha roto la calefacción',
+        'Cuando encuentras un billete de cinco euros en el bolsillo',
+      ],
+      a: 'Cuando después de un día agotador, llegas a casa y descubres que se ha roto la calefacción',
+    },
+    {
+      q: "Al decir esta expresión, el hablante implica que:",
+      options: [
+        'Su paciencia está al límite porque los problemas se acumulan',
+        'Le falta información para entender lo que está pasando',
+        'Necesita comprar algo que ha olvidado en la tienda',
+      ],
+      a: 'Su paciencia está al límite porque los problemas se acumulan',
+    },
+  ],
+},
+
+{
+  id: '55',
+  expression: 'Estar al día',
+  meaning:
+    'Быть в курсе последних новостей или событий, либо полностью закрыть текущие дела или платежи.',
+  example:
+    'Me gusta leer el periódico cada mañana para estar al día de lo que pasa en el mundo.',
+  imageUrl: "/idioms/aldia.jpg",
+  videoUrl: '/videos/aldia.mp4',
+  category: 'Trabajo/Información',
+  exercises: [
+    {
+      q: "¿Qué significa 'estar al día'?",
+      options: [
+        'Tener mucho sueño durante el día',
+        'Estar actualizado o informado sobre algo',
+        'Esperar a que salga el sol',
+      ],
+      a: 'Estar actualizado o informado sobre algo',
+    },
+    {
+      q: 'No he visto las noticias esta semana, así que no estoy muy ________ día.',
+      options: ['al', 'en el', 'del'],
+      a: 'al',
+    },
+    {
+      q: '¿En qué situación usarías esta frase?',
+      options: [
+        'Cuando has pagado todas tus facturas y no debes nada',
+        'Cuando olvidas qué día de la semana es',
+        'Cuando decides irte a dormir muy temprano',
+      ],
+      a: 'Cuando has pagado todas tus facturas y no debes nada',
+    },
+    {
+      q: "Si tu jefe te pide 'ponerte al día', te está diciendo que:",
+      options: [
+        'Vayas a trabajar solo por el día',
+        'Te actualices con el trabajo pendiente o las nuevas noticias',
+        'Compres un calendario nuevo',
+      ],
+      a: 'Te actualices con el trabajo pendiente o las nuevas noticias',
+    },
+  ],
+},
+
+{
+  id: '57',
+  expression: 'No tener dónde caerse muerto',
+  meaning:
+    'Ser extremadamente pobre o carecer por completo de bienes, dinero o recursos.',
+  example:
+    'Gasta todo su dinero en ropa de marca, pero la realidad es que no tiene dónde caerse muerto.',
+  imageUrl: "/idioms/caerse.jpg",
+  videoUrl: '/videos/caerse.mp4',
+  category: 'Sociedad/Dinero',
+  exercises: [
+    {
+      q: "¿Qué significa que alguien 'no tiene dónde caerse muerto'?",
+      options: [
+        'Que es una persona muy solitaria',
+        'Que no tiene dinero ni posesiones, es muy pobre',
+        'Que tiene miedo a la muerte',
+      ],
+      a: 'Que no tiene dinero ni posesiones, es muy pobre',
+    },
+    {
+      q: 'A pesar de trabajar tanto, dice que sigue sin tener dónde ________ muerto.',
+      options: ['tirarse', 'quedarse', 'caerse'],
+      a: 'caerse',
+    },
+    {
+      q: '¿En qué contexto usarías esta frase?',
+      options: [
+        'Para hablar de alguien que ha perdido toda su fortuna y propiedades',
+        'Para describir a alguien que siempre llega tarde',
+        'Para hablar de una persona que es muy generosa',
+      ],
+      a: 'Para hablar de alguien que ha perdido toda su fortuna y propiedades',
+    },
+    {
+      q: "Si decimos que un negocio 'no tiene dónde caerse muerto', queremos decir que:",
+      options: [
+        'Es un negocio que vende ataúdes',
+        'Es un negocio que no tiene clientes ni capital, está arruinado',
+        'Es un local muy grande pero vacío',
+      ],
+      a: 'Es un negocio que no tiene clientes ni capital, está arruinado',
+    },
+  ],
+},
+
+{
+  id: '58',
+  expression: 'Andar con pies de plomo',
+  meaning:
+    'Actuar con muchísima cautela, prudencia o precaución para evitar cometer un error o caer en un peligro.',
+  example:
+    'El negocio parece bueno, pero el mercado está muy inestable, así que hay que andar con pies de plomo.',
+  imageUrl: "/idioms/plomo.jpg",
+  videoUrl: '/videos/plomo.mp4',
+  category: 'Comportamiento/Prudencia',
+  exercises: [
+    {
+      q: "¿Qué significa 'andar con pies de plomo'?",
+      options: [
+        'Caminar muy rápido porque tienes prisa',
+        'Actuar con mucha cautela y precaución',
+        'Llevar zapatos muy pesados para hacer ejercicio',
+      ],
+      a: 'Actuar con mucha cautela y precaución',
+    },
+    {
+      q: 'Es una situación delicada, te sugiero que ________ con pies de plomo.',
+      options: ['vayas', 'andes', 'corras'],
+      a: 'andes',
+    },
+    {
+      q: '¿En qué situación usarías esta frase?',
+      options: [
+        'Cuando estás en una negociación difícil y no quieres arriesgarte',
+        'Cuando estás bailando en una fiesta muy animada',
+        'Cuando tienes total confianza en que nada puede salir mal',
+      ],
+      a: 'Cuando estás en una negociación difícil y no quieres arriesgarte',
+    },
+    {
+      q: "Si alguien te dice 'anda con pies de plomo', te está aconsejando que:",
+      options: [
+        'No seas tan lento al tomar decisiones',
+        'Tengas mucho cuidado con lo que haces o dices',
+        'Compres zapatos de mejor calidad',
+      ],
+      a: 'Tengas mucho cuidado con lo que haces o dices',
+    },
+  ],
+},
+
 ];
 export default idioms;
 
