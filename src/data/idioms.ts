@@ -2171,7 +2171,190 @@ export const idioms: Idiom[] = [
       a: 'Tengas mucho cuidado con lo que haces o dices',
     },
   ],
+},{
+  id: '59',
+  expression: 'Ser uña y carne',
+  meaning:
+    'Ser inseparables, tener una relación de amistad o amor muy estrecha y mantenerse siempre unidos.',
+  example:
+    'Desde que eran pequeños, Juan y Luis han sido uña y carne; van juntos a todas partes.',
+  imageUrl: "/idioms/una_carne.jpg",
+  videoUrl: '/videos/una_carne.mp4',
+  category: 'Relaciones/Social',
+  exercises: [
+    {
+      q: "¿Qué tipo de relación describe la expresión 'ser uña y carne'?",
+      options: [
+        'Una relación conflictiva y con muchas peleas',
+        'Una relación muy estrecha e inseparable',
+        'Una relación entre personas que casi no se conocen',
+      ],
+      a: 'Una relación muy estrecha e inseparable',
+    },
+    {
+      q: 'Marta y Elena no se separan nunca, son ________ y carne.',
+      options: ['mano', 'dedo', 'uña'],
+      a: 'uña',
+    },
+    {
+      q: '¿Cuál de estas situaciones describe mejor la frase?',
+      options: [
+        'Dos hermanos que se apoyan en todo y siempre están juntos',
+        'Dos compañeros de trabajo que no se llevan bien',
+        'Alguien que prefiere hacer senderismo en solitario',
+      ],
+      a: 'Dos hermanos que se apoyan en todo y siempre están juntos',
+    },
+    {
+      q: "Si alguien dice que tú y tu mejor amigo sois 'uña y carne', quiere decir que:",
+      options: [
+        'Tenéis gustos muy diferentes',
+        'Vuestra amistad es muy fuerte y sólida',
+        'Necesitáis pasar más tiempo separados',
+      ],
+      a: 'Vuestra amistad es muy fuerte y sólida',
+    },
+  ],
 },
+
+{
+  id: '60',
+  expression: 'Estar entre la espada y la pared',
+  meaning:
+    'Encontrarse en una situación muy difícil en la que solo hay dos opciones y ninguna es buena, o donde uno se siente acorralado sin salida.',
+  example:
+    'Si acepto el nuevo trabajo pierdo mi tiempo libre, pero si me quedo no podré pagar mis deudas; estoy entre la espada y la pared.',
+  imageUrl: "/idioms/pared.jpg",
+  videoUrl: '/videos/pared.mp4',
+  category: 'Problemas/Dificultades',
+  exercises: [
+    {
+      q: "¿Qué significa sentirse 'entre la espada y la pared'?",
+      options: [
+        'Tener que elegir entre dos situaciones agradables',
+        'Tener que tomar una decisión difícil bajo presión y sin buenas opciones',
+        'Tener ganas de practicar esgrima o decorar la casa',
+      ],
+      a: 'Tener que tomar una decisión difícil bajo presión y sin buenas opciones',
+    },
+    {
+      q: 'Mi jefe me pide que mienta y mi ética me dice que no, realmente estoy entre la ________ y la pared.',
+      options: ['piedra', 'puerta', 'espada'],
+      a: 'espada',
+    },
+    {
+      q: '¿En qué contexto es más probable escuchar esta frase?',
+      options: [
+        'En un momento de relajación y descanso total',
+        'En un momento de conflicto donde no sabes qué camino tomar',
+        'Cuando estás celebrando un éxito personal',
+      ],
+      a: 'En un momento de conflicto donde no sabes qué camino tomar',
+    },
+    {
+      q: "Si alguien te dice 'me tienes entre la espada y la pared', te está indicando que:",
+      options: [
+        'Le estás presionando mucho para que tome una decisión',
+        'Le has dado una noticia muy alegre',
+        'Quiere que le ayudes a mover unos muebles',
+      ],
+      a: 'Le estás presionando mucho para que tome una decisión',
+    },
+  ],
+},
+
+{
+  id: '61',
+  expression: 'Sacar de quicio',
+  meaning:
+    'Irritar o enfurecer a alguien de manera extrema, haciéndole perder el control o la paciencia.',
+  example:
+    'Me saca de quicio que la gente llegue tarde a las reuniones sin avisar.',
+  imageUrl: "/idioms/quicio.jpg",
+  videoUrl: '/videos/quicio.mp4',
+  category: 'Emociones/Enojo',
+  exercises: [
+    {
+      q: "¿Qué siente una persona cuando la 'sacan de quicio'?",
+      options: [
+        'Siente una gran alegría y euforia',
+        'Siente mucha calma y tranquilidad',
+        'Siente una irritación o enfado muy fuerte',
+      ],
+      a: 'Siente una irritación o enfado muy fuerte',
+    },
+    {
+      q: 'Ese ruido constante del vecino me está sacando de ________.',
+      options: ['quicio', 'lugar', 'quicio'],
+      a: 'quicio',
+    },
+    {
+      q: '¿Cuál de estas situaciones es más probable que te "saque de quicio"?',
+      options: [
+        'Que tu ordenador se apague justo antes de guardar un trabajo importante',
+        'Que te inviten a comer tu plato favorito',
+        'Que el día esté soleado y perfecto para pasear',
+      ],
+      a: 'Que tu ordenador se apague justo antes de guardar un trabajo importante',
+    },
+    {
+      q: "Si alguien te dice '¡No me saques de quicio!', te está advirtiendo que:",
+      options: [
+        'Está a punto de perder la paciencia por tu comportamiento',
+        'Le gusta mucho lo que estás haciendo',
+        'Quiere que le ayudes a abrir una puerta',
+      ],
+      a: 'Está a punto de perder la paciencia por tu comportamiento',
+    },
+  ],
+},
+
+{
+  id: '62',
+  expression: 'Tener pájaros en la cabeza',
+  meaning:
+    'Ser una persona idealista, poco realista o que se distrae fácilmente con fantasías e ideas poco prácticas.',
+  example:
+    'Cree que va a hacerse millonario mañana sin trabajar; ese chico tiene muchos pájaros en la cabeza.',
+  imageUrl: "/idioms/pajaros_cabeza.jpg",
+  videoUrl: '/videos/pajaros_cabeza.mp4',
+  category: 'Mente/Personalidad',
+  exercises: [
+    {
+      q: "¿Cómo es alguien que 'tiene pájaros en la cabeza'?",
+      options: [
+        'Es una persona muy seria y con los pies en la tierra',
+        'Es alguien soñador que piensa en cosas poco realistas',
+        'Es un experto en el cuidado de las aves',
+      ],
+      a: 'Es alguien soñador que piensa en cosas poco realistas',
+    },
+    {
+      q: 'Deja de soñar con castillos en el aire, que tienes demasiados ________ en la cabeza.',
+      options: ['aviones', 'pájaros', 'sombreros'],
+      a: 'pájaros',
+    },
+    {
+      q: '¿Cuál sería un ejemplo de "tener pájaros en la cabeza"?',
+      options: [
+        'Ahorrar dinero mes a mes para comprar una casa',
+        'Pensar que puedes aprender 10 idiomas perfectamente en una sola semana',
+        'Estudiar mucho para aprobar un examen difícil',
+      ],
+      a: 'Pensar que puedes aprender 10 idiomas perfectamente en una sola semana',
+    },
+    {
+      q: "Si un padre le dice a su hijo 'tienes pájaros en la cabeza', suele significar que:",
+      options: [
+        'Le está pidiendo que sea más realista y práctico',
+        'Le está felicitando por su gran inteligencia',
+        'Le está diciendo que necesita ir al peluquero',
+      ],
+      a: 'Le está pidiendo que sea más realista y práctico',
+    },
+  ],
+},
+
 
 ];
 export default idioms;
