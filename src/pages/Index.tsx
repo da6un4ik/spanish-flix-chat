@@ -10,39 +10,43 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [selectedIdiom, setSelectedIdiom] = useState<any>(null);
   const [progressMap, setProgressMap] = useState<Record<string, boolean>>({});
+  const [tgUser, setTgUser] = useState<any>(null);
+
+  const getStoredViews = () => parseInt(localStorage.getItem("modismo-total-views") || "0");
 
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      try { tg.expand(); } catch (e) {}
-    }
+    
+    const initApp = () => {
+      if (tg) {
+        tg.ready();
+        try { tg.expand(); } catch (e) { console.warn("Expand failed", e); }
+        
+        const user = tg.initDataUnsafe?.user;
+        if (user) setTgUser(user);
+      }
 
-    // 1. Загружаем статус Pro из памяти телефона
-    const savedPro = localStorage.getItem("modismo-is-pro") === "true";
-    setIsPro(savedPro);
+      // 1. Загружаем статус Pro из памяти телефона
+      const savedPro = localStorage.getItem("modismo-is-pro") === "true";
+      setIsPro(savedPro);
 
-    // 2. Загружаем прогресс идиом (сохранение прогресса при закрытии)
-    const savedProgress = localStorage.getItem("modismo-progress");
-    if (savedProgress) {
-      setProgressMap(JSON.parse(savedProgress));
-    }
+      // 2. Загружаем прогресс идиом из памяти (сохранение при закрытии)
+      const savedProgress = localStorage.getItem("modismo-progress");
+      if (savedProgress) {
+        setProgressMap(JSON.parse(savedProgress));
+      }
 
-    // 3. Загружаем счетчик просмотров
-    const views = parseInt(localStorage.getItem("modismo-total-views") || "0");
-    setViewCount(views);
+      // 3. Загружаем просмотры
+      setViewCount(getStoredViews());
+    };
+
+    initApp();
   }, []);
 
-  // Функция для сохранения прогресса "изучено"
-  const markAsLearned = (id: string) => {
-    const updated = { ...progressMap, [id]: true };
-    setProgressMap(updated);
-    localStorage.setItem("modismo-progress", JSON.stringify(updated));
-  };
-
+  // --- ЛОГИКА ОПЛАТЫ ---
   const handleUnlockPro = async () => {
     const tg = (window as any).Telegram?.WebApp;
-    const uid = tg?.initDataUnsafe?.user?.id;
+    const uid = tgUser?.id;
 
     if (!uid) {
       alert("Por favor, abre la app desde Telegram");
@@ -58,11 +62,13 @@ const Index = () => {
       const data = await res.json();
 
       if (data.link) {
-        // Fallback для версии 6.0
         const version = parseFloat(tg.version || "6.0");
         if (version >= 6.1) {
           tg.openInvoice(data.link, (status: string) => {
-            if (status === 'paid') alert("¡Pago con éxito! Espera el código del bot.");
+            if (status === 'paid') {
+               // После оплаты просто уведомляем, код придет от бота
+               alert("¡Pago realizado! El bot te enviará tu código de acceso.");
+            }
           });
         } else {
           tg.openLink(data.link);
@@ -73,12 +79,21 @@ const Index = () => {
     }
   };
 
+  // --- СОХРАНЕНИЕ ПРОГРЕССА (ЛОКАЛЬНОЕ) ---
+  const markAsLearned = (id: string) => {
+    const updated = { ...progressMap, [id]: true };
+    setProgressMap(updated);
+    // Это сохраняет данные в телефоне, они не удалятся при закрытии
+    localStorage.setItem("modismo-progress", JSON.stringify(updated));
+  };
+
   const checkAccess = (action: () => void) => {
     if (isPro) return action();
-    if (viewCount >= 3) {
+    const currentViews = getStoredViews();
+    if (currentViews >= 3) {
       setShowPaywall(true);
     } else {
-      const next = viewCount + 1;
+      const next = currentViews + 1;
       localStorage.setItem("modismo-total-views", next.toString());
       setViewCount(next);
       action();
@@ -86,10 +101,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4">
+    <div className="min-h-screen bg-black text-white p-4 font-sans">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Modismo</h1>
-        {!isPro && <span className="text-blue-500 text-xs font-bold uppercase">Gratis: {viewCount}/3</span>}
+        {!isPro && <span className="text-blue-500 text-[10px] font-black uppercase tracking-widest">Gratis: {viewCount}/3</span>}
       </div>
 
       <SearchBar value="" onChange={() => {}} />
@@ -99,12 +114,10 @@ const Index = () => {
           <div 
             key={i.id} 
             onClick={() => checkAccess(() => setSelectedIdiom(i))} 
-            className="p-5 bg-white/5 rounded-2xl border border-white/10 active:scale-95 transition"
+            className="p-5 bg-white/5 rounded-2xl border border-white/10 active:scale-95 transition cursor-pointer flex justify-between items-center"
           >
-            <div className="flex justify-between items-center">
-              <span>{i.expression}</span>
-              {progressMap[i.id] && <span className="text-green-500 text-sm">✓</span>}
-            </div>
+            <span>{i.expression}</span>
+            {progressMap[i.id] && <span className="text-green-500 text-sm font-bold">✓</span>}
           </div>
         ))}
       </div>
@@ -113,6 +126,7 @@ const Index = () => {
         <Paywall 
           onClose={() => setShowPaywall(false)} 
           onUnlock={handleUnlockPro} 
+          onSuccess={() => setIsPro(true)} // Передаем колбэк для активации Pro
         />
       )}
 
