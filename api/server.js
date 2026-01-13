@@ -12,20 +12,35 @@ export default async function handler(req, res) {
   try {
     const { action, userId } = req.query;
 
+    // Счета
     if (action === 'create-invoice' && req.method === 'POST') {
       const { uid } = req.body;
       const response = await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/createInvoiceLink`, {
         title: "Modismo Pro",
-        description: "Acceso ilimitado",
+        description: "Acceso ilimitado a expresiones y videos",
         payload: `user_${uid}`,
-        provider_token: PAYMENT_TOKEN,
+        provider_token: PAYMENT_TOKEN, // 381764678:TEST:158881
         currency: "RUB",
-        prices: [{ label: "Pro", amount: 19000 }]
+        prices: [{ label: "Acceso Pro", amount: 19000 }]
       });
       return res.status(200).json({ link: response.data.result });
     }
 
-    // Обработка вебхука
+    // Получение прогресса
+    if (action === 'get-user-data' && req.method === 'GET') {
+      const isPro = await kv.get(`user:${userId}:isPro`);
+      const progress = await kv.get(`user:${userId}:progress`);
+      return res.status(200).json({ isPro: !!isPro, progress: progress || {} });
+    }
+
+    // Сохранение прогресса
+    if (action === 'save-progress' && req.method === 'POST') {
+      const { uid, progressMap } = req.body;
+      await kv.set(`user:${uid}:progress`, progressMap);
+      return res.status(200).json({ success: true });
+    }
+
+    // Обработка вебхука (оплата)
     if (req.body.update_id) {
       const update = req.body;
       if (update.pre_checkout_query) {
