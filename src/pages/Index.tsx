@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { idioms } from "../data/idioms";
 import Paywall from "../components/Paywall";
 import SearchBar from "../components/SearchBar";
@@ -10,46 +10,39 @@ const Index = () => {
   const [showPaywall, setShowPaywall] = useState(false);
   const [selectedIdiom, setSelectedIdiom] = useState<any>(null);
   const [progressMap, setProgressMap] = useState<Record<string, boolean>>({});
-  const [tgUser, setTgUser] = useState<any>(null);
 
-  const getStoredViews = () => parseInt(localStorage.getItem("modismo-total-views") || "0");
-
-  // --- 1. ЗАГРУЗКА И СИНХРОНИЗАЦИЯ ---
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
-    
-    const initApp = async () => {
-      if (tg) {
-        tg.ready();
-        // Безопасный expand для версии 6.0
-        try { tg.expand(); } catch (e) { console.warn("Expand failed", e); }
-        
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-          setTgUser(user);
-          // Тянем прогресс из Vercel KV
-          try {
-            const res = await fetch(`/api/server?action=get-user-data&userId=${user.id}`);
-            const data = await res.json();
-            if (data.isPro) {
-              setIsPro(true);
-              localStorage.setItem("modismo-is-pro", "true");
-            }
-            if (data.progress) setProgressMap(data.progress);
-          } catch (e) { console.error("Cloud sync failed"); }
-        }
-      }
-      setIsPro(localStorage.getItem("modismo-is-pro") === "true");
-      setViewCount(getStoredViews());
-    };
+    if (tg) {
+      tg.ready();
+      try { tg.expand(); } catch (e) {}
+    }
 
-    initApp();
+    // 1. Загружаем статус Pro из памяти телефона
+    const savedPro = localStorage.getItem("modismo-is-pro") === "true";
+    setIsPro(savedPro);
+
+    // 2. Загружаем прогресс идиом (сохранение прогресса при закрытии)
+    const savedProgress = localStorage.getItem("modismo-progress");
+    if (savedProgress) {
+      setProgressMap(JSON.parse(savedProgress));
+    }
+
+    // 3. Загружаем счетчик просмотров
+    const views = parseInt(localStorage.getItem("modismo-total-views") || "0");
+    setViewCount(views);
   }, []);
 
-  // --- 2. ЛОГИКА ОПЛАТЫ (БЕЗОПАСНАЯ ДЛЯ V 6.0) ---
+  // Функция для сохранения прогресса "изучено"
+  const markAsLearned = (id: string) => {
+    const updated = { ...progressMap, [id]: true };
+    setProgressMap(updated);
+    localStorage.setItem("modismo-progress", JSON.stringify(updated));
+  };
+
   const handleUnlockPro = async () => {
     const tg = (window as any).Telegram?.WebApp;
-    const uid = tgUser?.id;
+    const uid = tg?.initDataUnsafe?.user?.id;
 
     if (!uid) {
       alert("Por favor, abre la app desde Telegram");
@@ -65,20 +58,13 @@ const Index = () => {
       const data = await res.json();
 
       if (data.link) {
+        // Fallback для версии 6.0
         const version = parseFloat(tg.version || "6.0");
-        // Если версия 6.1+ — открываем нативное окно
         if (version >= 6.1) {
           tg.openInvoice(data.link, (status: string) => {
-            if (status === 'paid') {
-              setIsPro(true);
-              setShowPaywall(false);
-              localStorage.setItem("modismo-is-pro", "true");
-              alert("¡Acceso Pro activado!");
-            }
+            if (status === 'paid') alert("¡Pago con éxito! Espera el código del bot.");
           });
         } else {
-          // Если версия 6.0 — открываем ссылку в браузере
-          alert("Abriendo enlace de pago...");
           tg.openLink(data.link);
         }
       }
@@ -87,29 +73,12 @@ const Index = () => {
     }
   };
 
-  // --- 3. СОХРАНЕНИЕ ПРОГРЕССА В ОБЛАКО ---
-  const markAsLearned = async (id: string) => {
-    const updated = { ...progressMap, [id]: true };
-    setProgressMap(updated);
-    // Сохраняем локально для скорости
-    localStorage.setItem("modismo-pro", JSON.stringify(updated));
-    // Сохраняем в облако навсегда
-    if (tgUser?.id) {
-      await fetch(`/api/server?action=save-progress`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid: tgUser.id, progressMap: updated })
-      });
-    }
-  };
-
   const checkAccess = (action: () => void) => {
     if (isPro) return action();
-    const currentViews = getStoredViews();
-    if (currentViews >= 3) {
+    if (viewCount >= 3) {
       setShowPaywall(true);
     } else {
-      const next = currentViews + 1;
+      const next = viewCount + 1;
       localStorage.setItem("modismo-total-views", next.toString());
       setViewCount(next);
       action();
@@ -117,10 +86,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 font-sans">
+    <div className="min-h-screen bg-black text-white p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Modismo</h1>
-        {!isPro && <span className="text-blue-500 text-[10px] font-black uppercase tracking-widest">Бесплатно: {viewCount}/3</span>}
+        {!isPro && <span className="text-blue-500 text-xs font-bold uppercase">Gratis: {viewCount}/3</span>}
       </div>
 
       <SearchBar value="" onChange={() => {}} />
@@ -130,14 +99,22 @@ const Index = () => {
           <div 
             key={i.id} 
             onClick={() => checkAccess(() => setSelectedIdiom(i))} 
-            className="p-5 bg-white/5 rounded-2xl border border-white/10 active:scale-95 transition cursor-pointer"
+            className="p-5 bg-white/5 rounded-2xl border border-white/10 active:scale-95 transition"
           >
-            {i.expression}
+            <div className="flex justify-between items-center">
+              <span>{i.expression}</span>
+              {progressMap[i.id] && <span className="text-green-500 text-sm">✓</span>}
+            </div>
           </div>
         ))}
       </div>
 
-      {showPaywall && <Paywall onClose={() => setShowPaywall(false)} onUnlock={handleUnlockPro} />}
+      {showPaywall && (
+        <Paywall 
+          onClose={() => setShowPaywall(false)} 
+          onUnlock={handleUnlockPro} 
+        />
+      )}
 
       {selectedIdiom && (
         <IdiomPractice 
