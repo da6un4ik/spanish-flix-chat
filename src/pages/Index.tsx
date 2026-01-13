@@ -22,60 +22,13 @@ const Index = () => {
   const [viewCount, setViewCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
 
-  // --- 1. ИНИЦИАЛИЗАЦИЯ И АВТО-СТАРТ ---
-  useEffect(() => {
-    // Настройка Telegram
-    const tg = (window as any).Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      tg.setHeaderColor("#0A0A0A");
-      const user = tg.initDataUnsafe?.user;
-      if (user) setTgUser(user);
-    }
+  // Вспомогательная функция: Получить текущие просмотры прямо из памяти
+  const getStoredViews = () => parseInt(localStorage.getItem("modismo-total-views") || "0");
 
-    // Загрузка данных (читаем всё синхронно для точности)
-    const savedProgress = localStorage.getItem("modismo-pro");
-    const savedFavs = localStorage.getItem("modismo-favs");
-    const savedIsPro = localStorage.getItem("modismo-is-pro") === "true";
-    const currentTotalViews = parseInt(localStorage.getItem("modismo-total-views") || "0");
-    
-    const initialProgress = savedProgress ? JSON.parse(savedProgress) : {};
-    
-    setProgressMap(initialProgress);
-    if (savedFavs) setFavorites(JSON.parse(savedFavs));
-    setIsPro(savedIsPro);
-    setViewCount(currentTotalViews);
-
-    // ЛОГИКА АВТО-СТАРТА ПРИ ЗАПУСКЕ
-    if (!savedIsPro && currentTotalViews >= 3) {
-      // Если лимит уже исчерпан — показываем пейвол сразу, ничего не открывая
-      setShowPaywall(true);
-    } else {
-      // Иначе находим идиому для показа
-      const unlearned = idioms.filter(i => !initialProgress[i.id]);
-      const startIdiom = unlearned.length > 0 
-        ? unlearned[Math.floor(Math.random() * unlearned.length)] 
-        : idioms[0];
-      
-      setSelectedIdiom(startIdiom);
-
-      // Важно: Считаем этот автоматический просмотр
-      if (!savedIsPro) {
-        const newCount = currentTotalViews + 1;
-        localStorage.setItem("modismo-total-views", newCount.toString());
-        setViewCount(newCount);
-      }
-    }
-
-    window.speechSynthesis.getVoices();
-  }, []);
-
-  // --- 2. ФУНКЦИЯ ПРОВЕРКИ ДОСТУПА (ГЛАВНЫЙ СТРАЖ) ---
-  const checkAccess = (action: () => void) => {
-    // Читаем напрямую из localStorage, чтобы избежать лагов стейта
+  // 1. ЕДИНАЯ ФУНКЦИЯ ПРОВЕРКИ ДОСТУПА
+  const checkAccess = useCallback((action: () => void) => {
     const currentIsPro = localStorage.getItem("modismo-is-pro") === "true";
-    const currentViews = parseInt(localStorage.getItem("modismo-total-views") || "0");
+    const currentViews = getStoredViews();
 
     if (currentIsPro) {
       action();
@@ -90,9 +43,44 @@ const Index = () => {
       setViewCount(newCount);
       action();
     }
-  };
+  }, []);
 
-  // --- 3. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ---
+  // 2. ИНИЦИАЛИЗАЦИЯ
+  useEffect(() => {
+    // Настройка Telegram
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor("#0A0A0A");
+      const user = tg.initDataUnsafe?.user;
+      if (user) setTgUser(user);
+    }
+
+    // Загрузка базовых данных
+    const savedProgress = localStorage.getItem("modismo-pro");
+    const savedFavs = localStorage.getItem("modismo-favs");
+    const savedIsPro = localStorage.getItem("modismo-is-pro") === "true";
+    
+    setIsPro(savedIsPro);
+    setViewCount(getStoredViews());
+    if (savedProgress) setProgressMap(JSON.parse(savedProgress));
+    if (savedFavs) setFavorites(JSON.parse(savedFavs));
+
+    // АВТО-СТАРТ ПРИ ЗАПУСКЕ (через систему доступа)
+    checkAccess(() => {
+      const initialProgress = savedProgress ? JSON.parse(savedProgress) : {};
+      const unlearned = idioms.filter(i => !initialProgress[i.id]);
+      const startIdiom = unlearned.length > 0 
+        ? unlearned[Math.floor(Math.random() * unlearned.length)] 
+        : idioms[0];
+      setSelectedIdiom(startIdiom);
+    });
+
+    window.speechSynthesis.getVoices();
+  }, [checkAccess]);
+
+  // 3. ЛОГИКА ПОИСКА СЛЕДУЮЩЕЙ
   const getNextUnlearned = useCallback((currentId: string, currentProgress: Record<string, boolean>) => {
     const unlearned = idioms.filter(i => !currentProgress[i.id] && i.id !== currentId);
     if (unlearned.length > 0) {
@@ -141,34 +129,6 @@ const Index = () => {
 
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
-      {/* ГЛАВНЫЙ ЭКРАН (если всё закрыто) */}
-      {!selectedIdiom && !practiceIdiom && (
-        <div className="bg-white/10 rounded-3xl p-6 mt-4 border border-white/5 text-center animate-in fade-in">
-          <h2 className="text-2xl font-bold mb-4">¿Quieres aprender más?</h2>
-          <button 
-            onClick={() => checkAccess(() => setSelectedIdiom(getNextUnlearned("", progressMap)))} 
-            className="w-full bg-blue-600 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-blue-900/30"
-          >
-            Siguiente idioma
-          </button>
-        </div>
-      )}
-
-      {/* ПРОФИЛЬ */}
-      <Profile
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        stats={{ learnedCount: Object.keys(progressMap).length, totalCount: idioms.length, streak: 0 }}
-        favorites={favorites}
-        onSelectIdiom={(id) => checkAccess(() => {
-          setSelectedIdiom(idioms.find(i => i.id === id));
-          setIsProfileOpen(false);
-        })}
-        user={tgUser}
-        idioms={idioms}
-        progressMap={progressMap}
-      />
-
       {/* КАРТОЧКА ИДИОМЫ */}
       {selectedIdiom && (
         <IdiomPractice
@@ -176,9 +136,8 @@ const Index = () => {
           isLearned={!!progressMap[selectedIdiom.id]}
           isFavorite={favorites.includes(selectedIdiom.id)}
           onClose={() => {
-            // Если при закрытии мы видим, что лимит исчерпан — показываем пейвол
-            const finalViews = parseInt(localStorage.getItem("modismo-total-views") || "0");
-            if (finalViews >= 3 && !isPro) {
+            // Если уже 3 просмотра, при закрытии покажем пейвол
+            if (getStoredViews() >= 3 && !isPro) {
               setShowPaywall(true);
             }
             setSelectedIdiom(null);
@@ -211,7 +170,6 @@ const Index = () => {
             localStorage.setItem("modismo-pro", JSON.stringify(newProgress));
             setPracticeIdiom(null);
 
-            // Сразу пытаемся открыть следующую через проверку лимита
             checkAccess(() => {
               const next = getNextUnlearned(practiceIdiom.id, newProgress);
               setSelectedIdiom(next);
@@ -220,7 +178,22 @@ const Index = () => {
         />
       )}
 
-      {/* ПЕЙВОЛ */}
+      {/* ПРОФИЛЬ */}
+      <Profile
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        stats={{ learnedCount: Object.keys(progressMap).length, totalCount: idioms.length, streak: 0 }}
+        favorites={favorites}
+        onSelectIdiom={(id) => checkAccess(() => {
+          setSelectedIdiom(idioms.find(i => i.id === id));
+          setIsProfileOpen(false);
+        })}
+        user={tgUser}
+        idioms={idioms}
+        progressMap={progressMap}
+      />
+
+      {/* PAYWALL */}
       {showPaywall && (
         <Paywall 
           onClose={() => setShowPaywall(false)} 
