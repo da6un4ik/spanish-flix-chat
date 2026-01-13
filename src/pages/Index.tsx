@@ -5,7 +5,7 @@ import IdiomPractice from "../components/IdiomPractice";
 import PracticePage from "../components/PracticePage";
 import SearchBar from "../components/SearchBar";
 import VideoPlayer from "../components/VideoPlayer";
-import Paywall from "../components/Paywall"; // Импортируем
+import Paywall from "../components/Paywall";
 
 const Index = () => {
   const [selectedIdiom, setSelectedIdiom] = useState<any>(null);
@@ -17,60 +17,54 @@ const Index = () => {
   const [tgUser, setTgUser] = useState<any>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
-  // --- НОВОЕ: СОСТОЯНИЯ ПЕЙВОЛА ---
+  // --- ЛОГИКА ПЕЙВОЛА ---
   const [isPro, setIsPro] = useState(false);
   const [viewCount, setViewCount] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
-    const tg = (window as any).Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      tg.setHeaderColor("#0A0A0A");
-      const user = tg.initDataUnsafe?.user;
-      if (user) setTgUser(user);
-    }
-
     const savedProgress = localStorage.getItem("modismo-pro");
     const savedFavs = localStorage.getItem("modismo-favs");
     const savedIsPro = localStorage.getItem("modismo-is-pro") === "true";
-    const savedViews = parseInt(localStorage.getItem("modismo-views") || "0");
+    const savedViews = parseInt(localStorage.getItem("modismo-total-views") || "0");
     
-    const initialProgress = savedProgress ? JSON.parse(savedProgress) : {};
-    setProgressMap(initialProgress);
+    setProgressMap(savedProgress ? JSON.parse(savedProgress) : {});
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
     setIsPro(savedIsPro);
     setViewCount(savedViews);
 
-    // Авто-старт: первая карточка при запуске всегда доступна
+    // Авто-старт при запуске
+    const initialProgress = savedProgress ? JSON.parse(savedProgress) : {};
     const unlearned = idioms.filter(i => !initialProgress[i.id]);
-    const startIdiom = unlearned.length > 0 
-      ? unlearned[Math.floor(Math.random() * unlearned.length)] 
-      : idioms[0];
+    const startIdiom = unlearned.length > 0 ? unlearned[Math.floor(Math.random() * unlearned.length)] : idioms[0];
     
-    setSelectedIdiom(startIdiom);
-    
-    // Считаем этот первый просмотр, если не Pro
-    if (!savedIsPro) {
-      const newCount = savedViews + 1;
-      setViewCount(newCount);
-      localStorage.setItem("modismo-views", newCount.toString());
-    }
-
-    window.speechSynthesis.getVoices();
-  }, []);
-
-  // --- НОВОЕ: ФУНКЦИЯ ПРОВЕРКИ ЛИМИТА ---
-  const checkLimit = (action: () => void) => {
-    if (isPro) {
-      action();
-    } else if (viewCount >= 3) {
+    // ПРОВЕРКА: Если лимит уже исчерпан при старте, не открываем карточку, а копим просмотр
+    if (savedViews >= 3 && !savedIsPro) {
       setShowPaywall(true);
     } else {
-      const newCount = viewCount + 1;
-      setViewCount(newCount);
-      localStorage.setItem("modismo-views", newCount.toString());
+      setSelectedIdiom(startIdiom);
+      if (!savedIsPro) {
+        updateViewCount(savedViews + 1);
+      }
+    }
+  }, []);
+
+  // Вспомогательная функция обновления счетчика
+  const updateViewCount = (newCount: number) => {
+    setViewCount(newCount);
+    localStorage.setItem("modismo-total-views", newCount.toString());
+  };
+
+  // Функция проверки доступа перед открытием
+  const checkAccess = (action: () => void) => {
+    if (isPro) {
+      action();
+      return;
+    }
+    if (viewCount >= 3) {
+      setShowPaywall(true);
+    } else {
+      updateViewCount(viewCount + 1);
       action();
     }
   };
@@ -79,97 +73,68 @@ const Index = () => {
     const unlearned = idioms.filter(i => !currentProgress[i.id] && i.id !== currentId);
     if (unlearned.length > 0) {
       return unlearned[Math.floor(Math.random() * unlearned.length)];
-    } else {
-      const currentIndex = idioms.findIndex(i => i.id === currentId);
-      return idioms[(currentIndex + 1) % idioms.length];
     }
+    const currentIndex = idioms.findIndex(i => i.id === currentId);
+    return idioms[(currentIndex + 1) % idioms.length];
   }, []);
 
-  const markAsLearned = (id: string) => {
-    setProgressMap((prev) => {
-      const updated = { ...prev, [id]: true };
-      localStorage.setItem("modismo-pro", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const toggleFavorite = (id: string) => {
-    setFavorites((prev) => {
-      const updated = prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id];
-      localStorage.setItem("modismo-favs", JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const openVideo = (idiom: any) => {
-    if (idiom.videoUrl) setVideoSrc(idiom.videoUrl);
-  };
-
   return (
-    <div className="min-h-screen bg-black text-white p-4 pb-10 font-sans">
+    <div className="min-h-screen bg-black text-white p-4 pb-10">
       
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Modismo Pro</h1>
-          {!isPro && <p className="text-[10px] text-blue-500 font-bold uppercase tracking-widest">Gratis: {3 - viewCount} restantes</p>}
-        </div>
-        <button onClick={() => setIsProfileOpen(true)} className="px-4 py-2 bg-white/10 rounded-2xl border border-white/5 active:scale-95 transition">
-          Perfil
-        </button>
+        <h1 className="text-3xl font-bold">Modismo Pro</h1>
+        <button onClick={() => setIsProfileOpen(true)} className="px-4 py-2 bg-white/10 rounded-2xl">Perfil</button>
       </div>
 
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
       {/* ГЛАВНЫЙ ЭКРАН */}
       {!selectedIdiom && !practiceIdiom && (
-        <div className="bg-white/10 rounded-3xl p-6 mt-4 border border-white/5">
-          <h2 className="text-2xl font-bold mb-2 text-center text-white">¡Sigue así! 🚀</h2>
+        <div className="mt-10 text-center">
           <button 
-            onClick={() => checkLimit(() => setSelectedIdiom(getNextUnlearned("", progressMap)))} 
-            className="w-full bg-blue-600 py-4 rounded-2xl font-bold text-lg mt-4"
+            onClick={() => checkAccess(() => setSelectedIdiom(getNextUnlearned("", progressMap)))}
+            className="w-full bg-blue-600 py-4 rounded-2xl font-bold"
           >
-            Continuar aprendiendo
+            Ver idioma ({3 - viewCount} gratis)
           </button>
         </div>
       )}
 
-      {/* МОДАЛКИ */}
-      <Profile
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        stats={{ learnedCount: Object.keys(progressMap).length, totalCount: idioms.length, streak: 0 }}
-        favorites={favorites}
-        onSelectIdiom={(id) => checkLimit(() => {
-          setSelectedIdiom(idioms.find(i => i.id === id));
-          setIsProfileOpen(false);
-        })}
-        user={tgUser}
-        idioms={idioms}
-        progressMap={progressMap}
-      />
-
+      {/* КАРТОЧКА ИДИОМЫ */}
       {selectedIdiom && (
         <IdiomPractice
           idiom={selectedIdiom}
-          onClose={() => setSelectedIdiom(null)}
-          onToggleLearned={() => markAsLearned(selectedIdiom.id)}
-          onToggleFavorite={() => toggleFavorite(selectedIdiom.id)}
-          isFavorite={favorites.includes(selectedIdiom.id)}
           isLearned={!!progressMap[selectedIdiom.id]}
-          onNext={() => checkLimit(() => {
-            const next = getNextUnlearned(selectedIdiom.id, progressMap);
-            setSelectedIdiom(next);
+          isFavorite={favorites.includes(selectedIdiom.id)}
+          onClose={() => {
+            // Если это была 3-я карточка, при закрытии покажем пейвол
+            if (viewCount >= 3 && !isPro) {
+              setShowPaywall(true);
+              setSelectedIdiom(null);
+            } else {
+              setSelectedIdiom(null);
+            }
+          }}
+          onNext={() => checkAccess(() => {
+            setSelectedIdiom(getNextUnlearned(selectedIdiom.id, progressMap));
           })}
-          onHome={() => setSelectedIdiom(null)}
           onOpenPractice={() => {
             setPracticeIdiom(selectedIdiom);
             setSelectedIdiom(null);
           }}
-          onOpenVideo={() => openVideo(selectedIdiom)}
+          onToggleLearned={() => {
+            const updated = { ...progressMap, [selectedIdiom.id]: true };
+            setProgressMap(updated);
+            localStorage.setItem("modismo-pro", JSON.stringify(updated));
+          }}
+          onToggleFavorite={() => {}}
+          onHome={() => setSelectedIdiom(null)}
+          onOpenVideo={() => {}}
         />
       )}
 
+      {/* ПРАКТИКА */}
       {practiceIdiom && (
         <PracticePage
           idiom={practiceIdiom}
@@ -179,14 +144,28 @@ const Index = () => {
             setProgressMap(newProgress);
             localStorage.setItem("modismo-pro", JSON.stringify(newProgress));
             setPracticeIdiom(null);
-            
-            // После практики проверяем лимит перед следующей
-            checkLimit(() => setSelectedIdiom(getNextUnlearned(practiceIdiom.id, newProgress)));
+            // Проверка перед следующей карточкой
+            checkAccess(() => setSelectedIdiom(getNextUnlearned(practiceIdiom.id, newProgress)));
           }}
         />
       )}
 
-      {/* PAYWALL */}
+      {/* ПРОФИЛЬ */}
+      <Profile
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        stats={{ learnedCount: Object.keys(progressMap).length, totalCount: idioms.length, streak: 0 }}
+        favorites={favorites}
+        onSelectIdiom={(id) => checkAccess(() => {
+          setSelectedIdiom(idioms.find(i => i.id === id));
+          setIsProfileOpen(false);
+        })}
+        idioms={idioms}
+        progressMap={progressMap}
+        user={tgUser}
+      />
+
+      {/* ПЕЙВОЛ */}
       {showPaywall && (
         <Paywall 
           onClose={() => setShowPaywall(false)} 
@@ -197,8 +176,6 @@ const Index = () => {
           }} 
         />
       )}
-
-      {videoSrc && <VideoPlayer src={videoSrc} onClose={() => setVideoSrc(null)} />}
     </div>
   );
 };
