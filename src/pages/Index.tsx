@@ -18,9 +18,9 @@ const Index = () => {
   const [tgUser, setTgUser] = useState<any>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
-  // Идиома дня (всегда сверху, меняется ежедневно)
+  // Идиома дня (меняется раз в сутки)
   const idiomOfTheDay = useMemo(() => {
-    const todayIndex = new Date().getDate() % idioms.length;
+    const todayIndex = new Date().getDate() % (idioms.length || 1);
     return idioms[todayIndex];
   }, []);
 
@@ -34,14 +34,11 @@ const Index = () => {
       if (user) setTgUser(user);
     }
 
-    // Загрузка прогресса
     const savedProgress = localStorage.getItem("modismo-pro");
     const savedFavs = localStorage.getItem("modismo-favs");
 
     if (savedProgress) setProgressMap(JSON.parse(savedProgress));
     if (savedFavs) setFavorites(JSON.parse(savedFavs));
-
-    window.speechSynthesis.getVoices();
   }, []);
 
   const toggleLearned = (id: string) => {
@@ -51,26 +48,19 @@ const Index = () => {
   };
 
   const toggleFavorite = (id: string) => {
-    const updated = favorites.includes(id)
-      ? favorites.filter((f) => f !== id)
-      : [...favorites, id];
+    const updated = favorites.includes(id) ? favorites.filter(f => f !== id) : [...favorites, id];
     setFavorites(updated);
     localStorage.setItem("modismo-favs", JSON.stringify(updated));
   };
 
-  const highlight = (text: string, query: string) => {
-    if (!query) return text;
-    const regex = new RegExp(`(${query})`, "gi");
-    return text.replace(regex, "<mark class='bg-yellow-400 text-black'>$1</mark>");
-  };
-
-  const filteredIdioms = idioms.filter((idiom) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      idiom.expression.toLowerCase().includes(q) ||
-      idiom.meaning.toLowerCase().includes(q)
+  const filteredIdioms = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return idioms;
+    return idioms.filter(i => 
+      i.expression.toLowerCase().includes(q) || 
+      i.meaning.toLowerCase().includes(q)
     );
-  });
+  }, [searchQuery]);
 
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-10 font-sans">
@@ -97,11 +87,11 @@ const Index = () => {
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
       {/* IDIOMA DEL DÍA */}
-      {!searchQuery && (
+      {!searchQuery && idiomOfTheDay && (
         <div className="bg-white/10 rounded-3xl p-5 mt-6 border border-white/5 shadow-2xl">
           <div className="relative">
-            <img src={idiomOfTheDay.imageUrl} className="w-full h-48 object-cover rounded-2xl mb-4" alt={idiomOfTheDay.expression} />
-            <div className="absolute top-3 left-3 bg-blue-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase">Recomendado</div>
+            <img src={idiomOfTheDay.imageUrl} className="w-full h-48 object-cover rounded-2xl mb-4" alt="" />
+            <div className="absolute top-3 left-3 bg-blue-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase">Hoy</div>
           </div>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Idioma del día</p>
           <h2 className="text-2xl font-bold mt-1 leading-tight">{idiomOfTheDay.expression}</h2>
@@ -112,19 +102,19 @@ const Index = () => {
         </div>
       )}
 
-      {/* LISTA COMPLETA */}
+      {/* LISTA */}
       <div className="mt-8 space-y-3">
         <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest ml-1">
           {searchQuery ? "Resultados" : "Explorar expresiones"}
         </h3>
-        {(searchQuery ? filteredIdioms : idioms).map((idiom) => (
+        {filteredIdioms.map((idiom) => (
           <div
             key={idiom.id}
             onClick={() => setSelectedIdiom(idiom)}
             className="p-5 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center transition cursor-pointer active:scale-[0.98]"
           >
             <span className={progressMap[idiom.id] ? "text-gray-500 line-through decoration-white/20" : "text-white"}>
-              <span dangerouslySetInnerHTML={{ __html: highlight(idiom.expression, searchQuery) }} />
+              {idiom.expression}
             </span>
             {progressMap[idiom.id] && <span className="text-green-500 text-sm font-bold">✓</span>}
           </div>
@@ -132,12 +122,25 @@ const Index = () => {
       </div>
 
       {/* MODALS */}
-      {isDonationOpen && (
-        <DonationModal 
-          user={tgUser}
-          onClose={() => setIsDonationOpen(false)} 
-        />
-      )}
+      {isDonationOpen && <DonationModal onClose={() => setIsDonationOpen(false)} />}
+
+      <Profile 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+        stats={{ 
+          learnedCount: Object.keys(progressMap || {}).length, 
+          totalCount: idioms?.length || 0, 
+          streak: 0 
+        }} 
+        favorites={favorites || []} 
+        user={tgUser} 
+        idioms={idioms || []}
+        onSelectIdiom={(id) => {
+          const found = idioms.find(i => i.id === id);
+          if (found) setSelectedIdiom(found);
+          setIsProfileOpen(false);
+        }}
+      />
 
       {selectedIdiom && (
         <IdiomPractice
@@ -158,26 +161,8 @@ const Index = () => {
       )}
 
       {practiceIdiom && (
-        <PracticePage 
-          idiom={practiceIdiom} 
-          onClose={() => setPracticeIdiom(null)} 
-          onFinish={() => setPracticeIdiom(null)} 
-        />
+        <PracticePage idiom={practiceIdiom} onClose={() => setPracticeIdiom(null)} onFinish={() => setPracticeIdiom(null)} />
       )}
-
-      <Profile 
-        isOpen={isProfileOpen} 
-        onClose={() => setIsProfileOpen(false)} 
-        stats={{ learnedCount: Object.keys(progressMap).length, totalCount: idioms.length, streak: 0 }} 
-        favorites={favorites} 
-        user={tgUser} 
-        idioms={idioms}
-        onSelectIdiom={(id) => {
-          const found = idioms.find(i => i.id === id);
-          if (found) setSelectedIdiom(found);
-          setIsProfileOpen(false);
-        }}
-      />
 
       {videoSrc && <VideoPlayer src={videoSrc} onClose={() => setVideoSrc(null)} />}
     </div>
